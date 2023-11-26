@@ -1,4 +1,7 @@
-using Microsoft.AspNetCore.ResponseCompression;
+global using GloriaFestasCatalogo.Server.Services.AuthService;
+using GloriaFestasCatalogo.Server.Data;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace GloriaFestasCatalogo
 {
@@ -10,8 +13,13 @@ namespace GloriaFestasCatalogo
 
             // Add services to the container.
 
+            builder.Services.AddDbContext<DataContext>(DbContextOptions =>
+            DbContextOptions.UseSqlite(builder.Configuration["ConnectionStrings:GloriaDbConnect"]));
+
             builder.Services.AddControllersWithViews();
             builder.Services.AddRazorPages();
+
+            builder.Services.AddScoped<IAuthService, AuthService>();
 
             var app = builder.Build();
 
