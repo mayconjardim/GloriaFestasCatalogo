@@ -362,3 +362,5 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /GloriaFestasCatalogo/Server/appsettings.json
+/GloriaFestasCatalogo/Server/Gloria.db
+/GloriaFestasCatalogo/Server/Gloria.db
