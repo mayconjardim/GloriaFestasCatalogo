@@ -8,6 +8,7 @@ namespace GloriaFestasCatalogo.Server.Services.ProductService
     {
 
         Task<ServiceResponse<List<ProductDto>>> GetProductsAsync();
+        Task<ServiceResponse<ProductResponse>> GetProductsPageableAsync(int page, int pageSize);
         Task<ServiceResponse<ProductDto>> GetProductAsync(int productId);
         Task<ServiceResponse<List<ProductDto>>> GetProductsByCategory(int categoryId);
         Task<ServiceResponse<ProductDto>> CreateProduct(Product product);

@@ -17,10 +17,23 @@ namespace GloriaFestasCatalogo.Server.Controllers
             _productService = productService;
         }
 
-        [HttpGet]
+        [HttpGet("all")]
         public async Task<ActionResult<ServiceResponse<List<ProductDto>>>> GetProducts()
         {
             var result = await _productService.GetProductsAsync();
+            return Ok(result);
+        }
+
+        [HttpGet("page/{page}")]
+        public async Task<ActionResult<ServiceResponse<ProductResponse>>> GetProductsPageable(int page, int pageSize = 20)
+        {
+            var result = await _productService.GetProductsPageableAsync(page, pageSize);
+
+            if (result == null || result.Data == null || result.Data.Products == null || result.Data.Products.Count == 0)
+            {
+                return NotFound("Desculpe, produto não encontrado.");
+            }
+
             return Ok(result);
         }
 

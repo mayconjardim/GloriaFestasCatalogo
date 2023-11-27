@@ -37,6 +37,35 @@ namespace GloriaFestasCatalogo.Server.Services.ProductService
             return response;
         }
 
+        public async Task<ServiceResponse<ProductResponse>> GetProductsPageableAsync(int page, int pageSize = 20)
+        {
+            var totalProducts = await _context.Products
+                .CountAsync(p => p.Active);
+
+            var products = await _context.Products
+                .Include(p => p.Category)
+                .Where(p => p.Active)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            var productDtos = _mapper.Map<List<ProductDto>>(products);
+
+            var totalPages = (int)Math.Ceiling((double)totalProducts / pageSize);
+
+            var response = new ServiceResponse<ProductResponse>
+            {
+                Data = new ProductResponse
+                {
+                    Products = productDtos,
+                    Pages = totalPages,
+                    CurrentPage = page
+                }
+            };
+
+            return response;
+        }
+
         public async Task<ServiceResponse<ProductDto>> GetProductAsync(int productId)
         {
             var response = new ServiceResponse<ProductDto>();
@@ -91,5 +120,6 @@ namespace GloriaFestasCatalogo.Server.Services.ProductService
         {
             throw new NotImplementedException();
         }
+
     }
 }

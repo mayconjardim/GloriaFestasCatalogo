@@ -1,5 +1,6 @@
 global using GloriaFestasCatalogo.Server.Services.AuthService;
 using GloriaFestasCatalogo.Server.Data;
+using GloriaFestasCatalogo.Server.Services.ProductService;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
@@ -16,14 +17,13 @@ namespace GloriaFestasCatalogo
             builder.Services.AddDbContext<DataContext>(DbContextOptions =>
             DbContextOptions.UseSqlite(builder.Configuration["ConnectionStrings:GloriaDbConnect"]));
 
-
             builder.Services.AddControllersWithViews();
             builder.Services.AddRazorPages();
 
             builder.Services.AddScoped<IAuthService, AuthService>();
+            builder.Services.AddScoped<IProductService, ProductService>();
 
             builder.Services.AddHttpContextAccessor();
-
 
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(c =>
