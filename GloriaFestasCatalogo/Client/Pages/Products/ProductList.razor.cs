@@ -1,4 +1,5 @@
-﻿using GloriaFestasCatalogo.Shared.Utils;
+﻿using GloriaFestasCatalogo.Shared.Dtos.Products;
+using GloriaFestasCatalogo.Shared.Utils;
 
 namespace GloriaFestasCatalogo.Client.Pages.Products
 {
@@ -40,6 +41,11 @@ namespace GloriaFestasCatalogo.Client.Pages.Products
                 products = result.Data;
                 currentPage = result.Data.CurrentPage;
             }
+        }
+
+        public async Task AddToCart(ProductDto product)
+        {
+            await CartService.AddToCart(product);
         }
 
     }

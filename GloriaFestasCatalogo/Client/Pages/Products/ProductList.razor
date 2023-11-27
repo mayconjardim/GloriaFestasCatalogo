@@ -1,4 +1,5 @@
 ﻿@inject IProductService ProductService
+@inject CartService CartService
 @inject NavigationManager NavigationManager
 
 @if (products != null && products.Products != null)
@@ -21,7 +22,7 @@
                     </div>
 
                     <div class="buy text-center" style="margin-bottom: 5px">
-                        <button class="btn" style="background: #5E0B76; color: #fff" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+                        <button class="btn" style="background: #5E0B76; color: #fff" @onclick="() => AddToCart(product)" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
                             <i class="fa-solid fa-cart-shopping"></i> Comprar
                         </button>
                     </div>
@@ -37,7 +38,6 @@
 
             @for (int i = 1; i <= products.Pages; i++ )
             {
-
                 var localVariable = i;
 
                 <li class="page-item @(i == products.CurrentPage ? "active" : "")">

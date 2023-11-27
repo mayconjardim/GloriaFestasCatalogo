@@ -1,4 +1,7 @@
-﻿<nav class="navbar" style="background:  #5e0b76" >
+﻿@inject CartService CartService
+@inject NavigationManager NavigationManager
+
+<nav class="navbar" style="background:  #5e0b76" >
     <div class="container-fluid d-flex justify-content-between align-items-center">
 
         <a class="navbar-brand mx-auto">
@@ -11,8 +14,85 @@
             <i class="fa-solid fa-cart-shopping"></i>
         </span>
 
+
+        @if (cartCount > 0)
+        {
+            <span class="badge text-bg-light" style="margin: 2px">@cartCount</span>
+        }
+
     </div>
 </nav>
 
+<div class="cart offcanvas offcanvas-end w-75 w-sm-100 w-md-50" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasRightLabel">CARRINHO</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
 
+        @if (cart != null && cart.Count > 0)
+        {
+
+            @foreach (var cartProducts in cart)
+            {
+
+                <div class="card mb-3" style="max-width: 440px;">
+                    <div class="row">
+                        <div class="col-md-12 d-flex align-items-center" style="margin-top: 2px">
+                            <img src="@cartProducts.Product.PhotoUrl" class="img-fluid rounded-start" alt="product img" width="100">
+                            <p class="card-title" style="font-size: 0.8rem">@cartProducts.Product.Name</p>
+                        </div>
+
+                        <div style="display: inline-block; text-align: center; margin-bottom: 2px">
+                            <span></span> <h6 class="mt-0 mb-0 price text-success" style="font-size: 0.8rem"> R$ @cartProducts.Product.Price un</h6>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="input-group d-flex justify-content-center align-items-center" style="margin-bottom: 2px">
+
+                                <span class="input-group-btn">
+                                    <button type="button" class="btn btn-success btn-number btn-sm" style="margin-right: 2px" @onclick="() => UpdateQuantity(true, cartProducts.Product)">
+                                        <i style="font-size: 12px;" class="fa-solid fa-plus"></i>
+                                    </button>
+                                </span>
+
+                                <input type="text" id="quantity" name="quantity" value="@cartProducts.Quantity" min="1" max="100" style="height: 31px; width: 50px; text-align: center;">
+
+                                <span class="input-group-btn">
+                                    <button type="button" class="btn btn-danger btn-number btn-sm" style="margin-left: 2px" @onclick="() => UpdateQuantity(false, cartProducts.Product)">
+                                        <i style="font-size: 12px;" class="fa-solid fa-minus"></i>
+                                    </button>
+                                </span>
+
+                                <span style="font-size: 12px; margin: 0 4px"> @cartProducts.Quantity x R$ @(cartProducts.Product.Price * cartProducts.Quantity) </span>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            }
+        }
+
+        <div>
+            <hr />
+            <p style="font-size: 1rem">Subtotal: <span class="mt-0 mb-0 price text-success">R$ @subtotal</span></p>
+            <hr />
+        </div>
+
+        <div class="text-center">
+            <button class="btn" style="background: #5E0B76; color: #fff; margin: 5px 0" @onclick="NavigateToHome" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+                Continuar comprando
+            </button>
+        </div>
+
+        <div class="text-center">
+            <button class="btn" style="background: #5E0B76; color: #fff; margin: 5px 0" @onclick="NavigateToOrder" disabled="@IsButtonDisabled" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+                Finalizar pedido
+            </button>
+        </div>
+
+    </div>
+</div>
 
