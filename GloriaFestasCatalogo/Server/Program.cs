@@ -1,7 +1,7 @@
 global using GloriaFestasCatalogo.Server.Services.AuthService;
 using GloriaFestasCatalogo.Server.Data;
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.OpenApi.Models;
 
 namespace GloriaFestasCatalogo
 {
@@ -24,6 +24,12 @@ namespace GloriaFestasCatalogo
 
             builder.Services.AddHttpContextAccessor();
 
+
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Gloria API", Version = "v1" });
+            });
             builder.Services.AddAutoMapper(typeof(Program).Assembly);
             var app = builder.Build();
 
@@ -39,6 +45,11 @@ namespace GloriaFestasCatalogo
                 app.UseHsts();
             }
 
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Your API V1");
+            });
             app.UseHttpsRedirection();
 
             app.UseBlazorFrameworkFiles();
