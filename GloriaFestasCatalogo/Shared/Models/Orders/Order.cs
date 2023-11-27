@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using GloriaFestasCatalogo.Shared.Utils;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GloriaFestasCatalogo.Shared.Models.Orders
 {
@@ -18,10 +19,11 @@ namespace GloriaFestasCatalogo.Shared.Models.Orders
         public string Observation { get; set; } = string.Empty;
         public string PaymentMethod { get; set; } = string.Empty;
         public DateTime OrderDate { get; set; } = DateTime.Now;
-
+        public OrderStatus Status { get; set; } = OrderStatus.OPEN;
         [Column(TypeName = "decimal(18,2)")]
         public decimal TotalPrice { get; set; }
         public List<OrderCart> Products { get; set; }
+
 
     }
 }
