@@ -39,17 +39,17 @@ namespace GloriaFestasCatalogo.Client.Services.ProductService
             return result;
         }
 
-        public async Task<ServiceResponse<ProductDto>> CreateProduct(Product product)
+        public Task<ServiceResponse<ProductDto>> CreateProduct(Product product)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<ServiceResponse<bool>> DeleteProduct(int productId)
+        public Task<ServiceResponse<bool>> DeleteProduct(int productId)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<ServiceResponse<ProductDto>> UpdateProduct(Product product)
+        public Task<ServiceResponse<ProductDto>> UpdateProduct(Product product)
         {
             throw new NotImplementedException();
         }

@@ -1,11 +1,10 @@
-﻿using GloriaFestasCatalogo.Shared.Models.Orders;
+﻿using GloriaFestasCatalogo.Shared.Utils;
 
 namespace GloriaFestasCatalogo.Shared.Dtos.Orders
 {
-    public class OrderDto
+    public class OrderCreateDto
     {
 
-        public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public string Whatsapp { get; set; } = string.Empty;
         public string ZipCode { get; set; } = string.Empty;
@@ -18,8 +17,7 @@ namespace GloriaFestasCatalogo.Shared.Dtos.Orders
         public string Observation { get; set; } = string.Empty;
         public string PaymentMethod { get; set; } = string.Empty;
         public decimal TotalPrice { get; set; }
-        public List<OrderCartDto> Products { get; set; }
-        public DateTime OrderDate { get; set; }
+        public List<CartProduct> Products { get; set; }
 
 
     }

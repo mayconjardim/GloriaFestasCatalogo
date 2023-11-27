@@ -1,0 +1,117 @@
+﻿@page "/order"
+@inject CartService CartService
+@inject IOrderService OrderService
+@inject IJSRuntime JS
+@inject NavigationManager NavigationManager
+
+<h3 style="margin: 2px 0">Seu pedido</h3>
+
+@if (cart != null && cart.Count > 0)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Produto</th>
+                <th>Quantidade</th>
+                <th>Preço Unitário</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var cartProduct in cart)
+            {
+                <tr>
+                    <td>@cartProduct.Product.Name</td>
+                    <td>@cartProduct.Quantity</td>
+                    <td>R$ @cartProduct.Product.Price</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <p>Subtotal: <span class="mt-0 mb-0 price text-success">R$ @subtotal</span> + frete</p>
+
+
+    <h4>Informações do Pedido</h4>
+
+    <EditForm Model="order" OnValidSubmit="ProcessOrders">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="mb-3">
+            <label for="Nome" class="form-label">Nome completo</label>
+            <input type="text" class="form-control" id="Nome" @bind="order.Name" required />
+        </div>
+
+        <div class="mb-3">
+            <label for="WhatsApp" class="form-label">WhatsApp</label>
+            <input type="text" class="form-control" id="WhatsApp" @bind="order.Whatsapp" required />
+        </div>
+
+        <div class="mb-3">
+            <label for="Cep" class="form-label">CEP</label>
+            <input type="text" class="form-control" id="Cep" @bind="order.ZipCode" required />
+        </div>
+
+        <div class="mb-3">
+            <label for="Endereco" class="form-label">Endereço</label>
+            <input type="text" class="form-control" id="Endereço" @bind="order.Street" required />
+        </div>
+
+        <div class="mb-3">
+            <label for="Numero" class="form-label">Número</label>
+            <input type="text" class="form-control" id="Número" @bind="order.Number" required />
+        </div>
+
+        <div class="mb-3">
+            <label for="Complemento" class="form-label">Complemento</label>
+            <input type="text" class="form-control" id="Complemento" @bind="order.Complement" placeholder="(opcional)" />
+        </div>
+
+        <div class="mb-3">
+            <label for="Bairro" class="form-label">Bairro</label>
+            <input type="text" class="form-control" id="Bairro" @bind="order.Neighborhood" required />
+        </div>
+
+        <div class="mb-3">
+            <label for="Cidade" class="form-label">Cidade</label>
+            <input type="text" class="form-control" id="Cidade" @bind="order.City" required />
+        </div>
+
+        <div class="mb-3">
+            <label for="Estado" class="form-label">Estado</label>
+            <input type="text" class="form-control" id="Estado" @bind="order.State" required />
+        </div>
+
+        <div class="mb-3">
+            <label for="Observacao" class="form-label">Informações adicionais</label>
+            <textarea class="form-control" id="Observacao" rows="5" @bind="order.Observation" placeholder="Notas sobre seu pedido, por exemplo, infomações especiais sobre entrega. (opcional)"></textarea>
+        </div>
+
+        <hr />
+        <div>
+            <select class="form-select form-select-lg mb-3" @bind="order.PaymentMethod" required>
+                <option value="">Forma de pagamento</option>
+                <option value="Dinheiro">Dinheiro</option>
+                <option value="Débito">Débito</option>
+                <option value="Crédito">Crédito</option>
+                <option value="Pix">Pix</option>
+            </select>
+
+        </div>
+        <hr />
+        <div class="text-center">
+            <button type="submit" id="whatsappButton" class="btn" style="background: #5E0B76; color: #fff; margin: 2px 0" disabled="@(!_editContext.Validate())">
+                Processar Pedido
+            </button>
+
+            <p>
+                Ao abrir o WhatsApp, envie a mensagem.
+            </p>
+
+        </div>
+
+    </EditForm>
+} else
+{
+    @message
+}

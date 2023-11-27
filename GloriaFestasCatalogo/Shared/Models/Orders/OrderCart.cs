@@ -11,6 +11,7 @@ namespace GloriaFestasCatalogo.Shared.Models.Orders
         public Product Product { get; set; }
 
         public int Quantity { get; set; }
+
     }
 
 }

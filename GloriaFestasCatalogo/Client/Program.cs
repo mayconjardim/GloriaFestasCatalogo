@@ -1,5 +1,6 @@
 using Blazored.LocalStorage;
 using GloriaFestasCatalogo.Client.Services.CartService;
+using GloriaFestasCatalogo.Client.Services.OrderService;
 using GloriaFestasCatalogo.Client.Services.ProductService;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -15,6 +16,7 @@ namespace GloriaFestasCatalogo.Client
             builder.RootComponents.Add<HeadOutlet>("head::after");
 
             builder.Services.AddScoped<IProductService, ProductService>();
+            builder.Services.AddScoped<IOrderService, OrderService>();
             builder.Services.AddScoped<CartService>();
 
             builder.Services.AddOptions();

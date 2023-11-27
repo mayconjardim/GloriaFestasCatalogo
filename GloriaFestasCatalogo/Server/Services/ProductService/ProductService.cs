@@ -13,7 +13,7 @@ namespace GloriaFestasCatalogo.Server.Services.ProductService
         private readonly DataContext _context;
         private readonly IMapper _mapper;
 
-        public ProductService(DataContext context, IHttpContextAccessor httpContextAccessor, IMapper mapper)
+        public ProductService(DataContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;

@@ -1,5 +1,6 @@
 global using GloriaFestasCatalogo.Server.Services.AuthService;
 using GloriaFestasCatalogo.Server.Data;
+using GloriaFestasCatalogo.Server.Services.OrderService;
 using GloriaFestasCatalogo.Server.Services.ProductService;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -22,6 +23,8 @@ namespace GloriaFestasCatalogo
 
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<IProductService, ProductService>();
+            builder.Services.AddScoped<IOrderService, OrderService>();
+
 
             builder.Services.AddHttpContextAccessor();
 
