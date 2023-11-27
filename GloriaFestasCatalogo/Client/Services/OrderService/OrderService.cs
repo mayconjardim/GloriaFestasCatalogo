@@ -18,16 +18,16 @@ namespace GloriaFestasCatalogo.Client.Services.OrderService
         {
             var result = await _http.PostAsJsonAsync("api/order", order);
 
-            if (result.IsSuccessStatusCode)
-            {
-                var orderDto = await result.Content.ReadFromJsonAsync<OrderDto>();
-                return new ServiceResponse<OrderDto> { Success = true, Data = orderDto };
-            }
-            else
-            {
-                var errorResponse = await result.Content.ReadFromJsonAsync<ServiceResponse<OrderDto>>();
-                return errorResponse ?? new ServiceResponse<OrderDto> { Success = false, Message = "Unknown error" };
-            }
+            var newOrder = await result.Content.ReadFromJsonAsync<ServiceResponse<OrderDto>>();
+
+            return newOrder;
+
+        }
+
+        public async Task<ServiceResponse<OrderDto>> GetOrderById(int orderId)
+        {
+            var result = await _http.GetFromJsonAsync<ServiceResponse<OrderDto>>($"api/order/{orderId}");
+            return result;
         }
 
     }

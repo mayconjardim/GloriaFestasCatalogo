@@ -3,6 +3,7 @@ using GloriaFestasCatalogo.Server.Data;
 using GloriaFestasCatalogo.Shared.Dtos.Orders;
 using GloriaFestasCatalogo.Shared.Models.Orders;
 using GloriaFestasCatalogo.Shared.Utils;
+using Microsoft.EntityFrameworkCore;
 namespace GloriaFestasCatalogo.Server.Services.OrderService
 {
     public class OrderService : IOrderService
@@ -15,7 +16,6 @@ namespace GloriaFestasCatalogo.Server.Services.OrderService
         {
             _context = context;
             _mapper = mapper;
-
         }
 
         public async Task<ServiceResponse<OrderDto>> CreateOrder(OrderCreateDto order)
@@ -52,6 +52,27 @@ namespace GloriaFestasCatalogo.Server.Services.OrderService
             }
 
             response.Data = _mapper.Map<OrderDto>(newOrder);
+            return response;
+        }
+
+        public async Task<ServiceResponse<OrderDto>> GetOrderById(int orderId)
+        {
+            var response = new ServiceResponse<OrderDto>();
+            var order = await _context.Orders
+            .Include(o => o.Products)
+            .ThenInclude(pc => pc.Product)
+            .FirstOrDefaultAsync(o => o.Id == orderId);
+
+            if (order == null)
+            {
+                response.Success = false;
+                response.Message = $"O pedido com o Id {orderId} não existe!";
+            }
+            else
+            {
+                response.Data = _mapper.Map<OrderDto>(order);
+            }
+
             return response;
         }
 

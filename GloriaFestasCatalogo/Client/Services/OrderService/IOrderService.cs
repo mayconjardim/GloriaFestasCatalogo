@@ -7,6 +7,7 @@ namespace GloriaFestasCatalogo.Client.Services.OrderService
     {
 
         Task<ServiceResponse<OrderDto>> CreateOrder(OrderCreateDto order);
+        Task<ServiceResponse<OrderDto>> GetOrderById(int orderId);
 
     }
 }

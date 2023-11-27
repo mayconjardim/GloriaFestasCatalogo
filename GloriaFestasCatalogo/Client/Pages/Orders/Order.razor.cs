@@ -57,9 +57,9 @@ namespace GloriaFestasCatalogo.Client.Pages.Orders
 
                 if (_editContext.Validate() && response.Data != null)
                 {
+                    var returnOrder = response.Data;
                     await CartService.CleanCart();
-
-                    await JS.InvokeVoidAsync("window.open", GetWhatsAppURL(AppConstants.PhoneNumber, response.Data.Name + " - Id: " + response.Data.Id));
+                    await JS.InvokeVoidAsync("window.open", GetWhatsAppURL(AppConstants.PhoneNumber, AppConstants.Message(returnOrder)));
                 }
 
             }

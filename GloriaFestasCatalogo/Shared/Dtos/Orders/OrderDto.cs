@@ -1,6 +1,4 @@
-﻿using GloriaFestasCatalogo.Shared.Models.Orders;
-
-namespace GloriaFestasCatalogo.Shared.Dtos.Orders
+﻿namespace GloriaFestasCatalogo.Shared.Dtos.Orders
 {
     public class OrderDto
     {
@@ -20,7 +18,6 @@ namespace GloriaFestasCatalogo.Shared.Dtos.Orders
         public decimal TotalPrice { get; set; }
         public List<OrderCartDto> Products { get; set; }
         public DateTime OrderDate { get; set; }
-
 
     }
 }

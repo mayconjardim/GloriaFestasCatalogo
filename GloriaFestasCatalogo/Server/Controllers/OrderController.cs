@@ -23,5 +23,20 @@ namespace GloriaFestasCatalogo.Server.Controllers
             return Ok(await _orderService.CreateOrder(request));
         }
 
+        [HttpGet("{orderId}")]
+        public async Task<ActionResult<ServiceResponse<OrderDto>>> GetOrderById(int orderId)
+        {
+
+            var result = await _orderService.GetOrderById(orderId);
+
+            if (!result.Success)
+            {
+                return NotFound(result);
+            }
+
+            return Ok(result);
+
+        }
+
     }
 }

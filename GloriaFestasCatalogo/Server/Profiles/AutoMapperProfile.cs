@@ -16,14 +16,13 @@ namespace GloriaFestasCatalogo.Server.Profiles
 
             CreateMap<ProductCategoryDto, ProductCategory>().ReverseMap();
 
-            CreateMap<Order, OrderDto>().ReverseMap();
-
-            CreateMap<OrderCreateDto, Order>()
-                .ForMember(dest => dest.Products, opt => opt.Ignore());
+            CreateMap<OrderDto, Order>().ReverseMap();
 
             CreateMap<Order, OrderCreateDto>();
 
-            CreateMap<OrderCart, OrderCartDto>().ReverseMap();
+            CreateMap<OrderCart, OrderCartDto>()
+                .ForMember(dist => dist.ProductName, opt => opt.MapFrom(src => src.Product.Name))
+                .ForMember(dist => dist.ProductPrice, opt => opt.MapFrom(src => src.Product.Price));
 
 
         }
