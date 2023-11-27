@@ -7,14 +7,14 @@ namespace GloriaFestasCatalogo.Client.Pages.Products
 
         private ProductResponse products;
         private string message = string.Empty;
-        private int page = 1;
-        private int pageSize = 20;
+        private int currentPage = 1;
+        private int pageSize = 10;
 
         protected override async Task OnInitializedAsync()
         {
             message = "Carregando Produtos...";
 
-            var result = await ProductService.GetProductsPageableAsync(page, pageSize);
+            var result = await ProductService.GetProductsPageableAsync(currentPage, pageSize);
             if (!result.Success)
             {
                 message = result.Message;
@@ -22,7 +22,23 @@ namespace GloriaFestasCatalogo.Client.Pages.Products
             else
             {
                 products = result.Data;
-                page = result.Data.CurrentPage;
+                currentPage = result.Data.CurrentPage;
+            }
+        }
+
+        private async Task ChangePage(int nextPage)
+        {
+
+            var result = await ProductService.GetProductsPageableAsync(nextPage, pageSize);
+
+            if (!result.Success)
+            {
+                message = result.Message;
+            }
+            else
+            {
+                products = result.Data;
+                currentPage = result.Data.CurrentPage;
             }
         }
 

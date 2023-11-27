@@ -37,7 +37,7 @@ namespace GloriaFestasCatalogo.Server.Services.ProductService
             return response;
         }
 
-        public async Task<ServiceResponse<ProductResponse>> GetProductsPageableAsync(int page, int pageSize = 20)
+        public async Task<ServiceResponse<ProductResponse>> GetProductsPageableAsync(int page, int pageSize = 10)
         {
             var totalProducts = await _context.Products
                 .CountAsync(p => p.Active);

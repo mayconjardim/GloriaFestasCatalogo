@@ -1,5 +1,5 @@
 ﻿@inject IProductService ProductService
-
+@inject NavigationManager NavigationManager
 
 @if (products != null && products.Products != null)
 {
@@ -31,6 +31,21 @@
         }
 
     </div>
+
+    <nav aria-label="Page navigation" class="d-flex justify-content-center" >
+        <ul class="pagination">
+
+            @for (int i = 1; i <= products.Pages; i++ )
+            {
+
+                var localVariable = i;
+
+                <li class="page-item @(i == products.CurrentPage ? "active" : "")">
+                    <a class="page-link" @onclick="() => ChangePage(localVariable)">@i</a>
+                </li>
+            }
+        </ul>
+    </nav>
 
 } else
 {

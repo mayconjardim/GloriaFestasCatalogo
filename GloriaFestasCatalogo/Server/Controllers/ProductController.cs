@@ -25,7 +25,7 @@ namespace GloriaFestasCatalogo.Server.Controllers
         }
 
         [HttpGet("page/{page}")]
-        public async Task<ActionResult<ServiceResponse<ProductResponse>>> GetProductsPageable(int page, int pageSize = 20)
+        public async Task<ActionResult<ServiceResponse<ProductResponse>>> GetProductsPageable(int page, int pageSize = 10)
         {
             var result = await _productService.GetProductsPageableAsync(page, pageSize);
 
