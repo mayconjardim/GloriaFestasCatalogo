@@ -23,6 +23,8 @@ namespace GloriaFestasCatalogo
             builder.Services.AddScoped<IAuthService, AuthService>();
 
             builder.Services.AddHttpContextAccessor();
+
+            builder.Services.AddAutoMapper(typeof(Program).Assembly);
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

@@ -1,4 +1,5 @@
 ﻿using GloriaFestasCatalogo.Server.Data;
+using GloriaFestasCatalogo.Shared.Dtos.Products;
 using GloriaFestasCatalogo.Shared.Models.Products;
 using GloriaFestasCatalogo.Shared.Utils;
 using Microsoft.EntityFrameworkCore;
@@ -17,8 +18,9 @@ namespace GloriaFestasCatalogo.Server.Services.ProductService
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task<ServiceResponse<List<Product>>> GetProductsByCategory(int categoryId)
+        public async Task<ServiceResponse<List<ProductDto>>> GetProductsByCategory(int categoryId)
         {
+
             var response = new ServiceResponse<List<Product>>
             {
                 Data = await _context.Products
