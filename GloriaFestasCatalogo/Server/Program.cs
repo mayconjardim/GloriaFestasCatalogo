@@ -16,11 +16,13 @@ namespace GloriaFestasCatalogo
             builder.Services.AddDbContext<DataContext>(DbContextOptions =>
             DbContextOptions.UseSqlite(builder.Configuration["ConnectionStrings:GloriaDbConnect"]));
 
+
             builder.Services.AddControllersWithViews();
             builder.Services.AddRazorPages();
 
             builder.Services.AddScoped<IAuthService, AuthService>();
 
+            builder.Services.AddHttpContextAccessor();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
