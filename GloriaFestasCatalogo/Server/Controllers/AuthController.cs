@@ -30,6 +30,24 @@ namespace GloriaFestasCatalogo.Server.Controllers
 
         }
 
+        [HttpPost("register")]
+        public async Task<ActionResult<ServiceResponse<int>>> Register(UserRegister request)
+        {
+            var response = await _authService.Register(
+                new User
+                {
+                    Username = request.Username
+                },
+                request.Password);
+
+            if (!response.Success)
+            {
+                return BadRequest(response);
+            }
+
+            return Ok(response);
+        }
+
     }
 
 }

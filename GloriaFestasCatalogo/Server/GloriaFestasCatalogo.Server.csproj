@@ -29,9 +29,5 @@
     <ProjectReference Include="..\Shared\GloriaFestasCatalogo.Shared.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Controllers\NewFolder\" />
-  </ItemGroup>
-
 
 </Project>
