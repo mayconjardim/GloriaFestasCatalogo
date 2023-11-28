@@ -1,0 +1,31 @@
+﻿@page "/login"
+@inject IAuthService AuthService
+@inject ILocalStorageService LocalStorage
+@inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<PageTitle>Login</PageTitle>
+
+<div class="container d-flex align-items-center justify-content-center" >
+    <div style=" margin: 50px auto; width: 400px">
+        <h3>Login</h3>
+
+        <EditForm Model="user" OnValidSubmit="HandleLogin">
+            <DataAnnotationsValidator />
+            <div class="mb-3">
+                <label for="username">Username</label>
+                <InputText id="Username" @bind-Value="user.Username" class="form-control" />
+                <ValidationMessage For="@(() => user.Username)" />
+            </div>
+            <div class="mb-3">
+                <label for="password">Password</label>
+                <InputText id="password" @bind-Value="user.Password" class="form-control" type="password" />
+                <ValidationMessage For="@(() => user.Password)" />
+            </div>
+            <button type="submit" class="btn" style="background: #5E0B76; color: white">Login</button>
+        </EditForm>
+        <div class="text-danger">
+            <span>@errorMessage</span>
+        </div>
+    </div>
+</div>

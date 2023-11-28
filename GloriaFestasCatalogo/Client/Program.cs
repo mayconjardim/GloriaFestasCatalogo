@@ -1,9 +1,14 @@
-using Blazored.LocalStorage;
-using GloriaFestasCatalogo.Client.Services.CartService;
-using GloriaFestasCatalogo.Client.Services.OrderService;
-using GloriaFestasCatalogo.Client.Services.ProductService;
-using Microsoft.AspNetCore.Components.Web;
-using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+global using GloriaFestasCatalogo.Shared;
+global using Blazored.LocalStorage;
+global using GloriaFestasCatalogo.Client.Services.AuthService;
+global using GloriaFestasCatalogo.Client.Services.CartService;
+global using GloriaFestasCatalogo.Client.Services.OrderService;
+global using GloriaFestasCatalogo.Client.Services.ProductService;
+global using Microsoft.AspNetCore.Components.Authorization;
+global using Microsoft.AspNetCore.Components.Web;
+global using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using GloriaFestasCatalogo.Client;
+
 
 namespace GloriaFestasCatalogo.Client
 {
@@ -17,10 +22,12 @@ namespace GloriaFestasCatalogo.Client
 
             builder.Services.AddScoped<IProductService, ProductService>();
             builder.Services.AddScoped<IOrderService, OrderService>();
+            builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<CartService>();
 
             builder.Services.AddOptions();
             builder.Services.AddAuthorizationCore();
+            builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
             builder.Services.AddBlazoredLocalStorage();
 
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
