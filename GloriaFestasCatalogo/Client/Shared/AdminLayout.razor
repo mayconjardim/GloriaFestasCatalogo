@@ -1,0 +1,45 @@
+﻿@inherits LayoutComponentBase
+
+<div class="container-fluid">
+    <div class="row flex-nowrap">
+        <div class="col-auto col-md-3 col-xl-2  px-0">
+            <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100" style="background: #5e0b76">
+
+                <a href="/" class="mx-auto d-none d-sm-inline">
+                    <img src="img/logo.svg" style="width: 120px; margin: 40px 0" />
+                </a>
+                <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
+
+                    <li class="nav-item">
+                        <a href="admin/pedidos" class="nav-link align-middle px-0">
+                            <i class="fa-regular fa-rectangle-list"></i> <span class="ms-1 d-none d-sm-inline">Pedidos</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="admin/produtos" class="nav-link px-0 align-middle">
+                            <i class="fa-brands fa-product-hunt"></i> <span class="ms-1 d-none d-sm-inline">Produtos</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="admin/categorias" class="nav-link px-0 align-middle">
+                            <i class="fa-solid fa-tags"></i><span class="ms-1 d-none d-sm-inline">Categorias</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="#" class="nav-link px-0 align-middle">
+                            <i class="fa-solid fa-right-from-bracket"></i> <span class="ms-1 d-none d-sm-inline">Sair</span>
+                        </a>
+                    </li>
+
+                </ul>
+         
+            </div>
+        </div>
+        <div class="col py-3">
+            @Body
+        </div>
+    </div>
+</div>

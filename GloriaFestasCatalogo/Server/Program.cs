@@ -2,7 +2,9 @@ global using GloriaFestasCatalogo.Server.Services.AuthService;
 using GloriaFestasCatalogo.Server.Data;
 using GloriaFestasCatalogo.Server.Services.OrderService;
 using GloriaFestasCatalogo.Server.Services.ProductService;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 namespace GloriaFestasCatalogo
@@ -26,6 +28,19 @@ namespace GloriaFestasCatalogo
             builder.Services.AddScoped<IOrderService, OrderService>();
 
 
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey =
+                            new SymmetricSecurityKey(System.Text.Encoding.UTF8
+                            .GetBytes(builder.Configuration.GetSection("AppSettings:Token").Value)),
+                        ValidateIssuer = false,
+                        ValidateAudience = false
+                    };
+                });
             builder.Services.AddHttpContextAccessor();
 
             builder.Services.AddEndpointsApiExplorer();
@@ -60,6 +75,8 @@ namespace GloriaFestasCatalogo
 
             app.UseRouting();
 
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.MapRazorPages();
             app.MapControllers();
