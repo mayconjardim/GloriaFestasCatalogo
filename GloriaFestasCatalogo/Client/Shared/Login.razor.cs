@@ -9,6 +9,16 @@ namespace GloriaFestasCatalogo.Client.Shared
 
         private string errorMessage = string.Empty;
 
+        protected override async Task OnInitializedAsync()
+        {
+            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            var user = authState.User;
+
+            if (user.Identity.IsAuthenticated)
+            {
+                NavigationManager.NavigateTo("/admin/pedidos");
+            }
+        }
 
         private async Task HandleLogin()
         {
@@ -19,7 +29,7 @@ namespace GloriaFestasCatalogo.Client.Shared
 
                 await LocalStorage.SetItemAsync("authToken", result.Data);
                 await AuthenticationStateProvider.GetAuthenticationStateAsync();
-                NavigationManager.NavigateTo("/admin");
+                NavigationManager.NavigateTo("/admin/pedidos");
             }
             else
             {
