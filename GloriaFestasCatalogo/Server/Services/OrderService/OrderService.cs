@@ -99,6 +99,23 @@ namespace GloriaFestasCatalogo.Server.Services.OrderService
 
 			var orderDtos = _mapper.Map<List<OrderDto>>(orders);
 
+			if (orderDtos == null || orderDtos.Count == 0)
+			{
+				var emptyResponse = new ServiceResponse<OrderResponse>
+				{
+					Success = true,
+					Data = new OrderResponse
+					{
+						Orders = new List<OrderDto>(),
+						Pages = 0,
+						CurrentPage = page
+					},
+					Message = "Não foram encontrados pedidos para os critérios fornecidos."
+				};
+
+				return emptyResponse;
+			}
+
 			var totalPages = (int)Math.Ceiling((double)totalOrders / pageSize);
 
 			var response = new ServiceResponse<OrderResponse>
@@ -113,6 +130,7 @@ namespace GloriaFestasCatalogo.Server.Services.OrderService
 
 			return response;
 		}
+
 
 		public async Task<ServiceResponse<OrderDto>> UpdateOrder(OrderDto orderDto)
 		{

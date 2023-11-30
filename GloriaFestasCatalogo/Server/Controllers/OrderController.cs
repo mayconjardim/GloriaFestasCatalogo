@@ -44,12 +44,6 @@ namespace GloriaFestasCatalogo.Server.Controllers
 			try
 			{
 				var result = await _orderService.GetOrderPageableAsync(page, pageSize, text, status);
-
-				if (result.Data.Orders == null || result.Data.Orders.Count == 0)
-				{
-					return NotFound("Desculpe, pedido não encontrado.");
-				}
-
 				return Ok(result);
 			}
 			catch (Exception ex)

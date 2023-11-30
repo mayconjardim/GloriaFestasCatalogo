@@ -1,5 +1,6 @@
 ﻿using GloriaFestasCatalogo.Shared.Dtos.Orders;
 using GloriaFestasCatalogo.Shared.Utils;
+using System.Net;
 using System.Net.Http.Json;
 
 namespace GloriaFestasCatalogo.Client.Services.OrderService
@@ -45,12 +46,33 @@ namespace GloriaFestasCatalogo.Client.Services.OrderService
 				url += $"&status={Uri.EscapeDataString(status.ToString())}";
 			}
 
-			// Faça a chamada HTTP com a URL construída
-			var result = await _http.GetFromJsonAsync<ServiceResponse<OrderResponse>>(url);
+			try
+			{
+				var result = await _http.GetFromJsonAsync<ServiceResponse<OrderResponse>>(url);
 
-			return result;
+				return result;
+			}
+			catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
+			{
+				var notFoundResponse = new ServiceResponse<OrderResponse>
+				{
+					Success = false,
+					Message = "O recurso não foi encontrado.",
+				};
+
+				return notFoundResponse;
+			}
+			catch (Exception ex)
+			{
+				var errorResponse = new ServiceResponse<OrderResponse>
+				{
+					Success = false,
+					Message = "Ocorreu um erro ao processar a solicitação.",
+				};
+
+				return errorResponse;
+			}
 		}
-
 
 		public async Task<ServiceResponse<OrderDto>> UpdateOrder(OrderDto order)
 		{

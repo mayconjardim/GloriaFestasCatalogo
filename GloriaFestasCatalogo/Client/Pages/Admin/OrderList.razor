@@ -11,8 +11,24 @@
 		<div class="table-wrapper">
 			<div class="table-title">
 				<div class="row">
-					<div class="col-sm-6">
+					<div class="col-sm-4 d-flex">
 						<h2>Gerenciar <b>Pedidos</b></h2>
+					</div>
+
+					<div class="col-sm-8 d-flex justify-content-end">
+
+							<select @onchange="HandleStatusChange" class="form-select-sm" style="margin: 0 10px">
+								<option selected value="">Status</option>
+								<option value="1">ABERTO</option>
+								<option value="2">PROCESSANDO</option>
+								<option value="3">FECHADO</option>
+								<option value="4">CANCELADO</option>
+							</select>
+
+							<form class="d-flex  w-75" role="search">
+								<input class="form-control me-2" type="search" placeholder="Procurar por Nome ou WhatsApp" aria-label="Search">
+								<button class="btn" type="submit" style="background: #fff; color: #000; border-radius: 5px"><span style="padding-right: 10px">Procurar</span></button>
+							</form>
 					</div>
 				</div>
 			</div>
@@ -204,4 +220,7 @@
 
 
 	}
+} else
+{
+	<p>@message</p>
 }
