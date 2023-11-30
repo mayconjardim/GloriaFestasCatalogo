@@ -82,7 +82,7 @@ namespace GloriaFestasCatalogo.Server.Services.OrderService
 
 			if (!string.IsNullOrEmpty(text))
 			{
-				query = (IOrderedQueryable<Order>)query.Where(o => o.Whatsapp.Contains(text) || o.Name.Contains(text));
+				query = (IOrderedQueryable<Order>)query.Where(o => o.Whatsapp.Contains(text) || EF.Functions.Like(o.Name, $"%{text}%"));
 			}
 
 			if (status.HasValue)

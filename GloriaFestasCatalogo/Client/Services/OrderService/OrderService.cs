@@ -33,7 +33,6 @@ namespace GloriaFestasCatalogo.Client.Services.OrderService
 
 		public async Task<ServiceResponse<OrderResponse>> GetOrderPageableAsync(int page, int pageSize, string text = null, OrderStatus? status = null)
 		{
-			// Construa a URL adicionando parâmetros opcionais
 			var url = $"api/order/page/{page}?pageSize={pageSize}";
 
 			if (!string.IsNullOrEmpty(text))

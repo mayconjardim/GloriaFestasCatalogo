@@ -16,6 +16,7 @@ namespace GloriaFestasCatalogo.Client.Pages.Admin
 		private OrderStatus selectedStatus;
 		private int selectedStatusValue = 0;
 		private string selectedValue;
+		private string searchText;
 
 		protected override async Task OnInitializedAsync()
 		{
@@ -33,7 +34,7 @@ namespace GloriaFestasCatalogo.Client.Pages.Admin
 			}
 		}
 
-		private async Task OrdersByStatus(int value)
+		private async Task FilterByStatus(int value)
 		{
 			string text = string.Empty;
 			OrderStatus status = OrderStatus.ABERTO;
@@ -58,6 +59,22 @@ namespace GloriaFestasCatalogo.Client.Pages.Admin
 			}
 
 			var result = await OrderService.GetOrderPageableAsync(currentPage, pageSize, text, status);
+
+			if (!result.Success)
+			{
+				message = result.Message;
+				StateHasChanged();
+			}
+			else
+			{
+				orders = result.Data;
+				StateHasChanged();
+			}
+		}
+
+		private async Task FilterByText()
+		{
+			var result = await OrderService.GetOrderPageableAsync(currentPage, pageSize, searchText, null);
 
 			if (!result.Success)
 			{
@@ -187,8 +204,13 @@ namespace GloriaFestasCatalogo.Client.Pages.Admin
 			if (int.TryParse(e.Value.ToString(), out var value))
 			{
 				selectedStatusValue = value;
-				await OrdersByStatus(selectedStatusValue);
+				await FilterByStatus(selectedStatusValue);
 			}
+		}
+
+		private async Task HandleSearch()
+		{
+			await FilterByText();
 		}
 
 		private async Task UpdateStatus()
