@@ -1,0 +1,207 @@
+﻿@page "/admin/pedidos"
+@inject IOrderService OrderService
+@inject IJSRuntime JSRuntime
+@inject NavigationManager NavigationManager
+@layout AdminLayout
+
+@if (orders != null && orders.Orders != null)
+{
+<div class="container-xl">
+	<div class="table-responsive">
+		<div class="table-wrapper">
+			<div class="table-title">
+				<div class="row">
+					<div class="col-sm-6">
+						<h2>Gerenciar <b>Pedidos</b></h2>
+					</div>
+				</div>
+			</div>
+			<table class="table table-striped table-hover">
+				<thead>
+					<tr>
+						<th>Id</th>
+						<th>Nome</th>
+						<th>Data</th>
+						<th>Whatsapp</th>
+						<th>Total</th>
+						<th>Status</th>
+						<th>Ações</th>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach (var order in orders.Orders)
+					{
+						<tr>
+							<td>@order.Id</td>
+							<td>@order.Name</td>
+							<td>@order.OrderDate</td>
+							<td>@order.Whatsapp</td>
+							<td>R$ @order.TotalPrice</td>
+						   	<td>
+									<span @onclick='(() => OpenModal("EditModal", order.Id))' class="@GetBadgeClass(order.Status)">@order.Status</span>
+							</td> 
+							<td>
+									<a @onclick='(() => OpenModal("PrintModal", order.Id))' class="edit" data-toggle="modal">
+										<i class="fa-solid fa-print" data-toggle="tooltip" title="Print" style="color: #5E0B76"></i>
+									</a>
+							</td>
+						</tr>
+					}
+				</tbody>
+			</table>
+
+			<div class="clearfix">
+				<ul class="pagination">
+
+					@for (int i = 1; i <= orders.Pages; i++)
+					{
+						var localVariable = i;
+
+						<li class="page-item @(i == orders.CurrentPage ? "active" : "")">
+							<a class="page-link" @onclick="() => ChangePage(localVariable)">@i</a>
+						</li>
+					}
+				</ul>
+			</div>
+
+		</div>
+	</div>
+</div>
+
+<!-- Print Modal  -->
+	@if (selectedOrder != null)
+	{
+		
+		<div id="PrintModal" class="modal fade">
+			<div class="modal-dialog" >
+				<div class="modal-content" >
+				<form>
+					<div class="modal-header">
+							<h4 class="modal-title"><b>Imprimir Pedido</b></h4>
+							<button type="button" @onclick='(() => CloseModal("PrintModal"))' class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					</div>
+
+				     <div class="modal-body" >
+
+							<div class="input-group mb-3 d-print-include">
+							<span class="input-group-text" id="basic-addon1"><b>Nome</b></span>
+							<input type="text" class="form-control"  value="@selectedOrder.Name" disabled>
+					     	</div>
+
+						<div class="input-group mb-3">
+								<span class="input-group-text" id="basic-addon1"><b>WhatsApp</b></span>
+							   <input type="text" class="form-control"  value="@selectedOrder.Whatsapp" disabled>
+
+								<span class="input-group-text" id="basic-addon1"><b>CEP</b></span>
+								<input type="text" class="form-control" value="@selectedOrder.ZipCode" disabled>
+						</div>
+
+						<div class="input-group mb-3">
+								<span class="input-group-text" id="basic-addon1"><b>Endereço</b></span>
+								<input type="text" class="form-control" value="@selectedOrder.Street" disabled>
+						</div>
+
+						<div class="input-group mb-3">
+								<span class="input-group-text" id="basic-addon1"><b>Número</b></span>
+								<input type="text" class="form-control" value="@selectedOrder.Number" disabled>
+						</div>
+
+							@if (!string.IsNullOrEmpty(selectedOrder.Complement))
+							{
+								<div class="input-group mb-3">
+									<span class="input-group-text" id="basic-addon1"><b>Complemento</b></span>
+									<input type="text" class="form-control" value="@selectedOrder.Complement" disabled>
+								</div>
+							}
+
+						<div class="input-group mb-3">
+								<span class="input-group-text" id="basic-addon1"><b>Bairro</b></span>
+								<input type="text" class="form-control" value="@selectedOrder.Neighborhood" disabled>
+
+								<span class="input-group-text" id="basic-addon1"><b>Cidade</b></span>
+								<input type="text" class="form-control" value="@selectedOrder.City" disabled>
+						</div>
+
+						<div class="input-group mb-3">
+								<span class="input-group-text" id="basic-addon1"><b>Estado</b></span>
+								<input type="text" class="form-control" value="@selectedOrder.State" disabled>
+						</div>
+
+						@if (!string.IsNullOrEmpty(selectedOrder.Observation))
+						{
+								<div class="input-group mb-3">
+									<label>Informações adicionais</label>
+									<input type="text" class="form-control" value="@selectedOrder.Observation" disabled>
+								</div>
+						}
+
+						<div class="input-group mb-3">
+								<span class="input-group-text" id="basic-addon1"><b>Pagamento</b></span>
+								<input type="text" class="form-control" value="@selectedOrder.PaymentMethod" disabled>
+
+								<span class="input-group-text" id="basic-addon1"><b>Total</b></span>
+								<input type="text" class="form-control" value="R$ @selectedOrder.TotalPrice" disabled>
+						</div>
+
+						<div class="produtos">
+								<span class="input-group-text"><b>Produtos</b></span>
+								<textarea class="form-control" readonly rows="@(selectedOrder.Products.Count * 3)" >
+									@foreach (var product in selectedOrder.Products)
+									{
+										@(product.Quantity + "x " + product.ProductName)
+										@if (product != selectedOrder.Products.Last()) 
+										{
+											@Environment.NewLine 
+											@Environment.NewLine 
+										}
+									}
+									</textarea>
+						</div>
+
+					</div>
+
+					<div class="modal-footer">
+							<input @onclick="Print" type="submit" class="btn" style="background: #5E0B76; color: #fff" value="Imprimir">
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	}
+
+
+	<!-- Edit Modal HTML -->
+	@if (selectedOrder != null)
+	{
+		<div id="EditModal" class="modal fade">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<form>
+						<div class="modal-header">
+							<h4 class="modal-title">Alterar Status</h4>
+							<button type="button" @onclick='(() => CloseModal("EditModal"))' class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						</div>
+						<div class="modal-body">
+
+							<div class="input-group mb-3">
+								<label class="input-group-text" for="inputGroupSelect01">Status</label>
+								<select class="form-select" id="inputGroupSelect01" @onchange="HandleSelectChange">
+									@foreach (var status in GetOrderStatusOptions())
+									{
+										<option value="@status.Value" selected="@status.IsSelected">@status.Text</option>
+									}
+								</select>
+							</div>
+
+						</div>
+						<div class="modal-footer">
+							<input @onclick="UpdateStatus" class="btn" style="background: #5E0B76; color: #fff" value="Salvar">
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+
+
+	}
+}

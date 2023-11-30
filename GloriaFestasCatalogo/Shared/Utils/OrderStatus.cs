@@ -3,9 +3,10 @@
     public enum OrderStatus
     {
 
-        OPEN = 1,
-        PROCESSING = 2,
-        CLOSED = 3,
+        ABERTO = 1,
+        PROCESSANDO = 2,
+        FECHADO = 3,
+        CANCELADO = 4,
 
     }
 }

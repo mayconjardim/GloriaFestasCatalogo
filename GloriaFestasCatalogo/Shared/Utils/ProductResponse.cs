@@ -1,11 +1,11 @@
-﻿using GloriaFestasCatalogo.Shared.Dtos.Products;
+﻿using GloriaFestasCatalogo.Shared.Dtos.Orders;
 
 namespace GloriaFestasCatalogo.Shared.Utils
 {
-    public class ProductResponse
+    public class OrderResponse
     {
 
-        public List<ProductDto> Products { get; set; } = new List<ProductDto>();
+        public List<OrderDto> Orders { get; set; } = new List<OrderDto>();
         public int Pages { get; set; }
         public int CurrentPage { get; set; }
 
