@@ -5,7 +5,7 @@ using Microsoft.JSInterop;
 
 namespace GloriaFestasCatalogo.Client.Pages.Admin
 {
-	partial class OrderList
+	partial class AdminOrderList
 	{
 
 		private OrderResponse orders;

@@ -1,10 +1,9 @@
-﻿a {
-    color: white;
+﻿.nav-item {
+    margin: 5px;
 }
 
-    a:hover {
-    }
-
-.nav-item {
-    margin: 5px;
+.nav-active {
+    background-color: white;
+    color: black;
+    font-style: normal;
 }
