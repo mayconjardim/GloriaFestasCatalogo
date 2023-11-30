@@ -76,14 +76,23 @@ namespace GloriaFestasCatalogo.Server.Services.OrderService
 			return response;
 		}
 
-		public async Task<ServiceResponse<OrderResponse>> GetOrderPageableAsync(int page, int pageSize = 10)
+		public async Task<ServiceResponse<OrderResponse>> GetOrderPageableAsync(int page, int pageSize = 20, string text = null, OrderStatus? status = null)
 		{
-			var totalOrders = await _context.Orders
-				.CountAsync();
+			var query = _context.Orders.Include(p => p.Products).OrderByDescending(o => o.OrderDate);
 
-			var orders = await _context.Orders
-				.Include(p => p.Products)
-				.OrderByDescending(o => o.OrderDate)
+			if (!string.IsNullOrEmpty(text))
+			{
+				query = (IOrderedQueryable<Order>)query.Where(o => o.Whatsapp.Contains(text) || o.Name.Contains(text));
+			}
+
+			if (status.HasValue)
+			{
+				query = (IOrderedQueryable<Order>)query.Where(o => o.Status == status);
+			}
+
+			var totalOrders = await query.CountAsync();
+
+			var orders = await query
 				.Skip((page - 1) * pageSize)
 				.Take(pageSize)
 				.ToListAsync();

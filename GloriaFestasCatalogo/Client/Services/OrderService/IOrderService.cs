@@ -8,7 +8,7 @@ namespace GloriaFestasCatalogo.Client.Services.OrderService
 
 		Task<ServiceResponse<OrderDto>> CreateOrder(OrderCreateDto order);
 		Task<ServiceResponse<OrderDto>> GetOrderById(int orderId);
-		Task<ServiceResponse<OrderResponse>> GetOrderPageableAsync(int page, int pageSize);
+		Task<ServiceResponse<OrderResponse>> GetOrderPageableAsync(int page, int pageSize = 20, string text = null, OrderStatus? status = null);
 		Task<ServiceResponse<OrderDto>> UpdateOrder(OrderDto orderDto);
 
 	}

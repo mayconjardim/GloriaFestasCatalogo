@@ -39,17 +39,25 @@ namespace GloriaFestasCatalogo.Server.Controllers
 		}
 
 		[HttpGet("page/{page}")]
-		public async Task<ActionResult<ServiceResponse<OrderResponse>>> GetProductsPageable(int page, int pageSize = 20)
+		public async Task<ActionResult<ServiceResponse<OrderResponse>>> GetProductsPageable(int page, int pageSize = 20, string? text = null, OrderStatus? status = null)
 		{
-			var result = await _orderService.GetOrderPageableAsync(page, pageSize);
-
-			if (result == null || result.Data == null || result.Data.Orders == null || result.Data.Orders.Count == 0)
+			try
 			{
-				return NotFound("Desculpe, pedido não encontrado.");
-			}
+				var result = await _orderService.GetOrderPageableAsync(page, pageSize, text, status);
 
-			return Ok(result);
+				if (result.Data.Orders == null || result.Data.Orders.Count == 0)
+				{
+					return NotFound("Desculpe, pedido não encontrado.");
+				}
+
+				return Ok(result);
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(500, "Erro interno no servidor.");
+			}
 		}
+
 
 		[HttpPut]
 		public async Task<ActionResult<ServiceResponse<bool>>> UpdateOrderStatus(OrderDto order)
