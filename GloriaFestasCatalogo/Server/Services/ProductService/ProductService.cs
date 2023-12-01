@@ -147,7 +147,6 @@ namespace GloriaFestasCatalogo.Server.Services.ProductService
 			if (category != null)
 			{
 				newProduct.Category = category;
-
 			}
 
 			try

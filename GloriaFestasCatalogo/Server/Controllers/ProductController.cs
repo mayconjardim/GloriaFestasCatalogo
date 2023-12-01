@@ -54,6 +54,12 @@ namespace GloriaFestasCatalogo.Server.Controllers
 			return Ok(result);
 		}
 
+		[HttpPost]
+		public async Task<ActionResult<ServiceResponse<ProductDto>>> CreateProduct(ProductCreateDto request)
+		{
+			return Ok(await _productService.CreateProduct(request));
+		}
+
 		[HttpPut("{id}")]
 		public async Task<ActionResult<ServiceResponse<ProductDto>>> UpdateProduct(ProductDto updatedProduct)
 		{
