@@ -1,4 +1,3 @@
-global using GloriaFestasCatalogo.Shared;
 global using Blazored.LocalStorage;
 global using GloriaFestasCatalogo.Client.Services.AuthService;
 global using GloriaFestasCatalogo.Client.Services.CartService;
@@ -7,7 +6,6 @@ global using GloriaFestasCatalogo.Client.Services.ProductService;
 global using Microsoft.AspNetCore.Components.Authorization;
 global using Microsoft.AspNetCore.Components.Web;
 global using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using GloriaFestasCatalogo.Client;
 
 
 namespace GloriaFestasCatalogo.Client

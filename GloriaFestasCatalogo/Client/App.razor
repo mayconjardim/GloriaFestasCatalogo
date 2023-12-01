@@ -3,8 +3,8 @@
         <Found Context="routeData">
             <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
                 <NotAuthorized>
-                    <h3>Opa! Você não tem permissão para ver esta página..</h3>
-                    <h5>Por favor <a href="login">conecte-se</a>.</h5>
+                    <h3 style="margin: 50px auto">Opa! Você não tem permissão para ver esta página..</h3>
+                    <h5 style="margin: 50px auto">Por favor <a href="login">conecte-se</a>.</h5>
                 </NotAuthorized>
             </AuthorizeRouteView>
             <FocusOnNavigate RouteData="@routeData" Selector="h1" />
