@@ -122,6 +122,21 @@ namespace GloriaFestasCatalogo.Client.Pages.Admin
 				var result = await ProductService.UpdateProduct(selectedProduct);
 				if (!result.Success)
 				{
+					await InvokeAsync(StateHasChanged);
+
+				}
+			}
+		}
+
+		private async Task DeleteProduct()
+		{
+			if (selectedProduct != null)
+			{
+				var result = await ProductService.DeleteProduct(selectedProduct.Id);
+				if (!result.Success)
+				{
+					await InvokeAsync(StateHasChanged);
+
 				}
 			}
 		}
