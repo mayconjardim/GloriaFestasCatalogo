@@ -21,18 +21,15 @@ namespace GloriaFestasCatalogo.Client.Services.ProductService
 			return result;
 		}
 
-		public async Task<ServiceResponse<ProductResponse>> GetProductsPageableAsync(int page, int pageSize, int categoryId, string text = null)
+		public async Task<ServiceResponse<ProductResponse>> GetProductsPageableAsync(int page, int pageSize, int categoryId, string? text = null)
 		{
 			var url = $"api/product/page/{page}?pageSize={pageSize}";
+
+			url += $"&categoryId={categoryId}";
 
 			if (!string.IsNullOrEmpty(text))
 			{
 				url += $"&text={Uri.EscapeDataString(text)}";
-			}
-
-			if (categoryId != 0)
-			{
-				url += $"&category={categoryId}";
 			}
 
 			var result = await _http.GetFromJsonAsync<ServiceResponse<ProductResponse>>(url);

@@ -1,6 +1,6 @@
 ﻿using GloriaFestasCatalogo.Shared.Dtos.Products;
 using GloriaFestasCatalogo.Shared.Utils;
-using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 
 namespace GloriaFestasCatalogo.Client.Pages.Admin
@@ -11,13 +11,12 @@ namespace GloriaFestasCatalogo.Client.Pages.Admin
 		private ProductResponse products;
 		private ProductDto? selectedProduct;
 		private ProductDto newProduct = new ProductDto();
+		private List<ProductCategoryDto> categories = new List<ProductCategoryDto>();
 		private string message = string.Empty;
 		private int currentPage = 1;
 		private int pageSize = 20;
 		private string searchText = string.Empty;
 		private int categoryId = 0;
-		private EditContext _editContext;
-
 
 		protected override async Task OnInitializedAsync()
 		{
@@ -32,6 +31,7 @@ namespace GloriaFestasCatalogo.Client.Pages.Admin
 			{
 				products = result.Data;
 				currentPage = result.Data.CurrentPage;
+				await GetCategories();
 			}
 		}
 
@@ -42,14 +42,36 @@ namespace GloriaFestasCatalogo.Client.Pages.Admin
 			if (!result.Success)
 			{
 				message = result.Message;
-				StateHasChanged();
+
 			}
 			else
 			{
 				products = result.Data;
-				StateHasChanged();
+
 			}
+
+			await InvokeAsync(StateHasChanged);
 		}
+
+		private async Task FilterByCategory()
+		{
+
+			var result = await ProductService.GetProductsPageableAsync(currentPage, pageSize, categoryId, searchText);
+
+			if (!result.Success)
+			{
+				message = result.Message;
+
+			}
+			else
+			{
+				products = result.Data;
+
+			}
+
+			await InvokeAsync(StateHasChanged);
+		}
+
 
 		private async Task ChangePage(int nextPage)
 		{
@@ -66,6 +88,21 @@ namespace GloriaFestasCatalogo.Client.Pages.Admin
 				currentPage = result.Data.CurrentPage;
 			}
 		}
+
+		private async Task GetCategories()
+		{
+
+			var result = await CategoryService.GetCategoriesAsync();
+
+			if (!result.Success)
+			{
+			}
+			else
+			{
+				categories = result.Data;
+			}
+		}
+
 
 		private async Task CreateProduct()
 		{
@@ -100,6 +137,16 @@ namespace GloriaFestasCatalogo.Client.Pages.Admin
 		private async Task HandleSearch()
 		{
 			await FilterByText();
+		}
+		private async Task HandleCategoryChange(ChangeEventArgs e)
+		{
+
+			if (int.TryParse(e.Value.ToString(), out var value))
+			{
+				categoryId = value;
+			}
+
+			await FilterByCategory();
 		}
 
 	}

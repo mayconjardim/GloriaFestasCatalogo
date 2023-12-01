@@ -1,6 +1,7 @@
 ﻿@page "/admin/produtos"
 @attribute [Authorize]
 @inject IProductService ProductService
+@inject ICategoryService CategoryService
 @inject IJSRuntime JSRuntime
 @inject NavigationManager NavigationManager
 @layout AdminLayout
@@ -24,15 +25,14 @@
 							</div>
 
 							<div>
-								<select class="form-select-sm" style="margin: 0 10px;height: 38px;">
-									<option selected value="">Categoria</option>
-									<option value="1">ABERTO</option>
-									<option value="2">PROCESSANDO</option>
-									<option value="3">FECHADO</option>
-									<option value="4">CANCELADO</option>
+								<select @onchange="HandleCategoryChange" class="form-select-sm" style="margin: 0 10px;height: 38px;">
+									<option selected value="0">Categorias</option>
+									@foreach (var category in categories)
+									{
+										<option value="@category.Id">@category.Name</option>
+									}
 								</select>
 							</div>
-
 							<form class="d-flex w-50" role="search" @onsubmit="HandleSearch">
 								<input class="form-control me-2" type="search" @bind="searchText" placeholder="Procurar produto por Nome" aria-label="Search">
 								<button class="btn" type="submit" style="background: #fff; color: #000; border-radius: 5px;height: 38px;"><span style="padding-right: 10px">Procurar</span></button>
