@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using GloriaFestasCatalogo.Server.Data;
+using GloriaFestasCatalogo.Shared.Dtos.Orders;
 using GloriaFestasCatalogo.Shared.Dtos.Products;
 using GloriaFestasCatalogo.Shared.Models.Products;
 using GloriaFestasCatalogo.Shared.Utils;
@@ -134,9 +135,36 @@ namespace GloriaFestasCatalogo.Server.Services.ProductService
 			return response;
 		}
 
-		public Task<ServiceResponse<ProductDto>> CreateProduct(Product product)
+		public async Task<ServiceResponse<ProductDto>> CreateProduct(ProductCreateDto product)
 		{
-			throw new NotImplementedException();
+
+			var response = new ServiceResponse<ProductDto>();
+
+
+			var category = await _context.Categories.Where(c => c.Id == product.ProductCategoryId).FirstOrDefaultAsync();
+
+			var newProduct = _mapper.Map<Product>(product);
+
+			if (category != null)
+			{
+				newProduct.Category = category;
+
+			}
+
+			try
+			{
+				_context.Add(newProduct);
+				await _context.SaveChangesAsync();
+				response.Success = false;
+				response.Data = _mapper.Map<ProductDto>(newProduct);
+			}
+			catch (Exception ex)
+			{
+				response.Success = false;
+				response.Message = ex.Message;
+			}
+
+			return response;
 		}
 
 		public Task<ServiceResponse<ProductDto>> UpdateProduct(Product product)

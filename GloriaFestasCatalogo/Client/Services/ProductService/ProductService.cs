@@ -1,4 +1,5 @@
-﻿using GloriaFestasCatalogo.Shared.Dtos.Products;
+﻿using GloriaFestasCatalogo.Shared.Dtos.Orders;
+using GloriaFestasCatalogo.Shared.Dtos.Products;
 using GloriaFestasCatalogo.Shared.Models.Products;
 using GloriaFestasCatalogo.Shared.Utils;
 using System.Net.Http.Json;
@@ -48,12 +49,16 @@ namespace GloriaFestasCatalogo.Client.Services.ProductService
 			return result;
 		}
 
-		public Task<ServiceResponse<ProductDto>> CreateProduct(Product product)
+		public async Task<ServiceResponse<ProductDto>> CreateProduct(ProductCreateDto product)
 		{
-			throw new NotImplementedException();
+			var result = await _http.PostAsJsonAsync("api/product", product);
+
+			var newProduct = await result.Content.ReadFromJsonAsync<ServiceResponse<ProductDto>>();
+
+			return newProduct;
 		}
 
-		public Task<ServiceResponse<bool>> DeleteProduct(int productId)
+		public async Task<ServiceResponse<bool>> DeleteProduct(int productId)
 		{
 			throw new NotImplementedException();
 		}
@@ -62,5 +67,7 @@ namespace GloriaFestasCatalogo.Client.Services.ProductService
 		{
 			throw new NotImplementedException();
 		}
+
+
 	}
 }

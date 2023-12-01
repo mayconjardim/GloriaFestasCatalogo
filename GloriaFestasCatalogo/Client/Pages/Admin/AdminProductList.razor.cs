@@ -10,7 +10,7 @@ namespace GloriaFestasCatalogo.Client.Pages.Admin
 
 		private ProductResponse products;
 		private ProductDto? selectedProduct;
-		private ProductDto newProduct = new ProductDto();
+		private ProductCreateDto newProduct = new ProductCreateDto();
 		private List<ProductCategoryDto> categories = new List<ProductCategoryDto>();
 		private string message = string.Empty;
 		private int currentPage = 1;
@@ -47,6 +47,7 @@ namespace GloriaFestasCatalogo.Client.Pages.Admin
 			else
 			{
 				products = result.Data;
+				currentPage = 1;
 
 			}
 
@@ -66,7 +67,7 @@ namespace GloriaFestasCatalogo.Client.Pages.Admin
 			else
 			{
 				products = result.Data;
-
+				currentPage = 1;
 			}
 
 			await InvokeAsync(StateHasChanged);
@@ -107,6 +108,11 @@ namespace GloriaFestasCatalogo.Client.Pages.Admin
 		private async Task CreateProduct()
 		{
 
+			var result = await ProductService.CreateProduct(newProduct);
+			if (!result.Success)
+			{
+				await InvokeAsync(StateHasChanged);
+			}
 		}
 
 		private async Task OpenModal(string modal, int id)
@@ -147,6 +153,16 @@ namespace GloriaFestasCatalogo.Client.Pages.Admin
 			}
 
 			await FilterByCategory();
+		}
+
+		private void HandleCreationCategory(ChangeEventArgs e)
+		{
+
+			if (int.TryParse(e.Value.ToString(), out var value))
+			{
+				newProduct.ProductCategoryId = value;
+			}
+
 		}
 
 	}

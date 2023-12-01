@@ -18,7 +18,7 @@ namespace GloriaFestasCatalogo.Server.Controllers
 		}
 
 		[HttpPost]
-		public async Task<ActionResult<ServiceResponse<OrderDto>>> CreatePlayer(OrderCreateDto request)
+		public async Task<ActionResult<ServiceResponse<OrderDto>>> CreateOrder(OrderCreateDto request)
 		{
 			return Ok(await _orderService.CreateOrder(request));
 		}
