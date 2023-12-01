@@ -1,6 +1,4 @@
-﻿using GloriaFestasCatalogo.Shared.Dtos.Orders;
-using GloriaFestasCatalogo.Shared.Dtos.Products;
-using GloriaFestasCatalogo.Shared.Models.Products;
+﻿using GloriaFestasCatalogo.Shared.Dtos.Products;
 using GloriaFestasCatalogo.Shared.Utils;
 using System.Net.Http.Json;
 

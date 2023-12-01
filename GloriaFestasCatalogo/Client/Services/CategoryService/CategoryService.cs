@@ -1,4 +1,5 @@
 ﻿using GloriaFestasCatalogo.Shared.Dtos.Products;
+using GloriaFestasCatalogo.Shared.Models.Products;
 using GloriaFestasCatalogo.Shared.Utils;
 using System.Net.Http.Json;
 
@@ -18,6 +19,58 @@ namespace GloriaFestasCatalogo.Client.Services.CategoryService
 		{
 			var result = await _http.GetFromJsonAsync<ServiceResponse<List<ProductCategoryDto>>>($"api/category");
 			return result;
+		}
+
+		public async Task<ServiceResponse<ProductCategoryDto>> GetCategorieAsync(int categoryId)
+		{
+			var result = await _http.GetFromJsonAsync<ServiceResponse<ProductCategoryDto>>($"api/category/{categoryId}");
+			return result;
+		}
+
+
+		public async Task<ServiceResponse<ProductCategoryDto>> CreateCategorie(ProductCategoryDto categoryDto)
+		{
+			var result = await _http.PostAsJsonAsync("api/category", categoryDto);
+
+			var newCategory = await result.Content.ReadFromJsonAsync<ServiceResponse<ProductCategoryDto>>();
+
+			return newCategory;
+		}
+
+		public async Task<ServiceResponse<ProductCategoryDto>> UpdateCategorie(ProductCategoryDto categoryDto)
+		{
+			var response = new ServiceResponse<ProductCategoryDto>();
+
+			try
+			{
+				var result = await _http.PutAsJsonAsync($"api/product/", categoryDto);
+				response = await result.Content.ReadFromJsonAsync<ServiceResponse<ProductCategoryDto>>();
+			}
+			catch (Exception ex)
+			{
+				response.Success = false;
+				response.Message = ex.Message;
+			}
+
+			return response;
+		}
+
+		public async Task<ServiceResponse<bool>> DeleteCategorie(int categoryId)
+		{
+			var response = new ServiceResponse<bool>();
+
+			try
+			{
+				var result = await _http.DeleteAsync($"api/category/{categoryId}");
+				response = await result.Content.ReadFromJsonAsync<ServiceResponse<bool>>();
+			}
+			catch (Exception ex)
+			{
+				response.Success = false;
+				response.Message = ex.Message;
+			}
+
+			return response;
 		}
 
 	}
