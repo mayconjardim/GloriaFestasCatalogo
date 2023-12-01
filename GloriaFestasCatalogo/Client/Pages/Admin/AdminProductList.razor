@@ -26,7 +26,7 @@
 
 							<div>
 								<select @onchange="HandleCategoryChange" class="form-select-sm" style="margin: 0 10px;height: 38px;">
-									<option selected >Categorias</option>
+									<option selected value="0">Categorias</option>
 									@foreach (var category in categories)
 									{
 										<option value="@category.Id">@category.Name</option>

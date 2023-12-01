@@ -58,18 +58,40 @@ namespace GloriaFestasCatalogo.Client.Pages.Admin
 				status = OrderStatus.CANCELADO;
 			}
 
-			var result = await OrderService.GetOrderPageableAsync(currentPage, pageSize, text, status);
-
-			if (!result.Success)
+			if (value == 0)
 			{
-				message = result.Message;
-				StateHasChanged();
+
+				var result = await OrderService.GetOrderPageableAsync(currentPage, pageSize, text, null);
+
+				if (!result.Success)
+				{
+					message = result.Message;
+					StateHasChanged();
+				}
+				else
+				{
+					orders = result.Data;
+					StateHasChanged();
+				}
+
 			}
 			else
 			{
-				orders = result.Data;
-				StateHasChanged();
+				var result = await OrderService.GetOrderPageableAsync(currentPage, pageSize, text, status);
+
+				if (!result.Success)
+				{
+					message = result.Message;
+					StateHasChanged();
+				}
+				else
+				{
+					orders = result.Data;
+					StateHasChanged();
+				}
+
 			}
+
 		}
 
 		private async Task FilterByText()
