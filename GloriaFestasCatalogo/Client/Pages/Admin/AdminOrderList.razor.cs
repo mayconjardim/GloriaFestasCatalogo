@@ -230,8 +230,10 @@ namespace GloriaFestasCatalogo.Client.Pages.Admin
 			}
 		}
 
-		private async Task HandleSearch()
+
+		private async void UpdateOrderNameSearch(ChangeEventArgs e)
 		{
+			searchText = e.Value.ToString();
 			await FilterByText();
 		}
 

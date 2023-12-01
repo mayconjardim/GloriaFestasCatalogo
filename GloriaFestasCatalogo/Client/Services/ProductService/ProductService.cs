@@ -60,13 +60,40 @@ namespace GloriaFestasCatalogo.Client.Services.ProductService
 
 		public async Task<ServiceResponse<bool>> DeleteProduct(int productId)
 		{
-			throw new NotImplementedException();
+			var response = new ServiceResponse<bool>();
+
+			try
+			{
+				var result = await _http.DeleteAsync($"api/product/{productId}");
+				response = await result.Content.ReadFromJsonAsync<ServiceResponse<bool>>();
+			}
+			catch (Exception ex)
+			{
+				response.Success = false;
+				response.Message = ex.Message;
+			}
+
+			return response;
 		}
 
-		public Task<ServiceResponse<ProductDto>> UpdateProduct(Product product)
+		public async Task<ServiceResponse<ProductDto>> UpdateProduct(ProductDto updatedProduct)
 		{
-			throw new NotImplementedException();
+			var response = new ServiceResponse<ProductDto>();
+
+			try
+			{
+				var result = await _http.PutAsJsonAsync($"api/product/{updatedProduct.Id}", updatedProduct);
+				response = await result.Content.ReadFromJsonAsync<ServiceResponse<ProductDto>>();
+			}
+			catch (Exception ex)
+			{
+				response.Success = false;
+				response.Message = ex.Message;
+			}
+
+			return response;
 		}
+
 
 
 	}

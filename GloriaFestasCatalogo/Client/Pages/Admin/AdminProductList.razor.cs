@@ -115,6 +115,17 @@ namespace GloriaFestasCatalogo.Client.Pages.Admin
 			}
 		}
 
+		private async Task EditProduct()
+		{
+			if (selectedProduct != null)
+			{
+				var result = await ProductService.UpdateProduct(selectedProduct);
+				if (!result.Success)
+				{
+				}
+			}
+		}
+
 		private async Task OpenModal(string modal, int id)
 		{
 
@@ -140,10 +151,12 @@ namespace GloriaFestasCatalogo.Client.Pages.Admin
 			await JSRuntime.InvokeAsync<object>("closeModal", modal);
 		}
 
-		private async Task HandleSearch()
+		private async void UpdateProductNameSearch(ChangeEventArgs e)
 		{
+			searchText = e.Value.ToString();
 			await FilterByText();
 		}
+
 		private async Task HandleCategoryChange(ChangeEventArgs e)
 		{
 
@@ -161,6 +174,19 @@ namespace GloriaFestasCatalogo.Client.Pages.Admin
 			if (int.TryParse(e.Value.ToString(), out var value))
 			{
 				newProduct.ProductCategoryId = value;
+			}
+
+		}
+
+		private void HandleUpdateCategory(ChangeEventArgs e)
+		{
+
+			if (int.TryParse(e.Value.ToString(), out var value))
+			{
+				if (selectedProduct != null)
+				{
+					selectedProduct.Category.Id = value;
+				}
 			}
 
 		}

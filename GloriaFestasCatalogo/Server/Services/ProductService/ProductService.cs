@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using GloriaFestasCatalogo.Server.Data;
-using GloriaFestasCatalogo.Shared.Dtos.Orders;
 using GloriaFestasCatalogo.Shared.Dtos.Products;
 using GloriaFestasCatalogo.Shared.Models.Products;
 using GloriaFestasCatalogo.Shared.Utils;
@@ -167,14 +166,73 @@ namespace GloriaFestasCatalogo.Server.Services.ProductService
 			return response;
 		}
 
-		public Task<ServiceResponse<ProductDto>> UpdateProduct(Product product)
+		public async Task<ServiceResponse<ProductDto>> UpdateProduct(ProductDto updatedProduct)
 		{
-			throw new NotImplementedException();
+			var response = new ServiceResponse<ProductDto>();
+
+			try
+			{
+				var category = await _context.Categories.Where(c => c.Id == updatedProduct.Category.Id).FirstOrDefaultAsync();
+
+				var product = await _context.Products.Where(p => p.Id == updatedProduct.Id).FirstOrDefaultAsync();
+
+				if (product != null && category != null)
+				{
+					product.Name = updatedProduct.Name;
+					product.Price = updatedProduct.Price;
+					product.PhotoUrl = updatedProduct.PhotoUrl;
+					product.Category = category;
+
+					_context.Update(product);
+					await _context.SaveChangesAsync();
+
+					response.Success = true;
+					response.Data = _mapper.Map<ProductDto>(product);
+				}
+				else
+				{
+					response.Success = false;
+					response.Message = "Produto ou categoria não encontrados.";
+				}
+			}
+			catch (Exception ex)
+			{
+				response.Success = false;
+				response.Message = ex.Message;
+			}
+
+			return response;
 		}
 
-		public Task<ServiceResponse<bool>> DeleteProduct(int productId)
+
+		public async Task<ServiceResponse<bool>> DeleteProduct(int productId)
 		{
-			throw new NotImplementedException();
+			var response = new ServiceResponse<bool>();
+
+			try
+			{
+				var product = await _context.Products.FindAsync(productId);
+
+				if (product == null)
+				{
+					response.Success = false;
+					response.Message = "Produto não encontrado.";
+					return response;
+				}
+
+				_context.Products.Remove(product);
+				await _context.SaveChangesAsync();
+
+				response.Success = true;
+				response.Data = true;
+			}
+			catch (Exception ex)
+			{
+				response.Success = false;
+				response.Message = ex.Message;
+			}
+
+			return response;
 		}
 
 	}

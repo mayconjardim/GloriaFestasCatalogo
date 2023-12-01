@@ -26,9 +26,8 @@
 								<option value="4">CANCELADO</option>
 							</select>
 
-							<form class="d-flex w-75" role="search" @onsubmit="HandleSearch">
-								<input class="form-control me-2" type="search" @bind="searchText" placeholder="Procurar por Nome ou WhatsApp" aria-label="Search">
-								<button class="btn" type="submit" style="background: #fff; color: #000; border-radius: 5px"><span style="padding-right: 10px">Procurar</span></button>
+							<form class="d-flex w-75" role="search" >
+								<input class="form-control me-2" type="search" @oninput="UpdateOrderNameSearch" placeholder="Procurar por Nome ou WhatsApp" aria-label="Search">
 							</form>
 					</div>
 				</div>
@@ -90,7 +89,7 @@
 	{
 		
 		<div id="PrintModal" class="modal fade">
-			<div class="modal-dialog" >
+			<div class="modal-dialog modal-lg">
 				<div class="modal-content" >
 				<form>
 					<div class="modal-header">
@@ -191,7 +190,7 @@
 	@if (selectedOrder != null)
 	{
 		<div id="EditModal" class="modal fade">
-			<div class="modal-dialog">
+			<div class="modal-dialog modal-lg">
 				<div class="modal-content">
 					<form>
 						<div class="modal-header">
