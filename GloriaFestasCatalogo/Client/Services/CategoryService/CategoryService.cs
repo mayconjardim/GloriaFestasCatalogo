@@ -1,5 +1,4 @@
 ﻿using GloriaFestasCatalogo.Shared.Dtos.Products;
-using GloriaFestasCatalogo.Shared.Models.Products;
 using GloriaFestasCatalogo.Shared.Utils;
 using System.Net.Http.Json;
 
@@ -15,9 +14,16 @@ namespace GloriaFestasCatalogo.Client.Services.CategoryService
 			_http = http;
 		}
 
-		public async Task<ServiceResponse<List<ProductCategoryDto>>> GetCategoriesAsync()
+		public async Task<ServiceResponse<List<ProductCategoryDto>>> GetCategoriesAsync(string? text = null)
 		{
-			var result = await _http.GetFromJsonAsync<ServiceResponse<List<ProductCategoryDto>>>($"api/category");
+			var url = "api/category/";
+
+			if (!string.IsNullOrEmpty(text))
+			{
+				url += (url.Contains("?") ? "&" : "?") + $"text={Uri.EscapeDataString(text)}";
+			}
+
+			var result = await _http.GetFromJsonAsync<ServiceResponse<List<ProductCategoryDto>>>(url);
 			return result;
 		}
 

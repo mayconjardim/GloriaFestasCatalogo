@@ -18,9 +18,9 @@ namespace GloriaFestasCatalogo.Server.Controllers
 		}
 
 		[HttpGet]
-		public async Task<ActionResult<ServiceResponse<List<ProductCategoryDto>>>> GetCategories()
+		public async Task<ActionResult<ServiceResponse<List<ProductCategoryDto>>>> GetCategories(string? text = null)
 		{
-			var result = await _categoryService.GetCategoriesAsync();
+			var result = await _categoryService.GetCategoriesAsync(text);
 			return Ok(result);
 		}
 

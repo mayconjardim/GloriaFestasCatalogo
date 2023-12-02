@@ -19,11 +19,18 @@ namespace GloriaFestasCatalogo.Server.Services.CategoryService
 			_mapper = mapper;
 		}
 
-		public async Task<ServiceResponse<List<ProductCategoryDto>>> GetCategoriesAsync()
+		public async Task<ServiceResponse<List<ProductCategoryDto>>> GetCategoriesAsync(string? text = null)
 		{
 			var response = new ServiceResponse<List<ProductCategoryDto>>();
 
-			var category = await _context.Categories.ToListAsync();
+			IQueryable<ProductCategory> query = _context.Categories;
+
+			if (!string.IsNullOrEmpty(text))
+			{
+				query = query.Where(p => EF.Functions.Like(p.Name, $"%{text}%"));
+			}
+
+			var category = await query.ToListAsync();
 
 			var categoryDto = _mapper.Map<List<ProductCategoryDto>>(category);
 			response.Success = true;

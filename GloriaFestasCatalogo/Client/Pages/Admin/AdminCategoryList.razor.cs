@@ -1,4 +1,6 @@
 ﻿using GloriaFestasCatalogo.Shared.Dtos.Products;
+using GloriaFestasCatalogo.Shared.Models.Products;
+using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 
 namespace GloriaFestasCatalogo.Client.Pages.Admin
@@ -6,17 +8,17 @@ namespace GloriaFestasCatalogo.Client.Pages.Admin
 	partial class AdminCategoryList
 	{
 
-		private List<ProductCategoryDto> categories;
+		private List<ProductCategoryDto> categories = new List<ProductCategoryDto>();
 		private ProductCategoryDto selectedCategorie;
 		private ProductCategoryDto newCategory = new ProductCategoryDto();
 		private string message = string.Empty;
-		private string searchText;
+		private string searchText = string.Empty;
 
 		protected override async Task OnInitializedAsync()
 		{
 			message = "Carregando Categorias...";
 
-			var result = await CategoryService.GetCategoriesAsync();
+			var result = await CategoryService.GetCategoriesAsync(searchText);
 			if (!result.Success)
 			{
 				message = result.Message;
@@ -25,6 +27,23 @@ namespace GloriaFestasCatalogo.Client.Pages.Admin
 			{
 				categories = result.Data;
 			}
+		}
+
+		private async Task FilterByText()
+		{
+			var result = await CategoryService.GetCategoriesAsync(searchText);
+
+			if (!result.Success)
+			{
+				message = result.Message;
+
+			}
+			else
+			{
+				categories = result.Data;
+			}
+
+			await InvokeAsync(StateHasChanged);
 		}
 
 		private async Task OpenModal(string modal, int id)
@@ -84,6 +103,13 @@ namespace GloriaFestasCatalogo.Client.Pages.Admin
 				}
 			}
 		}
+
+		private async void UpdateCategoryNameSearch(ChangeEventArgs e)
+		{
+			searchText = e.Value.ToString();
+			await FilterByText();
+		}
+
 
 	}
 }
