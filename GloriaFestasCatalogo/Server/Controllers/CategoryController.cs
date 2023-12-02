@@ -37,7 +37,7 @@ namespace GloriaFestasCatalogo.Server.Controllers
 			return Ok(await _categoryService.CreateCategorie(request));
 		}
 
-		[HttpPut]
+		[HttpPut("{id}")]
 		public async Task<ActionResult<ServiceResponse<ProductCategoryDto>>> UpdateCategorie(ProductCategoryDto updatedCategory)
 		{
 

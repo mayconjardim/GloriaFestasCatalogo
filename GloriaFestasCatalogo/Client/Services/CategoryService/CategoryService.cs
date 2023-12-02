@@ -43,7 +43,7 @@ namespace GloriaFestasCatalogo.Client.Services.CategoryService
 
 			try
 			{
-				var result = await _http.PutAsJsonAsync($"api/product/", categoryDto);
+				var result = await _http.PutAsJsonAsync($"api/category/{categoryDto.Id}", categoryDto);
 				response = await result.Content.ReadFromJsonAsync<ServiceResponse<ProductCategoryDto>>();
 			}
 			catch (Exception ex)
