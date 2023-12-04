@@ -123,6 +123,11 @@
 						</div>
 
 						<div class="input-group mb-3 d-print-include">
+							<span class="input-group-text" id="basic-addon1"><b>Descrição</b></span>
+							<textarea class="form-control" @bind="@newProduct.Description" rows="10" required></textarea>
+						</div>
+
+						<div class="input-group mb-3 d-print-include">
 							<span class="input-group-text" id="basic-addon1"><b>Imagem</b></span>
 							<input type="text" class="form-control" @bind="newProduct.PhotoUrl" required>
 						</div>
@@ -170,6 +175,11 @@
 							<div class="input-group mb-3 d-print-include">
 								<span class="input-group-text" id="basic-addon1"><b>Nome</b></span>
 								<input type="text" class="form-control" @bind-value="@selectedProduct.Name" required>
+							</div>
+
+							<div class="input-group mb-3 d-print-include">
+								<span class="input-group-text" id="basic-addon1"><b>Descrição</b></span>
+								<textarea class="form-control" @bind="@selectedProduct.Description" rows="10" required></textarea>
 							</div>
 
 							<div class="input-group mb-3 d-print-include">

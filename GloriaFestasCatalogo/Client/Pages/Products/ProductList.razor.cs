@@ -123,5 +123,10 @@ namespace GloriaFestasCatalogo.Client.Pages.Products
             await FilterByText();
         }
 
+        private void NavigateToProductPage(int id)
+        {
+            NavigationManager.NavigateTo($"/produto/{id}");
+        }
+
     }
 }
