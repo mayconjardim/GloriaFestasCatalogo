@@ -267,11 +267,12 @@ table.table .avatar {
 }
 
 @media print {
-    * {
+
+    .not-print {
         display: none;
     }
 
-    #mydiv {
-        display: block;
+    #PrintModal {
+        background-color: #fff;
     }
 }

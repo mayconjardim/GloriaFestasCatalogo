@@ -7,6 +7,7 @@ global using GloriaFestasCatalogo.Client.Services.CategoryService;
 global using Microsoft.AspNetCore.Components.Authorization;
 global using Microsoft.AspNetCore.Components.Web;
 global using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+global using Blazored.Toast;
 
 
 namespace GloriaFestasCatalogo.Client
@@ -24,6 +25,7 @@ namespace GloriaFestasCatalogo.Client
 			builder.Services.AddScoped<ICategoryService, CategoryService>();
 			builder.Services.AddScoped<IAuthService, AuthService>();
 			builder.Services.AddScoped<CartService>();
+			builder.Services.AddBlazoredToast();
 
 			builder.Services.AddOptions();
 			builder.Services.AddAuthorizationCore();

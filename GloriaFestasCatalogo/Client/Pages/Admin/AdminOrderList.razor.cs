@@ -151,7 +151,7 @@ namespace GloriaFestasCatalogo.Client.Pages.Admin
 
 		private async Task Print()
 		{
-			await JSRuntime.InvokeVoidAsync("printDiv", "PrintModal");
+			await JSRuntime.InvokeVoidAsync("window.print");
 
 		}
 
