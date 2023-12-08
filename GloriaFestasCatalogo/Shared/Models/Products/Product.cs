@@ -9,6 +9,7 @@
         public string PhotoUrl { get; set; }
         public decimal Price { get; set; }
         public ProductCategory Category { get; set; }
+        public string Tags { get; set; } = string.Empty;
         public bool Active { get; set; } = true;
 
     }
