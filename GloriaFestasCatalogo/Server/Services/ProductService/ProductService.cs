@@ -44,7 +44,7 @@ namespace GloriaFestasCatalogo.Server.Services.ProductService
 
 			if (!string.IsNullOrEmpty(text))
 			{
-				query = query.Where(p => EF.Functions.Like(p.Name, $"%{text}%"));
+				query = query.Where(p => EF.Functions.Like(p.Name, $"%{text}%") || EF.Functions.Like(p.Tags, $"%{text}%"));
 			}
 
 			if (categoryId != 0)
@@ -180,6 +180,7 @@ namespace GloriaFestasCatalogo.Server.Services.ProductService
 					product.Name = updatedProduct.Name;
 					product.Price = updatedProduct.Price;
 					product.PhotoUrl = updatedProduct.PhotoUrl;
+					product.Tags = updatedProduct.Tags;
 					product.Category = category;
 
 					_context.Update(product);

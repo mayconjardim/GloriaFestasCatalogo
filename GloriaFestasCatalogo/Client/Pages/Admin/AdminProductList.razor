@@ -142,6 +142,12 @@
 								}
 							</select>
 						</div>
+
+						<div class="input-group mb-3 d-print-include">
+							<span class="input-group-text" id="basic-addon1"><b>Tags</b></span>
+							<input type="text" class="form-control" @bind="newProduct.Tags" >
+						</div>
+
 						<div class="input-group mb-3 d-print-include">
 							<span class="input-group-text" id="basic-addon1"><b>Valor</b></span>
 							<input type="text" class="form-control" @bind="newProduct.Price" required>
@@ -201,6 +207,12 @@
 									}
 								</select>
 							</div>
+
+							<div class="input-group mb-3 d-print-include">
+								<span class="input-group-text" id="basic-addon1"><b>Tags</b></span>
+								<input type="text" class="form-control" @bind-value="@selectedProduct.Tags">
+							</div>
+
 							<div class="input-group mb-3 d-print-include">
 								<span class="input-group-text" id="basic-addon1"><b>Valor</b></span>
 								<input type="text" class="form-control" @bind-value="@selectedProduct.Price" required>
