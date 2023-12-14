@@ -2,6 +2,7 @@
 using GloriaFestasCatalogo.Shared.Dtos.Products;
 using GloriaFestasCatalogo.Shared.Utils;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace GloriaFestasCatalogo.Server.Controllers
 {
@@ -78,6 +79,20 @@ namespace GloriaFestasCatalogo.Server.Controllers
 		public async Task<ActionResult<ServiceResponse<bool>>> DeleteProduct(int id)
 		{
 			var response = await _productService.DeleteProduct(id);
+
+			if (response.Success)
+			{
+				return Ok(response);
+			}
+
+			return NotFound(response);
+		}
+
+
+		[HttpPut("active/{id}")]
+		public async Task<ActionResult<ServiceResponse<bool>>> ActiveOrDeactiveProduct(ActiveOrDeactive activeOr)
+		{
+			var response = await _productService.ActiveOrDeactiveProduct(activeOr);
 
 			if (response.Success)
 			{

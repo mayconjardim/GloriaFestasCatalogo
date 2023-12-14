@@ -65,12 +65,13 @@
 
 									@if (products.Active)
 									{
-										<input type="checkbox" checked  />
+										<input type="checkbox" checked @onclick='(() => ActiveOrDeactiveProduct(products.Id, !products.Active))' />
 									}
 									else
 									{
-										<input type="checkbox"  />
+										<input type="checkbox" @onclick='(() => ActiveOrDeactiveProduct(products.Id, !products.Active))' />
 									}
+
 
 								</td>
 								<td>

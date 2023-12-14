@@ -70,9 +70,8 @@ namespace GloriaFestasCatalogo.Client.Pages.Admin
 				currentPage = 1;
 			}
 
-			await InvokeAsync(StateHasChanged);
+			await InvokeAsync(() => StateHasChanged());
 		}
-
 
 		private async Task ChangePage(int nextPage)
 		{
@@ -88,6 +87,28 @@ namespace GloriaFestasCatalogo.Client.Pages.Admin
 				products = result.Data;
 				currentPage = result.Data.CurrentPage;
 			}
+
+			await InvokeAsync(() => StateHasChanged());
+		}
+
+		public async Task ActiveOrDeactiveProduct(int id, bool active)
+		{
+
+			ActiveOrDeactive activeOr = new ActiveOrDeactive();
+			activeOr.ProductId = id;
+			activeOr.Active = active;
+
+			var result = await ProductService.ActiveOrDeactiveProduct(activeOr);
+
+			if (!result.Success)
+			{
+				message = result.Message;
+			}
+			else
+			{
+				await InvokeAsync(() => StateHasChanged());
+			}
+
 		}
 
 		private async Task GetCategories()
@@ -111,7 +132,7 @@ namespace GloriaFestasCatalogo.Client.Pages.Admin
 			var result = await ProductService.CreateProduct(newProduct);
 			if (!result.Success)
 			{
-				await InvokeAsync(StateHasChanged);
+				await InvokeAsync(() => StateHasChanged());
 			}
 		}
 
@@ -122,7 +143,7 @@ namespace GloriaFestasCatalogo.Client.Pages.Admin
 				var result = await ProductService.UpdateProduct(selectedProduct);
 				if (!result.Success)
 				{
-					await InvokeAsync(StateHasChanged);
+					await InvokeAsync(() => StateHasChanged());
 
 				}
 			}
@@ -135,7 +156,7 @@ namespace GloriaFestasCatalogo.Client.Pages.Admin
 				var result = await ProductService.DeleteProduct(selectedProduct.Id);
 				if (!result.Success)
 				{
-					await InvokeAsync(StateHasChanged);
+					await InvokeAsync(() => StateHasChanged());
 
 				}
 			}

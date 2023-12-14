@@ -71,6 +71,25 @@ namespace GloriaFestasCatalogo.Client.Services.ProductService
 				response.Message = ex.Message;
 			}
 
+
+			return response;
+		}
+
+		public async Task<ServiceResponse<bool>> ActiveOrDeactiveProduct(ActiveOrDeactive activeOr)
+		{
+			var response = new ServiceResponse<bool>();
+
+			try
+			{
+				var result = await _http.PutAsJsonAsync($"api/product/active/{activeOr.ProductId}", activeOr);
+				response = await result.Content.ReadFromJsonAsync<ServiceResponse<bool>>();
+			}
+			catch (Exception ex)
+			{
+				response.Success = false;
+				response.Message = ex.Message;
+			}
+
 			return response;
 		}
 

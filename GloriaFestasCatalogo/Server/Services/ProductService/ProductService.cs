@@ -211,7 +211,7 @@ namespace GloriaFestasCatalogo.Server.Services.ProductService
 
 			try
 			{
-				var product = await _context.Products.FindAsync(productId);
+				var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == productId);
 
 				if (product == null)
 				{
@@ -233,6 +233,41 @@ namespace GloriaFestasCatalogo.Server.Services.ProductService
 			}
 
 			return response;
+		}
+
+		public async Task<ServiceResponse<bool>> ActiveOrDeactiveProduct(ActiveOrDeactive activeOr)
+		{
+			var response = new ServiceResponse<bool>();
+
+			try
+			{
+				var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == activeOr.ProductId);
+
+				if (product == null)
+				{
+					response.Success = false;
+					response.Message = "Produto não encontrado.";
+					return response;
+				}
+				await Console.Out.WriteLineAsync(" O RESULTADO É = " + activeOr.Active);
+
+
+				product.Active = activeOr.Active;
+				_context.Update(product);
+
+				await _context.SaveChangesAsync();
+
+				response.Success = true;
+				response.Data = true;
+			}
+			catch (Exception ex)
+			{
+				response.Success = false;
+				response.Message = ex.Message;
+			}
+
+			return response;
+
 		}
 
 	}
