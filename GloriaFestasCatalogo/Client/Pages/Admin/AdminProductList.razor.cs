@@ -128,7 +128,6 @@ namespace GloriaFestasCatalogo.Client.Pages.Admin
 
 		private async Task CreateProduct()
 		{
-
 			var result = await ProductService.CreateProduct(newProduct);
 			if (!result.Success)
 			{
@@ -206,17 +205,14 @@ namespace GloriaFestasCatalogo.Client.Pages.Admin
 
 		private void HandleCreationCategory(ChangeEventArgs e)
 		{
-
 			if (int.TryParse(e.Value.ToString(), out var value))
 			{
 				newProduct.ProductCategoryId = value;
 			}
-
 		}
 
 		private void HandleUpdateCategory(ChangeEventArgs e)
 		{
-
 			if (int.TryParse(e.Value.ToString(), out var value))
 			{
 				if (selectedProduct != null)
@@ -224,7 +220,6 @@ namespace GloriaFestasCatalogo.Client.Pages.Admin
 					selectedProduct.Category.Id = value;
 				}
 			}
-
 		}
 
 	}

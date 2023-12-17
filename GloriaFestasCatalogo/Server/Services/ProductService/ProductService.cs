@@ -39,32 +39,32 @@ namespace GloriaFestasCatalogo.Server.Services.ProductService
 
 		public async Task<ServiceResponse<ProductResponse>> GetProductsPageableAsync(int page, int pageSize, int categoryId, string text = null)
 		{
-			var query = _context.Products.Include(p => p.Category);
+
+			IQueryable<Product> query = _context.Products.Include(p => p.Category);
 
 			if (!string.IsNullOrEmpty(text))
 			{
-				query = (Microsoft.EntityFrameworkCore.Query.IIncludableQueryable<Product, ProductCategory>)
-					query.Where(p => EF.Functions.Like(p.Name, $"%{text}%") || EF.Functions.Like(p.Tags, $"%{text}%"));
+				query = query.Where(p => EF.Functions.Like(p.Name, $"%{text}%") || EF.Functions.Like(p.Tags, $"%{text}%"));
 			}
 
 			if (categoryId != 0)
 			{
-				query = (Microsoft.EntityFrameworkCore.Query.IIncludableQueryable<Product, ProductCategory>)
-					query.Where(p => p.Category.Id == categoryId);
+				query = query.Where(p => p.Category.Id == categoryId);
 			}
 
 			var totalProducts = await query.CountAsync();
 
 			var products = await query
 				.Skip((page - 1) * pageSize)
+				.Include(p => p.Category)
 				.Take(pageSize)
 				.ToListAsync();
 
 			var productDtos = _mapper.Map<List<ProductDto>>(products);
 
-			if (productDtos == null || !productDtos.Any())
+			if (productDtos == null || productDtos.Count == 0)
 			{
-				return new ServiceResponse<ProductResponse>
+				var emptyResponse = new ServiceResponse<ProductResponse>
 				{
 					Success = true,
 					Data = new ProductResponse
@@ -75,11 +75,13 @@ namespace GloriaFestasCatalogo.Server.Services.ProductService
 					},
 					Message = "Não foram encontrados produtos para os critérios fornecidos."
 				};
+
+				return emptyResponse;
 			}
 
 			var totalPages = (int)Math.Ceiling((double)totalProducts / pageSize);
 
-			return new ServiceResponse<ProductResponse>
+			var response = new ServiceResponse<ProductResponse>
 			{
 				Data = new ProductResponse
 				{
@@ -88,6 +90,8 @@ namespace GloriaFestasCatalogo.Server.Services.ProductService
 					CurrentPage = page
 				}
 			};
+
+			return response;
 		}
 
 		public async Task<ServiceResponse<ProductDto>> GetProductAsync(int productId)

@@ -28,7 +28,6 @@ namespace GloriaFestasCatalogo.Server.Controllers
 		[HttpGet("page/{page}")]
 		public async Task<ActionResult<ServiceResponse<ProductResponse>>> GetProductsPageable(int page, int pageSize, int categoryId, string? text = null)
 		{
-
 			try
 			{
 				var result = await _productService.GetProductsPageableAsync(page, pageSize, categoryId, text);
@@ -36,9 +35,9 @@ namespace GloriaFestasCatalogo.Server.Controllers
 			}
 			catch (Exception ex)
 			{
-				return StatusCode(500, "Erro interno no servidor.");
+				// Log the exception
+				return StatusCode(StatusCodes.Status500InternalServerError, "Erro interno no servidor.");
 			}
-
 		}
 
 		[HttpGet("{productId}")]
@@ -85,7 +84,7 @@ namespace GloriaFestasCatalogo.Server.Controllers
 				return Ok(response);
 			}
 
-			return NotFound(response);
+			return BadRequest(response);
 		}
 
 
@@ -99,7 +98,7 @@ namespace GloriaFestasCatalogo.Server.Controllers
 				return Ok(response);
 			}
 
-			return NotFound(response);
+			return BadRequest(response);
 		}
 
 
