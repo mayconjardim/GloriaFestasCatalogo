@@ -1,4 +1,5 @@
-﻿using GloriaFestasCatalogo.Shared.Dtos.Products;
+﻿using BlazorBootstrap;
+using GloriaFestasCatalogo.Shared.Dtos.Products;
 using GloriaFestasCatalogo.Shared.Utils;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
@@ -17,6 +18,8 @@ namespace GloriaFestasCatalogo.Client.Pages.Admin
 		private int pageSize = 20;
 		private string searchText = string.Empty;
 		private int categoryId = 0;
+
+		[Inject] protected ToastService toastService { get; set; }
 
 		protected override async Task OnInitializedAsync()
 		{
@@ -128,11 +131,29 @@ namespace GloriaFestasCatalogo.Client.Pages.Admin
 
 		private async Task CreateProduct()
 		{
-			var result = await ProductService.CreateProduct(newProduct);
-			if (!result.Success)
+
+			if (newProduct.Name != null)
 			{
-				await InvokeAsync(() => StateHasChanged());
+				var result = await ProductService.CreateProduct(newProduct);
+
+				if (result.Success)
+				{
+					await InvokeAsync(() =>
+					{
+						StateHasChanged();
+						toastService.Notify(new(ToastType.Success, $"Produto criado com sucesso!"));
+					});
+
+					await CloseModal("CreateModal");
+
+					RefreshPage();
+				}
+				else
+				{
+					toastService.Notify(new(ToastType.Danger, $"Ocorreu um erro ao criar o produto."));
+				}
 			}
+
 		}
 
 		private async Task EditProduct()
@@ -140,10 +161,21 @@ namespace GloriaFestasCatalogo.Client.Pages.Admin
 			if (selectedProduct != null)
 			{
 				var result = await ProductService.UpdateProduct(selectedProduct);
-				if (!result.Success)
+				if (result.Success)
 				{
-					await InvokeAsync(() => StateHasChanged());
+					await InvokeAsync(() =>
+					{
+						StateHasChanged();
+						toastService.Notify(new(ToastType.Success, $"Produto editado com sucesso!"));
+					});
 
+					await CloseModal("EditModal");
+
+					RefreshPage();
+				}
+				else
+				{
+					toastService.Notify(new(ToastType.Danger, $"Ocorreu um erro ao editar o produto."));
 				}
 			}
 		}
@@ -153,10 +185,22 @@ namespace GloriaFestasCatalogo.Client.Pages.Admin
 			if (selectedProduct != null)
 			{
 				var result = await ProductService.DeleteProduct(selectedProduct.Id);
-				if (!result.Success)
-				{
-					await InvokeAsync(() => StateHasChanged());
 
+				if (result.Success)
+				{
+					await InvokeAsync(() =>
+					{
+						StateHasChanged();
+						toastService.Notify(new(ToastType.Success, $"Produto deletado com sucesso!"));
+					});
+
+					await CloseModal("DeleteModal");
+
+					RefreshPage();
+				}
+				else
+				{
+					toastService.Notify(new(ToastType.Danger, $"Ocorreu um erro ao deletar o produto."));
 				}
 			}
 		}
@@ -220,6 +264,12 @@ namespace GloriaFestasCatalogo.Client.Pages.Admin
 					selectedProduct.Category.Id = value;
 				}
 			}
+		}
+
+		private async void RefreshPage()
+		{
+			await Task.Delay(1000);
+			NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
 		}
 
 	}
