@@ -1,5 +1,5 @@
-﻿using GloriaFestasCatalogo.Shared.Dtos.Products;
-using GloriaFestasCatalogo.Shared.Models.Products;
+﻿using BlazorBootstrap;
+using GloriaFestasCatalogo.Shared.Dtos.Products;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 
@@ -13,6 +13,8 @@ namespace GloriaFestasCatalogo.Client.Pages.Admin
 		private ProductCategoryDto newCategory = new ProductCategoryDto();
 		private string message = string.Empty;
 		private string searchText = string.Empty;
+
+		[Inject] protected ToastService toastService { get; set; }
 
 		protected override async Task OnInitializedAsync()
 		{
@@ -68,37 +70,60 @@ namespace GloriaFestasCatalogo.Client.Pages.Admin
 			await JSRuntime.InvokeAsync<object>("closeModal", modal);
 		}
 
-		private async Task CreateProduct()
+		private async Task CreateCategorie()
 		{
 
 			var result = await CategoryService.CreateCategorie(newCategory);
-			if (!result.Success)
+			if (result.Success)
 			{
-				await InvokeAsync(StateHasChanged);
+				await InvokeAsync(() =>
+				{
+					StateHasChanged();
+					toastService.Notify(new(ToastType.Success, $"Categoria criada com sucesso!"));
+				});
+
+				await CloseModal("CreateModal");
+
+				RefreshPage();
 			}
 		}
 
-		private async Task EditProduct()
+		private async Task EditCategorie()
 		{
 			if (selectedCategorie != null)
 			{
 				var result = await CategoryService.UpdateCategorie(selectedCategorie);
-				if (!result.Success)
+				if (result.Success)
 				{
-					await InvokeAsync(StateHasChanged);
+					await InvokeAsync(() =>
+					{
+						StateHasChanged();
+						toastService.Notify(new(ToastType.Success, $"Categoria editada com sucesso!"));
+					});
 
+					await CloseModal("EditModal");
+
+					RefreshPage();
 				}
 			}
 		}
 
-		private async Task DeleteProduct()
+		private async Task DeleteCategorie()
 		{
 			if (selectedCategorie != null)
 			{
 				var result = await CategoryService.DeleteCategorie(selectedCategorie.Id);
-				if (!result.Success)
+				if (result.Success)
 				{
-					await InvokeAsync(StateHasChanged);
+					await InvokeAsync(() =>
+					{
+						StateHasChanged();
+						toastService.Notify(new(ToastType.Success, $"Categoria deletada com sucesso!"));
+					});
+
+					await CloseModal("DeleteModal");
+
+					RefreshPage();
 
 				}
 			}
@@ -110,6 +135,11 @@ namespace GloriaFestasCatalogo.Client.Pages.Admin
 			await FilterByText();
 		}
 
+		private async void RefreshPage()
+		{
+			await Task.Delay(1000);
+			NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
+		}
 
 	}
 }
