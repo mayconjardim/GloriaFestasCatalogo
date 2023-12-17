@@ -20,6 +20,11 @@ namespace GloriaFestasCatalogo.Server.Services.ProductService
 
 		}
 
+		private async Task<bool> ProductExistsAsync(int productId)
+		{
+			return await _context.Products.AnyAsync(p => p.Id == productId);
+		}
+
 		public async Task<ServiceResponse<List<ProductDto>>> GetProductsAsync()
 		{
 			var products = await _context.Products
@@ -29,42 +34,37 @@ namespace GloriaFestasCatalogo.Server.Services.ProductService
 
 			var productDtos = _mapper.Map<List<ProductDto>>(products);
 
-			var response = new ServiceResponse<List<ProductDto>>
-			{
-				Data = productDtos
-			};
-
-			return response;
+			return new ServiceResponse<List<ProductDto>> { Data = productDtos };
 		}
 
 		public async Task<ServiceResponse<ProductResponse>> GetProductsPageableAsync(int page, int pageSize, int categoryId, string text = null)
 		{
-
-			IQueryable<Product> query = _context.Products.Include(p => p.Category);
+			var query = _context.Products.Include(p => p.Category);
 
 			if (!string.IsNullOrEmpty(text))
 			{
-				query = query.Where(p => EF.Functions.Like(p.Name, $"%{text}%") || EF.Functions.Like(p.Tags, $"%{text}%"));
+				query = (Microsoft.EntityFrameworkCore.Query.IIncludableQueryable<Product, ProductCategory>)
+					query.Where(p => EF.Functions.Like(p.Name, $"%{text}%") || EF.Functions.Like(p.Tags, $"%{text}%"));
 			}
 
 			if (categoryId != 0)
 			{
-				query = query.Where(p => p.Category.Id == categoryId);
+				query = (Microsoft.EntityFrameworkCore.Query.IIncludableQueryable<Product, ProductCategory>)
+					query.Where(p => p.Category.Id == categoryId);
 			}
 
 			var totalProducts = await query.CountAsync();
 
 			var products = await query
 				.Skip((page - 1) * pageSize)
-				.Include(p => p.Category)
 				.Take(pageSize)
 				.ToListAsync();
 
 			var productDtos = _mapper.Map<List<ProductDto>>(products);
 
-			if (productDtos == null || productDtos.Count == 0)
+			if (productDtos == null || !productDtos.Any())
 			{
-				var emptyResponse = new ServiceResponse<ProductResponse>
+				return new ServiceResponse<ProductResponse>
 				{
 					Success = true,
 					Data = new ProductResponse
@@ -75,13 +75,11 @@ namespace GloriaFestasCatalogo.Server.Services.ProductService
 					},
 					Message = "Não foram encontrados produtos para os critérios fornecidos."
 				};
-
-				return emptyResponse;
 			}
 
 			var totalPages = (int)Math.Ceiling((double)totalProducts / pageSize);
 
-			var response = new ServiceResponse<ProductResponse>
+			return new ServiceResponse<ProductResponse>
 			{
 				Data = new ProductResponse
 				{
@@ -90,14 +88,10 @@ namespace GloriaFestasCatalogo.Server.Services.ProductService
 					CurrentPage = page
 				}
 			};
-
-			return response;
 		}
 
 		public async Task<ServiceResponse<ProductDto>> GetProductAsync(int productId)
 		{
-			var response = new ServiceResponse<ProductDto>();
-
 			var product = await _context.Products
 				.Include(p => p.Category)
 				.Where(p => p.Id == productId && p.Active)
@@ -105,16 +99,15 @@ namespace GloriaFestasCatalogo.Server.Services.ProductService
 
 			if (product == null)
 			{
-				response.Success = false;
-				response.Message = "Desculpe, mas este produto não existe.";
-			}
-			else
-			{
-				var productDto = _mapper.Map<ProductDto>(product);
-				response.Data = productDto;
+				return new ServiceResponse<ProductDto>
+				{
+					Success = false,
+					Message = "Desculpe, mas este produto não existe."
+				};
 			}
 
-			return response;
+			var productDto = _mapper.Map<ProductDto>(product);
+			return new ServiceResponse<ProductDto> { Data = productDto };
 		}
 
 		public async Task<ServiceResponse<List<ProductDto>>> GetProductsByCategory(int categoryId)
@@ -126,34 +119,42 @@ namespace GloriaFestasCatalogo.Server.Services.ProductService
 
 			var productDtos = _mapper.Map<List<ProductDto>>(products);
 
-			var response = new ServiceResponse<List<ProductDto>>
-			{
-				Data = productDtos
-			};
-
-			return response;
+			return new ServiceResponse<List<ProductDto>> { Data = productDtos };
 		}
 
 		public async Task<ServiceResponse<ProductDto>> CreateProduct(ProductCreateDto product)
 		{
-
 			var response = new ServiceResponse<ProductDto>();
-
-
-			var category = await _context.Categories.Where(c => c.Id == product.ProductCategoryId).FirstOrDefaultAsync();
-
-			var newProduct = _mapper.Map<Product>(product);
-
-			if (category != null)
-			{
-				newProduct.Category = category;
-			}
 
 			try
 			{
+				var category = await _context.Categories.FindAsync(product.ProductCategoryId);
+
+				if (category == null)
+				{
+					response.Success = false;
+					response.Message = "Categoria não encontrada.";
+					return response;
+				}
+
+				var existingProduct = await _context.Products
+					.Where(p => p.Name == product.Name && p.Category.Id == category.Id)
+					.FirstOrDefaultAsync();
+
+				if (existingProduct != null)
+				{
+					response.Success = false;
+					response.Message = "Já existe um produto com o mesmo nome nesta categoria.";
+					return response;
+				}
+
+				var newProduct = _mapper.Map<Product>(product);
+				newProduct.Category = category;
+
 				_context.Add(newProduct);
 				await _context.SaveChangesAsync();
-				response.Success = false;
+
+				response.Success = true;
 				response.Data = _mapper.Map<ProductDto>(newProduct);
 			}
 			catch (Exception ex)
@@ -167,107 +168,108 @@ namespace GloriaFestasCatalogo.Server.Services.ProductService
 
 		public async Task<ServiceResponse<ProductDto>> UpdateProduct(ProductDto updatedProduct)
 		{
-			var response = new ServiceResponse<ProductDto>();
-
 			try
 			{
-				var category = await _context.Categories.Where(c => c.Id == updatedProduct.Category.Id).FirstOrDefaultAsync();
+				var category = await _context.Categories.FindAsync(updatedProduct.Category.Id);
 
-				var product = await _context.Products.Where(p => p.Id == updatedProduct.Id).FirstOrDefaultAsync();
+				var product = await _context.Products.FindAsync(updatedProduct.Id);
 
-				if (product != null && category != null)
+				if (product == null || category == null)
 				{
-					product.Name = updatedProduct.Name;
-					product.Price = updatedProduct.Price;
-					product.PhotoUrl = updatedProduct.PhotoUrl;
-					product.Tags = updatedProduct.Tags;
-					product.Category = category;
-
-					_context.Update(product);
-					await _context.SaveChangesAsync();
-
-					response.Success = true;
-					response.Data = _mapper.Map<ProductDto>(product);
+					return new ServiceResponse<ProductDto>
+					{
+						Success = false,
+						Message = "Produto ou categoria não encontrados."
+					};
 				}
-				else
+
+				product.Name = updatedProduct.Name;
+				product.Price = updatedProduct.Price;
+				product.PhotoUrl = updatedProduct.PhotoUrl;
+				product.Tags = updatedProduct.Tags;
+				product.Category = category;
+
+				_context.Update(product);
+				await _context.SaveChangesAsync();
+
+				return new ServiceResponse<ProductDto>
 				{
-					response.Success = false;
-					response.Message = "Produto ou categoria não encontrados.";
-				}
+					Success = true,
+					Data = _mapper.Map<ProductDto>(product)
+				};
 			}
 			catch (Exception ex)
 			{
-				response.Success = false;
-				response.Message = ex.Message;
+				return new ServiceResponse<ProductDto>
+				{
+					Success = false,
+					Message = ex.Message
+				};
 			}
-
-			return response;
 		}
-
 
 		public async Task<ServiceResponse<bool>> DeleteProduct(int productId)
 		{
-			var response = new ServiceResponse<bool>();
-
 			try
 			{
-				var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == productId);
+				var productExists = await ProductExistsAsync(productId);
 
-				if (product == null)
+				if (!productExists)
 				{
-					response.Success = false;
-					response.Message = "Produto não encontrado.";
-					return response;
+					return new ServiceResponse<bool>
+					{
+						Success = false,
+						Message = "Produto não encontrado."
+					};
 				}
 
+				var product = await _context.Products.FindAsync(productId);
 				_context.Products.Remove(product);
 				await _context.SaveChangesAsync();
 
-				response.Success = true;
-				response.Data = true;
+				return new ServiceResponse<bool> { Success = true, Data = true };
 			}
 			catch (Exception ex)
 			{
-				response.Success = false;
-				response.Message = ex.Message;
+				return new ServiceResponse<bool>
+				{
+					Success = false,
+					Message = ex.Message
+				};
 			}
-
-			return response;
 		}
 
 		public async Task<ServiceResponse<bool>> ActiveOrDeactiveProduct(ActiveOrDeactive activeOr)
 		{
-			var response = new ServiceResponse<bool>();
-
 			try
 			{
-				var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == activeOr.ProductId);
+				var productExists = await ProductExistsAsync(activeOr.ProductId);
 
-				if (product == null)
+				if (!productExists)
 				{
-					response.Success = false;
-					response.Message = "Produto não encontrado.";
-					return response;
+					return new ServiceResponse<bool>
+					{
+						Success = false,
+						Message = "Produto não encontrado."
+					};
 				}
-				await Console.Out.WriteLineAsync(" O RESULTADO É = " + activeOr.Active);
 
-
+				var product = await _context.Products.FindAsync(activeOr.ProductId);
 				product.Active = activeOr.Active;
-				_context.Update(product);
 
+				_context.Update(product);
 				await _context.SaveChangesAsync();
 
-				response.Success = true;
-				response.Data = true;
+				return new ServiceResponse<bool> { Success = true, Data = true };
 			}
 			catch (Exception ex)
 			{
-				response.Success = false;
-				response.Message = ex.Message;
+				return new ServiceResponse<bool>
+				{
+					Success = false,
+					Message = ex.Message
+				};
 			}
-
-			return response;
-
 		}
 
 	}
