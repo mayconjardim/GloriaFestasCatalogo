@@ -73,19 +73,24 @@ namespace GloriaFestasCatalogo.Client.Pages.Admin
 		private async Task CreateCategorie()
 		{
 
-			var result = await CategoryService.CreateCategorie(newCategory);
-			if (result.Success)
+			if (newCategory.Name != null)
 			{
-				await InvokeAsync(() =>
+
+				var result = await CategoryService.CreateCategorie(newCategory);
+				if (result.Success)
 				{
-					StateHasChanged();
-					toastService.Notify(new(ToastType.Success, $"Categoria criada com sucesso!"));
-				});
+					await InvokeAsync(() =>
+					{
+						StateHasChanged();
+						toastService.Notify(new(ToastType.Success, $"Categoria criada com sucesso!"));
+					});
 
-				await CloseModal("CreateModal");
+					await CloseModal("CreateModal");
 
-				RefreshPage();
+					RefreshPage();
+				}
 			}
+
 		}
 
 		private async Task EditCategorie()

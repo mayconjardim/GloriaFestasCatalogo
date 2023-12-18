@@ -71,7 +71,7 @@ namespace GloriaFestasCatalogo.Server.Services.CategoryService
 			{
 				_context.Add(newCategory);
 				await _context.SaveChangesAsync();
-				response.Success = false;
+				response.Success = true;
 				response.Data = _mapper.Map<ProductCategoryDto>(newCategory);
 			}
 			catch (Exception ex)
