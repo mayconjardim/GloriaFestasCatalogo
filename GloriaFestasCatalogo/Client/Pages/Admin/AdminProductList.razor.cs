@@ -25,7 +25,7 @@ namespace GloriaFestasCatalogo.Client.Pages.Admin
 		{
 			message = "Carregando Produtos...";
 
-			var result = await ProductService.GetProductsPageableAsync(currentPage, pageSize, categoryId, true, searchText);
+			var result = await ProductService.GetProductsPageableAsync(currentPage, pageSize, categoryId, searchText);
 			if (!result.Success)
 			{
 				message = result.Message;
@@ -40,7 +40,7 @@ namespace GloriaFestasCatalogo.Client.Pages.Admin
 
 		private async Task FilterByText()
 		{
-			var result = await ProductService.GetProductsPageableAsync(currentPage, pageSize, categoryId, true, searchText);
+			var result = await ProductService.GetProductsPageableAsync(currentPage, pageSize, categoryId, searchText);
 
 			if (!result.Success)
 			{
@@ -60,7 +60,7 @@ namespace GloriaFestasCatalogo.Client.Pages.Admin
 		private async Task FilterByCategory()
 		{
 
-			var result = await ProductService.GetProductsPageableAsync(currentPage, pageSize, categoryId, true, searchText);
+			var result = await ProductService.GetProductsPageableAsync(currentPage, pageSize, categoryId, searchText);
 
 			if (!result.Success)
 			{
@@ -79,7 +79,7 @@ namespace GloriaFestasCatalogo.Client.Pages.Admin
 		private async Task ChangePage(int nextPage)
 		{
 
-			var result = await ProductService.GetProductsPageableAsync(nextPage, pageSize, categoryId, true, searchText);
+			var result = await ProductService.GetProductsPageableAsync(nextPage, pageSize, categoryId, searchText);
 
 			if (!result.Success)
 			{

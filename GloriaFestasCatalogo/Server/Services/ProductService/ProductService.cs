@@ -37,16 +37,10 @@ namespace GloriaFestasCatalogo.Server.Services.ProductService
 			return new ServiceResponse<List<ProductDto>> { Data = productDtos };
 		}
 
-		public async Task<ServiceResponse<ProductResponse>> GetProductsPageableAsync(int page, int pageSize, int categoryId, bool showInactive, string text = null)
+		public async Task<ServiceResponse<ProductResponse>> GetProductsPageableAsync(int page, int pageSize, int categoryId, string text = null)
 		{
 
-
 			IQueryable<Product> query = _context.Products.Include(p => p.Category);
-
-			if (showInactive == false)
-			{
-				query = query.Where(p => p.Active == true);
-			}
 
 			if (!string.IsNullOrEmpty(text))
 			{
@@ -284,6 +278,61 @@ namespace GloriaFestasCatalogo.Server.Services.ProductService
 			}
 		}
 
+		public async Task<ServiceResponse<ProductResponse>> GetActiveProductsPageableAsync(int page, int pageSize, int categoryId, string text = null)
+		{
+			IQueryable<Product> query = _context.Products.Include(p => p.Category);
 
+			if (!string.IsNullOrEmpty(text))
+			{
+				query = query.Where(p => EF.Functions.Like(p.Name, $"%{text}%") || EF.Functions.Like(p.Tags, $"%{text}%"));
+			}
+
+			if (categoryId != 0)
+			{
+				query = query.Where(p => p.Category.Id == categoryId);
+			}
+
+			var totalProducts = await query.CountAsync();
+
+			var products = await query
+				.Skip((page - 1) * pageSize)
+				.Include(p => p.Category)
+				.Where(p => p.Active == true)
+				.Take(pageSize)
+				.ToListAsync();
+
+			var productDtos = _mapper.Map<List<ProductDto>>(products);
+
+			if (productDtos == null || productDtos.Count == 0)
+			{
+				var emptyResponse = new ServiceResponse<ProductResponse>
+				{
+					Success = true,
+					Data = new ProductResponse
+					{
+						Products = new List<ProductDto>(),
+						Pages = 0,
+						CurrentPage = page
+					},
+					Message = "Não foram encontrados produtos para os critérios fornecidos."
+				};
+
+				return emptyResponse;
+			}
+
+			var totalPages = (int)Math.Ceiling((double)totalProducts / pageSize);
+
+			var response = new ServiceResponse<ProductResponse>
+			{
+				Data = new ProductResponse
+				{
+					Products = productDtos,
+					Pages = totalPages,
+					CurrentPage = page
+				}
+			};
+
+			return response;
+		}
 	}
 }

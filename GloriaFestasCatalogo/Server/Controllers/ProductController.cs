@@ -2,7 +2,6 @@
 using GloriaFestasCatalogo.Shared.Dtos.Products;
 using GloriaFestasCatalogo.Shared.Utils;
 using Microsoft.AspNetCore.Mvc;
-using System;
 
 namespace GloriaFestasCatalogo.Server.Controllers
 {
@@ -26,11 +25,26 @@ namespace GloriaFestasCatalogo.Server.Controllers
 		}
 
 		[HttpGet("page/{page}")]
-		public async Task<ActionResult<ServiceResponse<ProductResponse>>> GetProductsPageable(int page, int pageSize, int categoryId, bool showInactive, string? text = null)
+		public async Task<ActionResult<ServiceResponse<ProductResponse>>> GetProductsPageable(int page, int pageSize, int categoryId, string? text = null)
 		{
 			try
 			{
-				var result = await _productService.GetProductsPageableAsync(page, pageSize, categoryId, showInactive, text);
+				var result = await _productService.GetProductsPageableAsync(page, pageSize, categoryId, text);
+				return Ok(result);
+			}
+			catch (Exception ex)
+			{
+				// Log the exception
+				return StatusCode(StatusCodes.Status500InternalServerError, "Erro interno no servidor.");
+			}
+		}
+
+		[HttpGet("page/active/{page}")]
+		public async Task<ActionResult<ServiceResponse<ProductResponse>>> GetActiveProductsPageable(int page, int pageSize, int categoryId, string? text = null)
+		{
+			try
+			{
+				var result = await _productService.GetActiveProductsPageableAsync(page, pageSize, categoryId, text);
 				return Ok(result);
 			}
 			catch (Exception ex)
