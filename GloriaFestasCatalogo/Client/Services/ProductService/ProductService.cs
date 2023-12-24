@@ -19,9 +19,9 @@ namespace GloriaFestasCatalogo.Client.Services.ProductService
 			return await _http.GetFromJsonAsync<ServiceResponse<List<ProductDto>>>("api/product/all");
 		}
 
-		public async Task<ServiceResponse<ProductResponse>> GetProductsPageableAsync(int page, int pageSize, int categoryId, string? text = null)
+		public async Task<ServiceResponse<ProductResponse>> GetProductsPageableAsync(int page, int pageSize, int categoryId, bool showInactive, string? text = null)
 		{
-			var url = $"api/product/page/{page}?pageSize={pageSize}&categoryId={categoryId}";
+			var url = $"api/product/page/{page}?pageSize={pageSize}&categoryId={categoryId}&showActive={showInactive}";
 
 			if (!string.IsNullOrEmpty(text))
 			{

@@ -26,11 +26,11 @@ namespace GloriaFestasCatalogo.Server.Controllers
 		}
 
 		[HttpGet("page/{page}")]
-		public async Task<ActionResult<ServiceResponse<ProductResponse>>> GetProductsPageable(int page, int pageSize, int categoryId, string? text = null)
+		public async Task<ActionResult<ServiceResponse<ProductResponse>>> GetProductsPageable(int page, int pageSize, int categoryId, bool showInactive, string? text = null)
 		{
 			try
 			{
-				var result = await _productService.GetProductsPageableAsync(page, pageSize, categoryId, text);
+				var result = await _productService.GetProductsPageableAsync(page, pageSize, categoryId, showInactive, text);
 				return Ok(result);
 			}
 			catch (Exception ex)

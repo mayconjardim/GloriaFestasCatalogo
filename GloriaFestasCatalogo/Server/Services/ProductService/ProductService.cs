@@ -37,10 +37,16 @@ namespace GloriaFestasCatalogo.Server.Services.ProductService
 			return new ServiceResponse<List<ProductDto>> { Data = productDtos };
 		}
 
-		public async Task<ServiceResponse<ProductResponse>> GetProductsPageableAsync(int page, int pageSize, int categoryId, string text = null)
+		public async Task<ServiceResponse<ProductResponse>> GetProductsPageableAsync(int page, int pageSize, int categoryId, bool showInactive, string text = null)
 		{
 
+
 			IQueryable<Product> query = _context.Products.Include(p => p.Category);
+
+			if (showInactive == false)
+			{
+				query = query.Where(p => p.Active == true);
+			}
 
 			if (!string.IsNullOrEmpty(text))
 			{
