@@ -96,14 +96,15 @@ namespace GloriaFestasCatalogo.Client.Pages.Admin
 
 		public async Task ActiveOrDeactiveProduct(int id, bool active)
 		{
-
-			ActiveOrDeactive activeOr = new ActiveOrDeactive();
-			activeOr.ProductId = id;
-			activeOr.Active = active;
+			ActiveOrDeactive activeOr = new ActiveOrDeactive
+			{
+				ProductId = id,
+				Active = active
+			};
 
 			var result = await ProductService.ActiveOrDeactiveProduct(activeOr);
 
-			if (!result.Success)
+			if (result.Success)
 			{
 				message = result.Message;
 			}
@@ -111,7 +112,6 @@ namespace GloriaFestasCatalogo.Client.Pages.Admin
 			{
 				await InvokeAsync(() => StateHasChanged());
 			}
-
 		}
 
 		private async Task GetCategories()

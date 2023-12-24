@@ -13,7 +13,7 @@ namespace GloriaFestasCatalogo.Server.Services.ProductService
 		Task<ServiceResponse<ProductDto>> CreateProduct(ProductCreateDto product);
 		Task<ServiceResponse<ProductDto>> UpdateProduct(ProductDto product);
 		Task<ServiceResponse<bool>> DeleteProduct(int productId);
-		Task<ServiceResponse<bool>> ActiveOrDeactiveProduct(ActiveOrDeactive activeOr);
+		Task<ServiceResponse<bool>> ActiveOrDeactiveProduct(int id, ActiveOrDeactive activeOr);
 
 	}
 }

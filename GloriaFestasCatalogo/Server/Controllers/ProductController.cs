@@ -74,33 +74,29 @@ namespace GloriaFestasCatalogo.Server.Controllers
 			return BadRequest(response);
 		}
 
-		[HttpDelete("{id}")]
-		public async Task<ActionResult<ServiceResponse<bool>>> DeleteProduct(int id)
-		{
-			var response = await _productService.DeleteProduct(id);
-
-			if (response.Success)
-			{
-				return Ok(response);
-			}
-
-			return BadRequest(response);
-		}
-
-
 		[HttpPut("active/{id}")]
-		public async Task<ActionResult<ServiceResponse<bool>>> ActiveOrDeactiveProduct(ActiveOrDeactive activeOr)
+		public async Task<ActionResult<ServiceResponse<bool>>> ActiveOrDeactiveProduct(int id, ActiveOrDeactive activeOr)
 		{
-			var response = await _productService.ActiveOrDeactiveProduct(activeOr);
-
-			if (response.Success)
+			try
 			{
-				return Ok(response);
+				var response = await _productService.ActiveOrDeactiveProduct(id, activeOr);
+
+				if (response.Success)
+				{
+					return Ok(response);
+				}
+
+				return BadRequest(response);
 			}
-
-			return BadRequest(response);
+			catch (Exception ex)
+			{
+				return StatusCode(500, new ServiceResponse<bool>
+				{
+					Success = false,
+					Message = ex.Message
+				});
+			}
 		}
-
 
 	}
 }

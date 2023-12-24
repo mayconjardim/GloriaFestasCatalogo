@@ -243,11 +243,11 @@ namespace GloriaFestasCatalogo.Server.Services.ProductService
 			}
 		}
 
-		public async Task<ServiceResponse<bool>> ActiveOrDeactiveProduct(ActiveOrDeactive activeOr)
+		public async Task<ServiceResponse<bool>> ActiveOrDeactiveProduct(int id, ActiveOrDeactive activeOr)
 		{
 			try
 			{
-				var productExists = await ProductExistsAsync(activeOr.ProductId);
+				var productExists = await ProductExistsAsync(id);
 
 				if (!productExists)
 				{
@@ -258,13 +258,15 @@ namespace GloriaFestasCatalogo.Server.Services.ProductService
 					};
 				}
 
-				var product = await _context.Products.FindAsync(activeOr.ProductId);
-				product.Active = activeOr.Active;
+				var product = await _context.Products.FindAsync(id);
+				product.Active = !product.Active;
+
 
 				_context.Update(product);
 				await _context.SaveChangesAsync();
 
 				return new ServiceResponse<bool> { Success = true, Data = true };
+
 			}
 			catch (Exception ex)
 			{
@@ -275,6 +277,7 @@ namespace GloriaFestasCatalogo.Server.Services.ProductService
 				};
 			}
 		}
+
 
 	}
 }
