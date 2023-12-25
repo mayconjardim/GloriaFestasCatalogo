@@ -365,3 +365,5 @@ FodyWeavers.xsd
 /GloriaFestasCatalogo/Server/Gloria.db
 /GloriaFestasCatalogo/Server/Gloria.db
 /GloriaFestasCatalogo/Client/Shared/AppConstants.cs
+/GloriaFestasCatalogo/Server/Gloria.db
+/GloriaFestasCatalogo/Server/appsettings.json
