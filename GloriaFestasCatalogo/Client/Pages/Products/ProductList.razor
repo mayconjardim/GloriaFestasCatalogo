@@ -35,8 +35,8 @@
         {
 
             <div >
-                <div  class="card" style="width: 170px; margin: 5px; height: 350px; display: flex; flex-direction: column; justify-content: space-between;">
-                    <img class="card-img" src="@product.PhotoUrl" alt="product-name" @onclick="() => NavigateToProductPage(product.Id)">
+                <div class="card" style="width: 170px; margin: 5px; height: 350px; display: flex; flex-direction: column; justify-content: space-between;">
+                    <img class="card-img" src="@product.PhotoUrl" alt="product-name" style="max-height: 180px;" @onclick="() => NavigateToProductPage(product.Id)">
 
                     <div class="card-body d-flex flex-column justify-content-between" @onclick="() => NavigateToProductPage(product.Id)">
                         <h4 class="card-title" style="font-size: 0.8rem;">@product.Name</h4>
