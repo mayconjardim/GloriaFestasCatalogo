@@ -1,94 +1,96 @@
-﻿using GloriaFestasCatalogo.Client.Services.CartService;
-using GloriaFestasCatalogo.Shared.Dtos.Products;
+﻿using GloriaFestasCatalogo.Shared.Dtos.Products;
 using GloriaFestasCatalogo.Shared.Utils;
 using Microsoft.AspNetCore.Components;
 
 namespace GloriaFestasCatalogo.Client.Shared
 {
-	partial class NavMenu
-	{
-		private int cartCount = 0;
-		private List<CartProduct> cart = new List<CartProduct>();
-		decimal subtotal = 0;
-		private bool IsButtonDisabled = true;
+    partial class NavMenu
+    {
+        private int cartCount = 0;
+        private List<CartProduct> cart = new List<CartProduct>();
+        decimal subtotal = 0;
+        private bool IsButtonDisabled = true;
 
-		protected override async Task OnInitializedAsync()
-		{
-			cart = await CartService.GetCart();
+        private bool showInstallPrompt;
 
-			if (cart != null)
-			{
-				cartCount = cart.Count();
-				IsButtonDisabled = false;
+        protected override async Task OnInitializedAsync()
+        {
+            cart = await CartService.GetCart();
 
-				foreach (var cartProducts in cart)
-				{
-					subtotal += cartProducts.Product.Price * cartProducts.Quantity;
-				}
-			}
+            if (cart != null)
+            {
+                cartCount = cart.Count();
+                IsButtonDisabled = false;
 
-			CartService.CartUpdated += HandleCartUpdated;
-		}
+                foreach (var cartProducts in cart)
+                {
+                    subtotal += cartProducts.Product.Price * cartProducts.Quantity;
+                }
+            }
 
-		private async Task UpdateQuantity(bool isAdding, ProductDto product)
-		{
-			int quantityChange = isAdding ? 1 : -1;
+            CartService.CartUpdated += HandleCartUpdated;
+        }
 
-			await CartService.UpdateCartItemQuantity(product, quantityChange);
+        private async Task UpdateQuantity(bool isAdding, ProductDto product)
+        {
+            int quantityChange = isAdding ? 1 : -1;
 
-			UpdateCartInfo();
-		}
+            await CartService.UpdateCartItemQuantity(product, quantityChange);
 
-		private void HandleCartUpdated(object sender, EventArgs e)
-		{
-			UpdateCartInfo();
-		}
+            UpdateCartInfo();
+        }
 
-		private async void UpdateCartInfo()
-		{
-			var updatedCart = await CartService.GetCart();
-			cartCount = updatedCart?.Count() ?? 0;
-			cart = updatedCart;
+        private void HandleCartUpdated(object sender, EventArgs e)
+        {
+            UpdateCartInfo();
+        }
 
-			subtotal = 0;
-			foreach (var cartProducts in updatedCart)
-			{
-				subtotal += cartProducts.Product.Price * cartProducts.Quantity;
-			}
+        private async void UpdateCartInfo()
+        {
+            var updatedCart = await CartService.GetCart();
+            cartCount = updatedCart?.Count() ?? 0;
+            cart = updatedCart;
 
-			IsButtonDisabled = cartCount == 0;
+            subtotal = 0;
+            foreach (var cartProducts in updatedCart)
+            {
+                subtotal += cartProducts.Product.Price * cartProducts.Quantity;
+            }
 
-			var currentUrl = NavigationManager.Uri;
-			await InvokeAsync(StateHasChanged);
-		}
+            IsButtonDisabled = cartCount == 0;
 
-		protected override void OnAfterRender(bool firstRender)
-		{
-			if (firstRender)
-			{
-				CartService.CartUpdated += HandleCartUpdated;
-			}
-		}
+            var currentUrl = NavigationManager.Uri;
+            await InvokeAsync(StateHasChanged);
+        }
 
-		private void NavigateToHome()
-		{
-			NavigationManager.NavigateTo("/");
-		}
+        protected override void OnAfterRender(bool firstRender)
+        {
+            if (firstRender)
+            {
+                CartService.CartUpdated += HandleCartUpdated;
+            }
+        }
 
-		private void NavigateToOrder()
-		{
-			var currentUrl = NavigationManager.Uri;
+        private void NavigateToHome()
+        {
+            NavigationManager.NavigateTo("/");
+        }
 
-			if (currentUrl.Contains("order", StringComparison.OrdinalIgnoreCase))
-			{
-				IsButtonDisabled = true;
-			}
-			else if (!IsButtonDisabled)
-			{
+        private void NavigateToOrder()
+        {
+            var currentUrl = NavigationManager.Uri;
 
-				NavigationManager.NavigateTo(currentUrl + "order");
-			}
+            if (currentUrl.Contains("order", StringComparison.OrdinalIgnoreCase))
+            {
+                IsButtonDisabled = true;
+            }
+            else if (!IsButtonDisabled)
+            {
 
-		}
-	}
+                NavigationManager.NavigateTo(currentUrl + "order");
+            }
+
+        }
+
+    }
 }
