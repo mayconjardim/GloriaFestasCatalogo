@@ -86,8 +86,7 @@ namespace GloriaFestasCatalogo.Client.Shared
             }
             else if (!IsButtonDisabled)
             {
-
-                NavigationManager.NavigateTo(currentUrl + "order");
+                NavigationManager.NavigateTo("/order");
             }
 
         }
