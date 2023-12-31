@@ -1,4 +1,5 @@
-﻿using GloriaFestasCatalogo.Shared.Models.Orders;
+﻿using GloriaFestasCatalogo.Shared.Models.Config;
+using GloriaFestasCatalogo.Shared.Models.Orders;
 using GloriaFestasCatalogo.Shared.Models.Products;
 using GloriaFestasCatalogo.Shared.Models.Users;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +14,7 @@ namespace GloriaFestasCatalogo.Server.Data
         public DbSet<User> Users { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductCategory> Categories { get; set; }
+        public DbSet<AppConfig> AppConfig { get; set; }
         public DbSet<Order> Orders { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -79,6 +81,10 @@ namespace GloriaFestasCatalogo.Server.Data
                 .HasOne(oc => oc.Product)
                 .WithMany()
                 .HasForeignKey(oc => oc.ProductId);
+
+            modelBuilder.Entity<AppConfig>()
+               .Property(u => u.phoneNumber)
+               .IsRequired();
 
         }
     }
