@@ -5,6 +5,31 @@
 @inject NavigationManager NavigationManager
 @layout AdminLayout
 
-@code {
-    
+@if (appConfig != null)
+{
+	<div class="container-xl not-print">
+		<div class="table-responsive">
+			<div class="table-wrapper">
+				<div class="table-title">
+					<div class="row">
+						<div class="col-sm-4 d-flex">
+							<h2>Gerenciar <b>Configurações</b></h2>
+						</div>
+					</div>
+				</div>
+				<table class="table table-striped table-hover">
+					<thead>
+						<tr>
+							<th>WhatsApp</th>
+						</tr>
+					</thead>
+					<tbody>
+							<tr>
+							<td>@appConfig.phoneNumber</td>
+							</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
 }

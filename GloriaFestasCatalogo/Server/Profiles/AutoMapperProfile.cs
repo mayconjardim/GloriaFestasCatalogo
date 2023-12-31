@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using GloriaFestasCatalogo.Shared.Dtos.Config;
 using GloriaFestasCatalogo.Shared.Dtos.Orders;
 using GloriaFestasCatalogo.Shared.Dtos.Products;
+using GloriaFestasCatalogo.Shared.Models.Config;
 using GloriaFestasCatalogo.Shared.Models.Orders;
 using GloriaFestasCatalogo.Shared.Models.Products;
 
@@ -31,6 +33,8 @@ namespace GloriaFestasCatalogo.Server.Profiles
 			CreateMap<OrderCart, OrderCartDto>()
 				.ForMember(dist => dist.ProductName, opt => opt.MapFrom(src => src.Product.Name))
 				.ForMember(dist => dist.ProductPrice, opt => opt.MapFrom(src => src.Product.Price));
+
+			CreateMap<AppConfig, AppConfigDto>().ReverseMap();
 
 
 		}
