@@ -1,6 +1,7 @@
 global using GloriaFestasCatalogo.Server.Services.AuthService;
 using GloriaFestasCatalogo.Server.Data;
 using GloriaFestasCatalogo.Server.Services.CategoryService;
+using GloriaFestasCatalogo.Server.Services.ConfigService;
 using GloriaFestasCatalogo.Server.Services.OrderService;
 using GloriaFestasCatalogo.Server.Services.ProductService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -25,6 +26,7 @@ namespace GloriaFestasCatalogo
 			builder.Services.AddRazorPages();
 
 			builder.Services.AddScoped<IAuthService, AuthService>();
+			builder.Services.AddScoped<IConfigService, ConfigService>();
 			builder.Services.AddScoped<IProductService, ProductService>();
 			builder.Services.AddScoped<IOrderService, OrderService>();
 			builder.Services.AddScoped<ICategoryService, CategoryService>();
