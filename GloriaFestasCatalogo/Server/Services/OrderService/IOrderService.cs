@@ -11,6 +11,5 @@ namespace GloriaFestasCatalogo.Server.Services.OrderService
 		Task<ServiceResponse<OrderDto>> GetOrderById(int orderId);
 		Task<ServiceResponse<OrderDto>> UpdateOrder(OrderDto orderDto);
 
-
 	}
 }
