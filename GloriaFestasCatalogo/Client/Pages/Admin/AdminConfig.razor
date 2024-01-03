@@ -1,13 +1,13 @@
 ﻿@page "/admin/configuracoes"
 @attribute [Authorize]
-@inject ICategoryService CategoryService
+@inject IConfigService ConfigService
 @inject IJSRuntime JSRuntime
 @inject NavigationManager NavigationManager
 @layout AdminLayout
 
 @if (appConfig != null)
 {
-	<div class="container-xl not-print">
+	<div class="container-xl">
 		<div class="table-responsive">
 			<div class="table-wrapper">
 				<div class="table-title">
@@ -21,15 +21,52 @@
 					<thead>
 						<tr>
 							<th>WhatsApp</th>
+							<th>Ações</th>
 						</tr>
 					</thead>
 					<tbody>
 							<tr>
-							<td>@appConfig.phoneNumber</td>
+								<td>
+								<img src="/img/zap.svg" alt="Imagem" style="max-width: 50px; max-height: 50px; margin-right: 10px; border-radius: 50%;" />
+								@appConfig.PhoneNumber
+							</td>
+								<td>
+								<a @onclick='(() => OpenModal("EditModal", appConfig.Id))' class="edit" data-toggle="modal">
+									<i class="fa-solid fa-pen-to-square" data-toggle="tooltip" title="Edit" style="color: #5E0B76"></i>
+								</a>
+								</td>
 							</tr>
 					</tbody>
 				</table>
 			</div>
 		</div>
 	</div>
+
+	<!-- Edit Modal HTML -->
+		<div id="EditModal" class="modal fade">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<form>
+
+						<div class="modal-header">
+							<h4 class="modal-title">Editar Configurações</h4>
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true" @onclick='(() => CloseModal("EditModal"))'>&times;</button>
+						</div>
+
+						<div class="modal-body">
+
+							<div class="input-group mb-3 d-print-include">
+								<span class="input-group-text" id="basic-addon1"><b>NÚmero do WhatsApp</b></span>
+							<input type="text" class="form-control" @bind-value="@newNumber" required>
+							</div>
+
+						</div>
+						<div class="modal-footer">
+							<input class="btn btn-success" value="Editar" @onclick="EditConfig">
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+
 }

@@ -4,6 +4,7 @@ global using GloriaFestasCatalogo.Client.Services.CartService;
 global using GloriaFestasCatalogo.Client.Services.OrderService;
 global using GloriaFestasCatalogo.Client.Services.ProductService;
 global using GloriaFestasCatalogo.Client.Services.CategoryService;
+global using GloriaFestasCatalogo.Client.Services.ConfigService;
 global using Microsoft.AspNetCore.Components.Authorization;
 global using Microsoft.AspNetCore.Components.Web;
 global using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -23,6 +24,7 @@ namespace GloriaFestasCatalogo.Client
 			builder.Services.AddScoped<IOrderService, OrderService>();
 			builder.Services.AddScoped<ICategoryService, CategoryService>();
 			builder.Services.AddScoped<IAuthService, AuthService>();
+			builder.Services.AddScoped<IConfigService, ConfigService>();
 			builder.Services.AddScoped<CartService>();
 			builder.Services.AddBlazorBootstrap();
 

@@ -4,7 +4,7 @@ using System.Net.Http.Json;
 
 namespace GloriaFestasCatalogo.Client.Services.ConfigService
 {
-	public class ConfigService
+	public class ConfigService : IConfigService
 	{
 
 		private readonly HttpClient _http;
