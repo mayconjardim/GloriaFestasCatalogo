@@ -4,7 +4,7 @@
     {
 
         public int Id { get; set; }
-        public string phoneNumber { get; set; } = string.Empty;
+        public string PhoneNumber { get; set; } = string.Empty;
 
     }
 }

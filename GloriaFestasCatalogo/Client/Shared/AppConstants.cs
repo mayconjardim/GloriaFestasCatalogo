@@ -5,15 +5,13 @@ namespace GloriaFestasCatalogo.Client.Shared
 	public static class AppConstants
 	{
 
-		public const string PhoneNumber = "5521975185287";
-
 		public static string Message(OrderDto order)
 		{
 			string message = string.Empty;
 
 			if (order != null)
 			{
-				message = $"Olá, Glória Festas 🌈, meu nome é {order.Name} 😀\n" +
+				message = $"Olá Glória Festas, meu nome é {order.Name} \\u{{1F604}} \n" +
 						  "\n" +
 						  $"🛒 *Acabei de realizar o pedido abaixo:*\n" +
 						  $"📝 Nº do Pedido: {order.Id} \n" +

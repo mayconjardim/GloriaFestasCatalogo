@@ -1,4 +1,5 @@
 ﻿using GloriaFestasCatalogo.Client.Shared;
+using GloriaFestasCatalogo.Shared.Dtos.Config;
 using GloriaFestasCatalogo.Shared.Dtos.Orders;
 using GloriaFestasCatalogo.Shared.Utils;
 using Microsoft.AspNetCore.Components.Forms;
@@ -11,12 +12,23 @@ namespace GloriaFestasCatalogo.Client.Pages.Orders
 
         private List<CartProduct> cart = new List<CartProduct>();
         private OrderCreateDto order = new OrderCreateDto();
+        private AppConfigDto appConfig;
         decimal subtotal = 0;
         private EditContext _editContext;
         string message;
 
         protected override async Task OnInitializedAsync()
         {
+            var config = await ConfigService.GetConfig();
+            if (!config.Success)
+            {
+                message = config.Message;
+            }
+            else
+            {
+                appConfig = config.Data;
+            }
+
             _editContext = new EditContext(order);
             cart = await CartService.GetCart();
             CartService.CartUpdated += HandleCartUpdated;
@@ -66,7 +78,7 @@ namespace GloriaFestasCatalogo.Client.Pages.Orders
                     {
                         var returnOrder = orderReponse.Data;
 
-                        await JS.InvokeVoidAsync("window.open", GetWhatsAppURL(AppConstants.PhoneNumber, AppConstants.Message(returnOrder)));
+                        await JS.InvokeVoidAsync("window.open", GetWhatsAppURL(appConfig.PhoneNumber, AppConstants.Message(returnOrder)));
                     }
 
                     RefreshPage();

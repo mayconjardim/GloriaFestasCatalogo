@@ -3,10 +3,11 @@ using GloriaFestasCatalogo.Shared.Utils;
 
 namespace GloriaFestasCatalogo.Server.Services.ConfigService
 {
-	public interface IConfigService
-	{
+    public interface IConfigService
+    {
 
-		Task<ServiceResponse<AppConfigDto>> GetConfig();
+        Task<ServiceResponse<AppConfigDto>> GetConfig();
+        Task<ServiceResponse<AppConfigDto>> UpdateConfig(AppConfigDto config);
 
-	}
+    }
 }

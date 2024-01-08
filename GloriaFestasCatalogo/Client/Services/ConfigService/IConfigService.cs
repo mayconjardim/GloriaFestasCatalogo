@@ -7,6 +7,8 @@ namespace GloriaFestasCatalogo.Client.Services.ConfigService
 	{
 
 		Task<ServiceResponse<AppConfigDto>> GetConfig();
+        Task<ServiceResponse<AppConfigDto>> UpdateConfig(AppConfigDto config);
+
 
 	}
 }
