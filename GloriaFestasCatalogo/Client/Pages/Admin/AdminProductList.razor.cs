@@ -1,5 +1,6 @@
 ﻿using BlazorBootstrap;
 using GloriaFestasCatalogo.Shared.Dtos.Products;
+using GloriaFestasCatalogo.Shared.Models.Products;
 using GloriaFestasCatalogo.Shared.Utils;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
@@ -132,7 +133,7 @@ namespace GloriaFestasCatalogo.Client.Pages.Admin
 		private async Task CreateProduct()
 		{
 
-			if (newProduct.Name != null)
+			if (IsValid())
 			{
 				var result = await ProductService.CreateProduct(newProduct);
 
@@ -153,6 +154,7 @@ namespace GloriaFestasCatalogo.Client.Pages.Admin
 					toastService.Notify(new(ToastType.Danger, $"Ocorreu um erro ao criar o produto."));
 				}
 			}
+
 
 		}
 
@@ -264,6 +266,30 @@ namespace GloriaFestasCatalogo.Client.Pages.Admin
 					selectedProduct.Category.Id = value;
 				}
 			}
+		}
+
+		bool IsValid()
+		{
+
+			if (string.IsNullOrEmpty(newProduct.Name) || string.IsNullOrEmpty(newProduct.Description) || string.IsNullOrEmpty(newProduct.PhotoUrl))
+			{
+				toastService.Notify(new(ToastType.Danger, $"Preencha todos campos necessarios!"));
+				return false;
+			}
+
+			if (!newProduct.ProductCategoryId.HasValue)
+			{
+				toastService.Notify(new(ToastType.Danger, $"Selecione a categoria do produto!"));
+				return false;
+			}
+
+			if (newProduct.Price <= 0)
+			{
+				toastService.Notify(new(ToastType.Danger, $"Edite o valor do produto!"));
+				return false;
+			}
+
+			return true;
 		}
 
 		private async void RefreshPage()
