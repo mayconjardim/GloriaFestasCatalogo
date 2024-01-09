@@ -83,7 +83,7 @@ namespace GloriaFestasCatalogo.Server.Data
                 .HasForeignKey(oc => oc.ProductId);
 
             modelBuilder.Entity<AppConfig>()
-               .Property(u => u.phoneNumber)
+               .Property(u => u.PhoneNumber)
                .IsRequired();
 
         }
