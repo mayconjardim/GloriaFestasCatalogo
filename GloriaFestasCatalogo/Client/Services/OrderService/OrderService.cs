@@ -25,6 +25,24 @@ namespace GloriaFestasCatalogo.Client.Services.OrderService
 
 		}
 
+		public async Task<ServiceResponse<bool>> DeleteOrder(int orderId)
+		{
+			var response = new ServiceResponse<bool>();
+
+			try
+			{
+				var result = await _http.DeleteAsync($"api/order/{orderId}");
+				response = await result.Content.ReadFromJsonAsync<ServiceResponse<bool>>();
+			}
+			catch (Exception ex)
+			{
+				response.Success = false;
+				response.Message = ex.Message;
+			}
+
+			return response;
+		}
+
 		public async Task<ServiceResponse<OrderDto>> GetOrderById(int orderId)
 		{
 			var result = await _http.GetFromJsonAsync<ServiceResponse<OrderDto>>($"api/order/{orderId}");

@@ -60,6 +60,10 @@
 									<a @onclick='(() => OpenModal("PrintModal", order.Id))' class="edit" data-toggle="modal">
 										<i class="fa-solid fa-print" data-toggle="tooltip" title="Print" style="color: #5E0B76"></i>
 									</a>
+
+									<a @onclick='(() => OpenModal("DeleteModal", order.Id))' class="delete" data-toggle="modal">
+										<i class="fa-solid fa-trash" data-toggle="tooltip" title="Delete" style="color: #5E0B76"></i>
+									</a>
 							</td>
 						</tr>
 					}
@@ -212,6 +216,29 @@
 						</div>
 						<div class="modal-footer">
 							<input @onclick="UpdateStatus" class="btn" style="background: #5E0B76; color: #fff" value="Salvar">
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+
+		<!-- Delete Modal HTML -->
+		<div id="DeleteModal" class="modal fade">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<form>
+						<div class="modal-header">
+							<h4 class="modal-title">Deletar Pedido</h4>
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true" @onclick='(() => CloseModal("DeleteModal"))' a>&times;</button>
+						</div>
+						<div class="modal-body">
+							<p>
+								Tem certeza de que deseja excluir este pedido?
+							</p>
+							<p class="text-warning"><small>Essa ação não pode ser desfeita.</small></p>
+						</div>
+						<div class="modal-footer">
+							<input class="btn btn-danger" @onclick="DeleteOrder" value="Deletar">
 						</div>
 					</form>
 				</div>

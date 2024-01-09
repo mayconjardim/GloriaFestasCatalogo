@@ -55,6 +55,39 @@ namespace GloriaFestasCatalogo.Server.Services.OrderService
 			return response;
 		}
 
+		public async Task<ServiceResponse<bool>> DeleteOrder(int orderId)
+		{
+			try
+			{
+				var orderExists = await _context.Orders.FirstOrDefaultAsync(o => o.Id == orderId);
+
+				if (orderExists == null)
+				{
+					return new ServiceResponse<bool>
+					{
+						Success = false,
+						Message = "Pedido não encontrado."
+					};
+				}
+				else
+				{
+					_context.Orders.Remove(orderExists);
+					await _context.SaveChangesAsync();
+
+					return new ServiceResponse<bool> { Success = true, Data = true };
+				}
+
+			}
+			catch (Exception ex)
+			{
+				return new ServiceResponse<bool>
+				{
+					Success = false,
+					Message = ex.Message
+				};
+			}
+		}
+
 		public async Task<ServiceResponse<OrderDto>> GetOrderById(int orderId)
 		{
 			var response = new ServiceResponse<OrderDto>();

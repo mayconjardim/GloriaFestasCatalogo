@@ -1,4 +1,5 @@
-﻿using GloriaFestasCatalogo.Shared.Dtos.Orders;
+﻿using BlazorBootstrap;
+using GloriaFestasCatalogo.Shared.Dtos.Orders;
 using GloriaFestasCatalogo.Shared.Utils;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
@@ -18,6 +19,9 @@ namespace GloriaFestasCatalogo.Client.Pages.Admin
 		private string selectedValue;
 		private string searchText;
 
+		[Inject] protected ToastService toastService { get; set; }
+
+
 		protected override async Task OnInitializedAsync()
 		{
 			message = "Carregando Pedidos...";
@@ -31,6 +35,31 @@ namespace GloriaFestasCatalogo.Client.Pages.Admin
 			{
 				orders = result.Data;
 				currentPage = result.Data.CurrentPage;
+			}
+		}
+
+		private async Task DeleteOrder()
+		{
+			if (selectedOrder != null)
+			{
+				var result = await OrderService.DeleteOrder(selectedOrder.Id);
+
+				if (result.Success)
+				{
+					await InvokeAsync(() =>
+					{
+						StateHasChanged();
+						toastService.Notify(new(ToastType.Success, $"Pedido deletado com sucesso!"));
+					});
+
+					await CloseModal("DeleteModal");
+
+					RefreshPage();
+				}
+				else
+				{
+					toastService.Notify(new(ToastType.Danger, $"Ocorreu um erro ao deletar o pedido."));
+				}
 			}
 		}
 
