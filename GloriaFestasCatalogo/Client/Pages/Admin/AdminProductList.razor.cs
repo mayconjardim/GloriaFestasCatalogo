@@ -259,12 +259,10 @@ namespace GloriaFestasCatalogo.Client.Pages.Admin
 
 		private void HandleUpdateCategory(ChangeEventArgs e)
 		{
+	
 			if (int.TryParse(e.Value.ToString(), out var value))
 			{
-				if (selectedProduct != null)
-				{
-					selectedProduct.Category.Id = value;
-				}
+				selectedProduct.Category.Id = value;
 			}
 		}
 
@@ -274,12 +272,6 @@ namespace GloriaFestasCatalogo.Client.Pages.Admin
 			if (string.IsNullOrEmpty(newProduct.Name) || string.IsNullOrEmpty(newProduct.Description) || string.IsNullOrEmpty(newProduct.PhotoUrl))
 			{
 				toastService.Notify(new(ToastType.Danger, $"Preencha todos campos necessarios!"));
-				return false;
-			}
-
-			if (!newProduct.ProductCategoryId.HasValue)
-			{
-				toastService.Notify(new(ToastType.Danger, $"Selecione a categoria do produto!"));
 				return false;
 			}
 
