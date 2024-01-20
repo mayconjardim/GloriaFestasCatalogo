@@ -5,7 +5,6 @@ namespace GloriaFestasCatalogo.Shared.Models.Products
 	public class ProductVariant
 	{
 
-		[JsonIgnore]
 		public Product Product { get; set; }
 		public int ProductId { get; set; }
 
