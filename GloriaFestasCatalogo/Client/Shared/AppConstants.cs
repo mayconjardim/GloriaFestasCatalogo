@@ -38,8 +38,11 @@ namespace GloriaFestasCatalogo.Client.Shared
                            "\n" +
                            $"🏠 Endereço: {order.Street}, Nº: {order.Number} \n" +
                            $"🌍 Cidade e CEP: {order.City} - {order.ZipCode}\n" +
-                           "\n" +
-                           $"Pedido feito em {order.OrderDate:dd/MM/yyyy} às {order.OrderDate:HH:mm}\n";
+						   $"❗ Informações adicionais: \n" +
+						   $"{order.Observation} \n" +
+						   "\n" +
+                           $"Pedido feito em {order.OrderDate:dd/MM/yyyy} às {order.OrderDate:HH:mm}\n"
+                           ;
             }
 
             return message;

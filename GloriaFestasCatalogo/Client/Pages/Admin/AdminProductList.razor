@@ -197,13 +197,9 @@
 							<div class="input-group mb-3 d-print-include">
 								<label class="input-group-text" for="inputGroupSelect01"><b>Categoria</b></label>
 								<select @onchange="HandleUpdateCategory" class="form-select" required>
-									<option selected value="@selectedProduct.Category.Id">@selectedProduct.Category.Name</option>
+									<option value="@selectedProduct.Category.Id">@selectedProduct.Category.Name</option>
 									@foreach (var category in categories)
 									{
-										if (category.Id == selectedProduct.Category.Id)
-										{
-											continue;
-										}
 										<option value="@category.Id">@category.Name</option>
 									}
 								</select>

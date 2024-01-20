@@ -191,9 +191,10 @@ namespace GloriaFestasCatalogo.Server.Services.ProductService
 				product.Price = updatedProduct.Price;
 				product.PhotoUrl = updatedProduct.PhotoUrl;
 				product.Tags = updatedProduct.Tags;
+				product.Description = updatedProduct.Description;
 				product.Category = category;
 
-				_context.Update(product);
+                _context.Update(product);
 				await _context.SaveChangesAsync();
 
 				return new ServiceResponse<ProductDto>
