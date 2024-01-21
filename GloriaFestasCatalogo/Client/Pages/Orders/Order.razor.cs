@@ -34,7 +34,7 @@ namespace GloriaFestasCatalogo.Client.Pages.Orders
             CartService.CartUpdated += HandleCartUpdated;
             foreach (var cartProducts in cart)
             {
-                subtotal += cartProducts.Product.Price * cartProducts.Quantity;
+                // subtotal += cartProducts.Product.Price * cartProducts.Quantity;
             }
         }
 
@@ -51,7 +51,7 @@ namespace GloriaFestasCatalogo.Client.Pages.Orders
             subtotal = 0;
             foreach (var cartProducts in updatedCart)
             {
-                subtotal += cartProducts.Product.Price * cartProducts.Quantity;
+                // subtotal += cartProducts.Product.Price * cartProducts.Quantity;
             }
 
             await InvokeAsync(StateHasChanged);

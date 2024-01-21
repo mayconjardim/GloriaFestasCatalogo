@@ -1,6 +1,4 @@
-﻿using System.Text.Json.Serialization;
-
-namespace GloriaFestasCatalogo.Shared.Models.Products
+﻿namespace GloriaFestasCatalogo.Shared.Models.Products
 {
 	public class ProductVariant
 	{

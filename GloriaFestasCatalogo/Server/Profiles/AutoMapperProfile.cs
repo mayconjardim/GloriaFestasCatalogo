@@ -14,12 +14,23 @@ namespace GloriaFestasCatalogo.Server.Profiles
 		public AutoMapperProfile()
 		{
 
-			CreateMap<ProductDto, Product>().ReverseMap();
+
+			CreateMap<Product, ProductDto>()
+				.ForMember(dest => dest.Variants, opt => opt.MapFrom(src => src.Variants));
+
+			CreateMap<ProductVariant, ProductVariantDto>()
+				.ForMember(dest => dest.ProductTypeName, opt => opt.MapFrom(src => src.ProductType.Name));
+
+			CreateMap<ProductDto, Product>();
+
+			CreateMap<ProductVariantDto, ProductVariant>();
 
 			CreateMap<ProductCategoryDto, ProductCategory>().ReverseMap();
 
 			CreateMap<ProductCreateDto, Product>()
-				.ForMember(dest => dest.Category, opt => opt.Ignore());
+				.ForMember(dest => dest.Category, opt => opt.Ignore())
+				.ForMember(dest => dest.Variants, opt => opt.Ignore());
+
 
 			CreateMap<OrderDto, Order>().ReverseMap();
 
@@ -34,7 +45,8 @@ namespace GloriaFestasCatalogo.Server.Profiles
 
 			CreateMap<ProductType, ProductTypeDto>().ReverseMap();
 
-			CreateMap<ProductVariant, ProductVariantDto>().ReverseMap();
+
+
 
 		}
 	}

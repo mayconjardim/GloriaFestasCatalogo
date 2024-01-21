@@ -24,6 +24,13 @@ namespace GloriaFestasCatalogo.Server.Controllers
 			return Ok(result);
 		}
 
+		[HttpGet("{typeId}")]
+		public async Task<ActionResult<ServiceResponse<ProductTypeDto>>> GetProductTypeAsync(int typeId)
+		{
+			var result = await _productTypeService.GetProductTypeAsync(typeId);
+			return Ok(result);
+		}
+
 		[HttpPost]
 		public async Task<ActionResult<ServiceResponse<ProductTypeDto>>> CreateProduct(ProductTypeDto request)
 		{

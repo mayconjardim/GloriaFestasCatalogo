@@ -24,7 +24,7 @@ namespace GloriaFestasCatalogo.Client.Shared
 
 				foreach (var cartProducts in cart)
 				{
-					subtotal += cartProducts.Product.Price * cartProducts.Quantity;
+					//subtotal += cartProducts.Product.Price * cartProducts.Quantity;
 				}
 			}
 
@@ -55,7 +55,7 @@ namespace GloriaFestasCatalogo.Client.Shared
 			subtotal = 0;
 			foreach (var cartProducts in updatedCart)
 			{
-				subtotal += cartProducts.Product.Price * cartProducts.Quantity;
+				//subtotal += cartProducts.Product.Price * cartProducts.Quantity;
 			}
 
 			IsButtonDisabled = cartCount == 0;

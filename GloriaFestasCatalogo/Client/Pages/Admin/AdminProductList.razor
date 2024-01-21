@@ -1,6 +1,7 @@
 ﻿@page "/admin/produtos"
 @attribute [Authorize]
 @inject IProductService ProductService
+@inject IProductTypeService ProductTypeService
 @inject ICategoryService CategoryService
 @inject IJSRuntime JSRuntime
 @inject NavigationManager NavigationManager
@@ -60,7 +61,19 @@
 									@products.Name
 								</td>
 								<td>@products.Category.Name</td>
-								<td>R$ @products.Price</td>
+								<td>
+
+									@if (products.Variants.Count > 1)
+									{
+										<span>A partir de:</span>
+										<br />
+										<span>R$ @products.Variants.Min(v => v.Price)</span>
+									}else
+									{
+										<span>R$ @products.Variants.FirstOrDefault().Price</span>
+									}
+								
+								</td>
 								<td>
 
 									@if (products.Active)
@@ -149,11 +162,45 @@
 							<input type="text" class="form-control" @bind="newProduct.Tags" >
 						</div>
 
-						<div class="input-group mb-3 d-print-include">
-							<span class="input-group-text" id="basic-addon1"><b>Valor</b></span>
-							<input type="text" class="form-control" @bind="newProduct.Price" required>
+						<hr />
+						<div class="header">
+							<div class="cols">Tipo de Produto</div>
+							<div class="cols">Preço</div>
+							<div class="cols"></div>
+
 						</div>
-					
+						@foreach (var variant in newProduct.Variants)
+						{
+							<div class="rows">
+								<div class="cols">
+
+									<select class="form-select" @onchange="@((ChangeEventArgs e) => SelectProductType( int.Parse(e.Value.ToString()), variant))">
+										<option selected disabled>Tipo de produto</option>
+										@foreach (var productType in productTypes)
+										{
+											<option value="@productType.Id">
+												@productType.Name
+											</option>
+										}
+									</select>
+
+								</div>
+								<div class="cols">
+									<input type="text" class="form-control" @bind="variant.Price" required>
+								</div>
+
+								<div class="cols">
+									<a class="delete" @onclick="@(() => RemoveVariant(variant, 0))" style="font-size: 20px">
+										<i class="fa-solid fa-trash" data-toggle="tooltip" title="Delete" style="color: #5E0B76"></i>
+									</a>
+								</div>
+							</div>
+
+						}
+						<button type="button" class="btn" style="color: #5E0B76" @onclick="() => AddVariant(0)">
+							<i class="oi oi-plus" ></i> Add Tipos de Produto
+						</button>
+						<hr />
 					</div>
 					<div class="modal-footer">
 						<input class="btn btn-success" value="Adicionar" @onclick="CreateProduct">
@@ -162,6 +209,7 @@
 				</div>
 			</div>
 		</div>
+
 	<!-- Create Modal HTML -->
 
 	<!-- Edit Modal HTML -->
@@ -210,10 +258,50 @@
 								<input type="text" class="form-control" @bind-value="@selectedProduct.Tags">
 							</div>
 
-							<div class="input-group mb-3 d-print-include">
-								<span class="input-group-text" id="basic-addon1"><b>Valor</b></span>
-								<input type="text" class="form-control" @bind-value="@selectedProduct.Price" required>
+							<hr />
+							<div class="header">
+								<div class="cols">Tipo de Produto</div>
+								<div class="cols">Preço</div>
+								<div class="cols"></div>
+
 							</div>
+							@foreach (var variant in selectedProduct.Variants)
+							{
+								<div class="rows">
+									<div class="cols">
+
+										<select class="form-select" @onchange="@((ChangeEventArgs e) => SelectProductType( int.Parse(e.Value.ToString()), variant))">
+
+											@if (!string.IsNullOrEmpty(variant.ProductTypeName))
+											{
+												<option value="@variant.ProductTypeId">@variant.ProductTypeName</option>
+											} else
+											{
+												<option selected disabled>Tipo de produto</option>
+											}
+											@foreach (var productType in productTypes)
+											{
+												<option value="@productType.Id">@productType.Name</option>
+											}
+										</select>
+
+									</div>
+									<div class="cols">
+										<input type="text" class="form-control" @bind="variant.Price" required>
+									</div>
+
+									<div class="cols">
+										<a class="delete" @onclick="@(() => RemoveVariant(variant, 1))" style="font-size: 20px">
+											<i class="fa-solid fa-trash" data-toggle="tooltip" title="Delete" style="color: #5E0B76"></i>
+										</a>
+									</div>
+								</div>
+
+							}
+							<button type="button" class="btn" style="color: #5E0B76" @onclick="() => AddVariant(1)">
+								<i class="oi oi-plus"></i> Add Tipos de Produto
+							</button>
+							<hr />
 
 						</div>
 						<div class="modal-footer">

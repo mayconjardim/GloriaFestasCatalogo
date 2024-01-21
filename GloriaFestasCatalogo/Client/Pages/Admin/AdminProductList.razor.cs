@@ -1,6 +1,5 @@
 ﻿using BlazorBootstrap;
 using GloriaFestasCatalogo.Shared.Dtos.Products;
-using GloriaFestasCatalogo.Shared.Models.Products;
 using GloriaFestasCatalogo.Shared.Utils;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
@@ -12,8 +11,9 @@ namespace GloriaFestasCatalogo.Client.Pages.Admin
 
 		private ProductResponse products;
 		private ProductDto? selectedProduct;
-		private ProductCreateDto newProduct = new ProductCreateDto();
+		private ProductCreateDto? newProduct = new ProductCreateDto();
 		private List<ProductCategoryDto> categories = new List<ProductCategoryDto>();
+		private List<ProductTypeDto> productTypes = new List<ProductTypeDto>();
 		private string message = string.Empty;
 		private int currentPage = 1;
 		private int pageSize = 20;
@@ -36,6 +36,7 @@ namespace GloriaFestasCatalogo.Client.Pages.Admin
 				products = result.Data;
 				currentPage = result.Data.CurrentPage;
 				await GetCategories();
+				await GetProductTypes();
 			}
 		}
 
@@ -129,9 +130,25 @@ namespace GloriaFestasCatalogo.Client.Pages.Admin
 			}
 		}
 
+		private async Task GetProductTypes()
+		{
+
+			var result = await ProductTypeService.GetProductTypeAsync();
+
+			if (!result.Success)
+			{
+			}
+			else
+			{
+				productTypes = result.Data;
+			}
+		}
+
+
 
 		private async Task CreateProduct()
 		{
+			await JSRuntime.InvokeVoidAsync("console.log", newProduct);
 
 			if (IsValid())
 			{
@@ -160,26 +177,33 @@ namespace GloriaFestasCatalogo.Client.Pages.Admin
 
 		private async Task EditProduct()
 		{
+
 			if (selectedProduct != null)
 			{
-				var result = await ProductService.UpdateProduct(selectedProduct);
-				if (result.Success)
+
+				if (IsValidEdit())
 				{
-					await InvokeAsync(() =>
+
+					var result = await ProductService.UpdateProduct(selectedProduct);
+					if (result.Success)
 					{
-						StateHasChanged();
-						toastService.Notify(new(ToastType.Success, $"Produto editado com sucesso!"));
-					});
+						await InvokeAsync(() =>
+						{
+							StateHasChanged();
+							toastService.Notify(new(ToastType.Success, $"Produto editado com sucesso!"));
+						});
 
-					await CloseModal("EditModal");
+						await CloseModal("EditModal");
 
-					RefreshPage();
-				}
-				else
-				{
-					toastService.Notify(new(ToastType.Danger, $"Ocorreu um erro ao editar o produto."));
+						RefreshPage();
+					}
+					else
+					{
+						toastService.Notify(new(ToastType.Danger, $"Ocorreu um erro ao editar o produto."));
+					}
 				}
 			}
+
 		}
 
 		private async Task DeleteProduct()
@@ -230,6 +254,8 @@ namespace GloriaFestasCatalogo.Client.Pages.Admin
 		private async Task CloseModal(string modal)
 		{
 			await JSRuntime.InvokeAsync<object>("closeModal", modal);
+			selectedProduct = null;
+			newProduct = new ProductCreateDto();
 		}
 
 		private async void UpdateProductNameSearch(ChangeEventArgs e)
@@ -259,11 +285,44 @@ namespace GloriaFestasCatalogo.Client.Pages.Admin
 
 		private void HandleUpdateCategory(ChangeEventArgs e)
 		{
-	
+
 			if (int.TryParse(e.Value.ToString(), out var value))
 			{
 				selectedProduct.Category.Id = value;
 			}
+		}
+
+		private void AddVariant(int type)
+		{
+
+			if (type == 0)
+			{
+				newProduct.Variants
+				.Add(new ProductVariantDto { });
+			}
+			if (type == 1)
+			{
+				selectedProduct.Variants
+				.Add(new ProductVariantDto { });
+			}
+
+		}
+
+		private void RemoveVariant(ProductVariantDto productVariantDto, int type)
+		{
+			if (type == 0)
+			{
+				newProduct.Variants.Remove(productVariantDto);
+			}
+			if (type == 1)
+			{
+				selectedProduct.Variants.Remove(productVariantDto);
+			}
+		}
+
+		private void SelectProductType(int productTypeId, ProductVariantDto variant)
+		{
+			variant.ProductTypeId = productTypeId;
 		}
 
 		bool IsValid()
@@ -275,9 +334,91 @@ namespace GloriaFestasCatalogo.Client.Pages.Admin
 				return false;
 			}
 
-			if (newProduct.Price <= 0)
+			if (newProduct.Variants.Count == 0)
 			{
-				toastService.Notify(new(ToastType.Danger, $"Edite o valor do produto!"));
+				toastService.Notify(new(ToastType.Danger, $"É necessario adicionar um tipo de produto!"));
+				return false;
+			}
+
+			if (newProduct.ProductCategoryId == null)
+			{
+				toastService.Notify(new(ToastType.Danger, $"É necessario adicionar uma categoria ao produto!"));
+				return false;
+			}
+
+			else
+			{
+
+				if (newProduct.Variants.Any(variant => variant.ProductTypeId == 0))
+				{
+					toastService.Notify(new(ToastType.Danger, $"É necessario adicionar um tipo de produto!"));
+					return false;
+				}
+
+				if (newProduct.Variants.Any(variant => variant.Price == 0.00m))
+				{
+					toastService.Notify(new(ToastType.Danger, $"É necessario adicionar um valor maior que 0!"));
+					return false;
+				}
+			}
+
+			var duplicateProductTypeIds = newProduct.Variants
+				.GroupBy(v => v.ProductTypeId)
+				.Any(g => g.Count() > 1);
+
+			if (duplicateProductTypeIds)
+			{
+				toastService.Notify(new(ToastType.Danger, $"Existem tipos de produto repetidos! "));
+				return false;
+			}
+
+			return true;
+		}
+
+		bool IsValidEdit()
+		{
+
+			if (string.IsNullOrEmpty(selectedProduct.Name) || string.IsNullOrEmpty(selectedProduct.Description) || string.IsNullOrEmpty(selectedProduct.PhotoUrl))
+			{
+				toastService.Notify(new(ToastType.Danger, $"Preencha todos campos necessarios!"));
+				return false;
+			}
+
+			if (selectedProduct.Variants.Count == 0)
+			{
+				toastService.Notify(new(ToastType.Danger, $"É necessario adicionar um tipo de produto!"));
+				return false;
+			}
+
+			if (selectedProduct.Category.Id == null)
+			{
+				toastService.Notify(new(ToastType.Danger, $"É necessario adicionar uma categoria ao produto!"));
+				return false;
+			}
+
+			else
+			{
+
+				if (selectedProduct.Variants.Any(variant => variant.ProductTypeId == 0))
+				{
+					toastService.Notify(new(ToastType.Danger, $"É necessario adicionar um tipo de produto!"));
+					return false;
+				}
+
+				if (selectedProduct.Variants.Any(variant => variant.Price == 0.00m))
+				{
+					toastService.Notify(new(ToastType.Danger, $"É necessario adicionar um valor maior que 0!"));
+					return false;
+				}
+			}
+
+			var duplicateProductTypeIds = selectedProduct.Variants
+				.GroupBy(v => v.ProductTypeId)
+				.Any(g => g.Count() > 1);
+
+			if (duplicateProductTypeIds)
+			{
+				toastService.Notify(new(ToastType.Danger, $"Existem tipos de produto repetidos! "));
 				return false;
 			}
 

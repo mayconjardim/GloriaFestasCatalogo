@@ -8,7 +8,7 @@
 		public string PhotoUrl { get; set; }
 		public int? ProductCategoryId { get; set; }
 		public string Tags { get; set; } = string.Empty;
-		public decimal Price { get; set; } = 0.00m;
+		public List<ProductVariantDto> Variants { get; set; } = new List<ProductVariantDto>();
 		public bool Active { get; set; } = true;
 
 	}

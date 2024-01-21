@@ -37,6 +37,28 @@ namespace GloriaFestasCatalogo.Server.Services.ProductTypeService
 			return response;
 		}
 
+		public async Task<ServiceResponse<ProductTypeDto>> GetProductTypeAsync(int id)
+		{
+			var response = new ServiceResponse<ProductTypeDto>();
+
+			var type = await _context.ProductTypes
+				.Where(p => p.Id == id)
+				.FirstOrDefaultAsync();
+
+			if (type == null)
+			{
+				response.Success = false;
+				response.Message = "Desculpe, mas este tipo de Produto não existe.";
+			}
+			else
+			{
+				var typeDto = _mapper.Map<ProductTypeDto>(type);
+				response.Data = typeDto;
+			}
+
+			return response;
+		}
+
 		public async Task<ServiceResponse<ProductTypeDto>> CreateProductType(ProductTypeDto productTypeDto)
 		{
 			var response = new ServiceResponse<ProductTypeDto>();
@@ -121,5 +143,7 @@ namespace GloriaFestasCatalogo.Server.Services.ProductTypeService
 
 			return response;
 		}
+
+
 	}
 }
