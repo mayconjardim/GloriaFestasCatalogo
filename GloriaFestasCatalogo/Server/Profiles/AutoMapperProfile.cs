@@ -21,12 +21,10 @@ namespace GloriaFestasCatalogo.Server.Profiles
 			CreateMap<ProductCreateDto, Product>()
 				.ForMember(dest => dest.Category, opt => opt.Ignore());
 
-
 			CreateMap<OrderDto, Order>().ReverseMap();
 
 			CreateMap<OrderCreateDto, Order>()
 				.ForMember(dest => dest.Products, opt => opt.Ignore());
-
 
 			CreateMap<Order, OrderCreateDto>();
 
@@ -36,6 +34,9 @@ namespace GloriaFestasCatalogo.Server.Profiles
 
 			CreateMap<AppConfig, AppConfigDto>().ReverseMap();
 
+			CreateMap<ProductType, ProductTypeDto>().ReverseMap();
+
+			CreateMap<ProductVariant, ProductVariantDto>().ReverseMap();
 
 		}
 	}

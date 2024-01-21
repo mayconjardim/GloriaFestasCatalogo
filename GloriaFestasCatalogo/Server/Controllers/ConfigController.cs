@@ -6,46 +6,46 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace GloriaFestasCatalogo.Server.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class ConfigController : ControllerBase
-    {
+	[Route("api/[controller]")]
+	[ApiController]
+	public class ConfigController : ControllerBase
+	{
 
-        private readonly IConfigService _configService;
+		private readonly IConfigService _configService;
 
-        public ConfigController(IConfigService configService)
-        {
-            _configService = configService;
-        }
+		public ConfigController(IConfigService configService)
+		{
+			_configService = configService;
+		}
 
-        [HttpGet]
-        public async Task<ActionResult<ServiceResponse<AppConfigDto>>> GetConfig()
-        {
+		[HttpGet]
+		public async Task<ActionResult<ServiceResponse<AppConfigDto>>> GetConfig()
+		{
 
-            var result = await _configService.GetConfig();
+			var result = await _configService.GetConfig();
 
-            if (!result.Success)
-            {
-                return NotFound(result);
-            }
+			if (!result.Success)
+			{
+				return NotFound(result);
+			}
 
-            return Ok(result);
+			return Ok(result);
 
-        }
+		}
 
-        [HttpPut("{id}")]
-        public async Task<ActionResult<ServiceResponse<AppConfigDto>>> UpdateConfig(AppConfigDto config)
-        {
+		[HttpPut("{id}")]
+		public async Task<ActionResult<ServiceResponse<AppConfigDto>>> UpdateConfig(AppConfigDto config)
+		{
 
-            var response = await _configService.UpdateConfig(config);
+			var response = await _configService.UpdateConfig(config);
 
-            if (response.Success)
-            {
-                return Ok(response);
-            }
+			if (response.Success)
+			{
+				return Ok(response);
+			}
 
-            return BadRequest(response);
-        }
+			return BadRequest(response);
+		}
 
-    }
+	}
 }

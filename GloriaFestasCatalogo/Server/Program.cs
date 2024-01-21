@@ -31,6 +31,8 @@ namespace GloriaFestasCatalogo
 			builder.Services.AddScoped<IOrderService, OrderService>();
 			builder.Services.AddScoped<ICategoryService, CategoryService>();
 
+			builder.Configuration.AddUserSecrets<Program>();
+
 			builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 				.AddJwtBearer(options =>
 				{

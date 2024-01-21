@@ -6,86 +6,91 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GloriaFestasCatalogo.Server.Data
 {
-    public class DataContext : DbContext
-    {
+	public class DataContext : DbContext
+	{
 
-        public DataContext(DbContextOptions<DataContext> options) : base(options) { }
+		public DataContext(DbContextOptions<DataContext> options) : base(options) { }
 
-        public DbSet<User> Users { get; set; }
-        public DbSet<Product> Products { get; set; }
-        public DbSet<ProductCategory> Categories { get; set; }
-        public DbSet<AppConfig> AppConfig { get; set; }
-        public DbSet<Order> Orders { get; set; }
+		public DbSet<User> Users { get; set; }
+		public DbSet<Product> Products { get; set; }
+		public DbSet<ProductCategory> Categories { get; set; }
+		public DbSet<ProductVariant> ProductVariants { get; set; }
+		public DbSet<ProductType> ProductTypes { get; set; }
+		public DbSet<AppConfig> AppConfig { get; set; }
+		public DbSet<Order> Orders { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
+		protected override void OnModelCreating(ModelBuilder modelBuilder)
+		{
 
-            modelBuilder.Entity<User>()
-                .Property(u => u.Username)
-                .IsRequired();
+			modelBuilder.Entity<User>()
+				.Property(u => u.Username)
+				.IsRequired();
 
-            modelBuilder.Entity<Product>()
-                .Property(p => p.Name)
-                .IsRequired();
-            modelBuilder.Entity<Product>()
-                .Property(p => p.Description)
-                .IsRequired();
-            modelBuilder.Entity<Product>()
-                .Property(p => p.Price)
-                .HasColumnType("decimal(18,2)");
+			modelBuilder.Entity<Product>()
+				.Property(p => p.Name)
+				.IsRequired();
 
-            modelBuilder.Entity<ProductCategory>()
-                .Property(c => c.Name)
-                .IsRequired();
+			modelBuilder.Entity<Product>()
+				.Property(p => p.Description)
+				.IsRequired();
 
-            modelBuilder.Entity<Order>()
-                .Property(o => o.Name)
-                .IsRequired();
-            modelBuilder.Entity<Order>()
-                .Property(o => o.Whatsapp)
-                .IsRequired();
-            modelBuilder.Entity<Order>()
-                .Property(o => o.ZipCode)
-                .IsRequired();
-            modelBuilder.Entity<Order>()
-                .Property(o => o.Street)
-                .IsRequired();
-            modelBuilder.Entity<Order>()
-                .Property(o => o.Neighborhood)
-                .IsRequired();
-            modelBuilder.Entity<Order>()
-                .Property(o => o.City)
-                .IsRequired();
-            modelBuilder.Entity<Order>()
-                .Property(o => o.State)
-                .IsRequired();
-            modelBuilder.Entity<Order>()
-                .Property(o => o.TotalPrice)
-                .HasColumnType("decimal(18,2)")
-                .IsRequired();
+			modelBuilder.Entity<ProductVariant>()
+			   .HasKey(p => new { p.ProductId, p.ProductTypeId });
 
-            modelBuilder.Entity<Order>()
-                .HasMany(o => o.Products)
-                .WithOne()
-                .HasForeignKey(oc => oc.OrderId);
+			modelBuilder.Entity<ProductCategory>()
+				.Property(c => c.Name)
+				.IsRequired();
 
-            modelBuilder.Entity<OrderCart>()
-                .HasKey(oc => new { oc.OrderId, oc.ProductId });
+			modelBuilder.Entity<Order>()
+				.Property(o => o.Name)
+				.IsRequired();
+			modelBuilder.Entity<Order>()
+				.Property(o => o.Whatsapp)
+				.IsRequired();
+			modelBuilder.Entity<Order>()
+				.Property(o => o.ZipCode)
+				.IsRequired();
+			modelBuilder.Entity<Order>()
+				.Property(o => o.Street)
+				.IsRequired();
+			modelBuilder.Entity<Order>()
+				.Property(o => o.Neighborhood)
+				.IsRequired();
+			modelBuilder.Entity<Order>()
+				.Property(o => o.City)
+				.IsRequired();
+			modelBuilder.Entity<Order>()
+				.Property(o => o.State)
+				.IsRequired();
+			modelBuilder.Entity<Order>()
+				.Property(o => o.TotalPrice)
+				.HasColumnType("decimal(18,2)")
+				.IsRequired();
 
-            modelBuilder.Entity<OrderCart>()
-                .HasOne(oc => oc.Order)
-                .WithMany(o => o.Products)
-                .HasForeignKey(oc => oc.OrderId);
+			modelBuilder.Entity<Order>()
+				.HasMany(o => o.Products)
+				.WithOne()
+				.HasForeignKey(oc => oc.OrderId);
 
-            modelBuilder.Entity<OrderCart>()
-                .HasOne(oc => oc.Product)
-                .WithMany()
-                .HasForeignKey(oc => oc.ProductId);
+			modelBuilder.Entity<OrderCart>()
+				.HasKey(oc => new { oc.OrderId, oc.ProductId });
 
-            modelBuilder.Entity<AppConfig>()
-               .Property(u => u.PhoneNumber)
-               .IsRequired();
+			modelBuilder.Entity<OrderCart>()
+				.HasOne(oc => oc.Order)
+				.WithMany(o => o.Products)
+				.HasForeignKey(oc => oc.OrderId);
 
-        }
-    }
+			modelBuilder.Entity<OrderCart>()
+				.HasOne(oc => oc.Product)
+				.WithMany()
+				.HasForeignKey(oc => oc.ProductId);
+
+			modelBuilder.Entity<AppConfig>()
+			   .Property(u => u.PhoneNumber)
+			   .IsRequired();
+
+
+
+		}
+	}
 }
