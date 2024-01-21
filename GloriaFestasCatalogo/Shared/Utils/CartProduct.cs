@@ -2,11 +2,11 @@
 
 namespace GloriaFestasCatalogo.Shared.Utils
 {
-    public class CartProduct
-    {
+	public class CartProduct
+	{
 
-        public ProductDto Product { get; set; }
-        public int Quantity { get; set; }
+		public ProductCartDto Product { get; set; }
+		public int Quantity { get; set; }
 
-    }
+	}
 }

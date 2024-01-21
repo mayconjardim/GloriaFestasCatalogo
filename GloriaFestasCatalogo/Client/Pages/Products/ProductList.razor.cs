@@ -111,7 +111,7 @@ namespace GloriaFestasCatalogo.Client.Pages.Products
 			await FilterByCategory();
 		}
 
-		public async Task AddToCart(ProductDto product)
+		public async Task AddToCart(ProductCartDto product)
 		{
 			await CartService.AddToCart(product);
 		}

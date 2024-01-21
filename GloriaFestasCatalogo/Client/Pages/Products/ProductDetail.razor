@@ -1,6 +1,8 @@
 ﻿@page "/produto/{id:int}"
 @inject IProductService ProductService
 @inject CartService CartService
+@inject IJSRuntime JSRuntime
+
 
 @if (product != null)
 {

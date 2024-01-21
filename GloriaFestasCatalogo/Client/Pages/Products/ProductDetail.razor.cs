@@ -1,5 +1,6 @@
 ﻿using GloriaFestasCatalogo.Shared.Dtos.Products;
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 
 namespace GloriaFestasCatalogo.Client.Pages.Products
 {
@@ -7,6 +8,7 @@ namespace GloriaFestasCatalogo.Client.Pages.Products
 	{
 
 		private ProductDto product = null;
+		private ProductCartDto cartProduct = new ProductCartDto();
 		private string message = string.Empty;
 		private int currentTypeId = 1;
 
@@ -38,8 +40,17 @@ namespace GloriaFestasCatalogo.Client.Pages.Products
 		{
 			var productVariant = GetSelectedVariant();
 
+			cartProduct.Id = product.Id;
+			cartProduct.Name = product.Name;
+			cartProduct.Description = product.Description;
+			cartProduct.PhotoUrl = product.PhotoUrl;
+			cartProduct.Category = product.Category;
+			cartProduct.Tags = product.Tags;
+			cartProduct.Variant = productVariant;
+			cartProduct.ProductTypeName = productVariant.ProductTypeName;
 
-			await CartService.AddToCart(product);
+			await JSRuntime.InvokeVoidAsync("console.log", cartProduct);
+			await CartService.AddToCart(cartProduct);
 		}
 
 

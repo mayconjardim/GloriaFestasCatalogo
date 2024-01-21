@@ -11,8 +11,6 @@ namespace GloriaFestasCatalogo.Client.Shared
 		decimal subtotal = 0;
 		private bool IsButtonDisabled = true;
 
-		private bool showInstallPrompt;
-
 		protected override async Task OnInitializedAsync()
 		{
 			cart = await CartService.GetCart();
@@ -24,14 +22,14 @@ namespace GloriaFestasCatalogo.Client.Shared
 
 				foreach (var cartProducts in cart)
 				{
-					//subtotal += cartProducts.Product.Price * cartProducts.Quantity;
+					subtotal += cartProducts.Product.Variant.Price * cartProducts.Quantity;
 				}
 			}
 
 			CartService.CartUpdated += HandleCartUpdated;
 		}
 
-		private async Task UpdateQuantity(bool isAdding, ProductDto product)
+		private async Task UpdateQuantity(bool isAdding, ProductCartDto product)
 		{
 			int quantityChange = isAdding ? 1 : -1;
 
@@ -55,7 +53,7 @@ namespace GloriaFestasCatalogo.Client.Shared
 			subtotal = 0;
 			foreach (var cartProducts in updatedCart)
 			{
-				//subtotal += cartProducts.Product.Price * cartProducts.Quantity;
+				subtotal += cartProducts.Product.Variant.Price * cartProducts.Quantity;
 			}
 
 			IsButtonDisabled = cartCount == 0;
