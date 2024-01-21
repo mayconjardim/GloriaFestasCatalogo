@@ -50,11 +50,15 @@
                     <div class="row">
                         <div class="col-md-12 d-flex align-items-center" style="margin-top: 2px">
                             <img src="@cartProducts.Product.PhotoUrl" class="img-fluid rounded-start" alt="product img" width="100">
-                            <p class="card-title" style="font-size: 0.8rem">@cartProducts.Product.Name</p>
+                            <div class="d-flex flex-column ml-2">
+                                <p class="card-title mb-0" style="font-size: 0.8rem">@cartProducts.Product.Name</p>
+                                <p class="mb-0" style="font-size: 0.8rem; text-align: center; font-weight: bold">(@cartProducts.Product.Variant.ProductTypeName)</p>
+                            </div>
                         </div>
 
+
                         <div style="display: inline-block; text-align: center; margin-bottom: 2px">
-                           <!-- <span></span> <h6 class="mt-0 mb-0 price text-success" style="font-size: 0.8rem"> R$ @cartProducts.Product.Price un</h6> -->
+                            <h6 class="mt-0 mb-0 price text-success" style="font-size: 0.8rem"> R$ @cartProducts.Product.Variant.Price un</h6> 
                         </div>
 
                         <div class="col-md-12">
@@ -74,7 +78,7 @@
                                     </button>
                                 </span>
 
-                               <!-- <span style="font-size: 12px; margin: 0 4px"> @cartProducts.Quantity x R$ @(cartProducts.Product.Price * cartProducts.Quantity) </span>-->
+                              <span style="font-size: 12px; margin: 0 4px"> @cartProducts.Quantity x R$ @(cartProducts.Product.Variant.Price * cartProducts.Quantity) </span>
 
                             </div>
                         </div>

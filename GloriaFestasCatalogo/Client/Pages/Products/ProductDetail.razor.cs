@@ -49,7 +49,6 @@ namespace GloriaFestasCatalogo.Client.Pages.Products
 			cartProduct.Variant = productVariant;
 			cartProduct.ProductTypeName = productVariant.ProductTypeName;
 
-			await JSRuntime.InvokeVoidAsync("console.log", cartProduct);
 			await CartService.AddToCart(cartProduct);
 		}
 
