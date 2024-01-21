@@ -11,6 +11,5 @@ namespace GloriaFestasCatalogo.Server.Services.ProductTypeService
 		Task<ServiceResponse<ProductTypeDto>> UpdateProductType(ProductTypeDto productType);
 		Task<ServiceResponse<bool>> DeleteProductType(int id);
 
-
 	}
 }

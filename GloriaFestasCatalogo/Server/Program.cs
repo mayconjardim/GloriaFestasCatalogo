@@ -4,6 +4,7 @@ using GloriaFestasCatalogo.Server.Services.CategoryService;
 using GloriaFestasCatalogo.Server.Services.ConfigService;
 using GloriaFestasCatalogo.Server.Services.OrderService;
 using GloriaFestasCatalogo.Server.Services.ProductService;
+using GloriaFestasCatalogo.Server.Services.ProductTypeService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -18,7 +19,6 @@ namespace GloriaFestasCatalogo
 			var builder = WebApplication.CreateBuilder(args);
 
 			// Add services to the container.
-
 			builder.Services.AddDbContext<DataContext>(DbContextOptions =>
 			DbContextOptions.UseSqlite(builder.Configuration["ConnectionStrings:GloriaDbConnect"]));
 
@@ -28,6 +28,7 @@ namespace GloriaFestasCatalogo
 			builder.Services.AddScoped<IAuthService, AuthService>();
 			builder.Services.AddScoped<IConfigService, ConfigService>();
 			builder.Services.AddScoped<IProductService, ProductService>();
+			builder.Services.AddScoped<IProductTypeService, ProductTypeService>();
 			builder.Services.AddScoped<IOrderService, OrderService>();
 			builder.Services.AddScoped<ICategoryService, CategoryService>();
 
