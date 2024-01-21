@@ -26,7 +26,6 @@
                 }
             </select>
         </div>
-
     }
 
     <div class="produtos d-flex justify-content-center flex-wrap" style="margin: 5px">
@@ -34,22 +33,31 @@
         @foreach (var product in products.Products)
         {
 
-            <div >
-                <div class="card" style=" margin: 5px; height: 350px; display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+                <div class="card" style=" margin: 5px; height: 300px; display: flex; flex-direction: column; justify-content: space-between;">
                     <img class="card-img" src="@product.PhotoUrl" alt="product-name" style="max-height: 180px;" @onclick="() => NavigateToProductPage(product.Id)">
 
                     <div class="card-body d-flex flex-column justify-content-between" @onclick="() => NavigateToProductPage(product.Id)">
-                        <h4 class="card-title" style="font-size: 0.8rem;">@product.Name</h4>
+                        <h4 class="card-title" style="font-size: 0.8rem;">
+                            <a href="/produto/@product.Id">
+                               @product.Name
+                            </a>
+                        </h4>
 
                         <div class="price text-center text-success">
-                      <!--     <p class="mt-0 mb-0" style="font-size: 1rem">R$ @product.Price</p> -->
-                        </div>
-                    </div>
 
-                    <div class="buy text-center" style="margin-bottom: 5px">
-                        <button class="btn" style="background: #5E0B76; color: #fff" @onclick="() => AddToCart(product)" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
-                            <i class="fa-solid fa-cart-shopping"></i> Comprar
-                        </button>
+                            @if (product.Variants.Count > 1)
+                            {
+                                <span>A partir de:</span>
+                                <br />
+                                <h5 class="mt-0 mb-0" style="font-size: 1.4rem">R$ @product.Variants.Min(v => v.Price)</h5>
+                            }
+                            else
+                            {
+                                <h5 class="mt-0 mb-0" style="font-size: 1.4rem">R$ @product.Variants.FirstOrDefault().Price</h5>
+                            }
+
+                        </div>
                     </div>
                 </div>
             </div>
@@ -57,6 +65,8 @@
         }
 
     </div>
+
+
 
     <nav aria-label="Page navigation" class="d-flex justify-content-center" >
         <ul class="pagination">

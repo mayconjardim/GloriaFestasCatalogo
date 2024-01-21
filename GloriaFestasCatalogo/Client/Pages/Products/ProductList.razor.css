@@ -7,6 +7,10 @@
     border: 1px solid grey;
 }
 
+.card-title {
+    text-align: center;
+    font-weight: 800;
+}
 
 @media screen and (max-width: 390px) {
 
@@ -16,6 +20,8 @@
 
     .card-title {
         font-size: 0.6rem;
+        color: blue;
+        text-decoration: underline;
     }
 }
 

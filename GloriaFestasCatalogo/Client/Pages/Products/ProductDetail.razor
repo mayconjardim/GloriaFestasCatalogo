@@ -21,9 +21,26 @@
 					<h3 class="product-title">@product.Name</h3>
 	
 					<p class="product-description">@product.Description.</p>
-					<!--	<h4 class="price">Valor: <span>R$ @product.Price</span></h4>-->
+
+					@if (product.Variants != null && product.Variants.Count > 1)
+					{
+						<div style="margin: 10px">
+							<select class="form-select" @bind="currentTypeId">
+								@foreach (var variant in product.Variants)
+								{
+									<option value="@variant.ProductTypeId">@variant.ProductTypeName</option>
+								}
+							</select>
+						</div>
+					}
+
+					@if (GetSelectedVariant() != null)
+					{
+						
+					   <h5 class="mt-0 mb-0" style="font-size: 1.4rem; margin: 10px">R$ @GetSelectedVariant().Price</h5>
+					}
 			
-					<div class="action">
+					<div class="action" style="margin: 10px">
 						<button @onclick="() => AddToCart(product)" class="add-to-cart btn" style="background: #5E0B76;" type="button"
 								data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Comprar</button>
 					</div>

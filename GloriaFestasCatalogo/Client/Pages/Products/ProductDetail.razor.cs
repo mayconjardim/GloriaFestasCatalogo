@@ -8,6 +8,7 @@ namespace GloriaFestasCatalogo.Client.Pages.Products
 
 		private ProductDto product = null;
 		private string message = string.Empty;
+		private int currentTypeId = 1;
 
 		[Parameter]
 		public int Id { get; set; }
@@ -27,8 +28,17 @@ namespace GloriaFestasCatalogo.Client.Pages.Products
 			}
 		}
 
+		private ProductVariantDto GetSelectedVariant()
+		{
+			var variant = product.Variants.FirstOrDefault(v => v.ProductTypeId == currentTypeId);
+			return variant;
+		}
+
 		public async Task AddToCart(ProductDto product)
 		{
+			var productVariant = GetSelectedVariant();
+
+
 			await CartService.AddToCart(product);
 		}
 
