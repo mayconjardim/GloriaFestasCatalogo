@@ -28,9 +28,7 @@ namespace GloriaFestasCatalogo.Server.Profiles
 
 			CreateMap<Order, OrderCreateDto>();
 
-			CreateMap<OrderCart, OrderCartDto>()
-				.ForMember(dist => dist.ProductName, opt => opt.MapFrom(src => src.Product.Name))
-				.ForMember(dist => dist.ProductPrice, opt => opt.MapFrom(src => src.Product.Price));
+			CreateMap<OrderCart, OrderCartDto>();
 
 			CreateMap<AppConfig, AppConfigDto>().ReverseMap();
 
