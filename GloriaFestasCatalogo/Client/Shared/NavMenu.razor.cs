@@ -13,20 +13,38 @@ namespace GloriaFestasCatalogo.Client.Shared
 
 		protected override async Task OnInitializedAsync()
 		{
-			cart = await CartService.GetCart();
-
-			if (cart != null)
+			try
 			{
-				cartCount = cart.Count();
-				IsButtonDisabled = false;
+				cartCount = 0;
+				subtotal = 0;
+				IsButtonDisabled = true; 
 
-				foreach (var cartProducts in cart)
+				cart = await CartService.GetCart();
+
+				if (cart != null)
 				{
-					subtotal += cartProducts.Product.Variant.Price * cartProducts.Quantity;
+					cartCount = cart.Count();
+
+					foreach (var cartProducts in cart)
+					{
+						if (cartProducts.Product != null && cartProducts.Product.Variant != null)
+						{
+							subtotal += cartProducts.Product.Variant.Price * cartProducts.Quantity;
+						}
+					}
+
+					IsButtonDisabled = false;
+				}
+
+				if (CartService != null)
+				{
+					CartService.CartUpdated += HandleCartUpdated;
 				}
 			}
-
-			CartService.CartUpdated += HandleCartUpdated;
+			catch (Exception ex)
+			{
+				Console.WriteLine($"Exception during initialization: {ex.Message}");
+			}
 		}
 
 		private async Task UpdateQuantity(bool isAdding, ProductCartDto product)
