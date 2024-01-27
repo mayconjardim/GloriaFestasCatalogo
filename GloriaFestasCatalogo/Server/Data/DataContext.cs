@@ -34,6 +34,11 @@ namespace GloriaFestasCatalogo.Server.Data
 				.Property(p => p.Description)
 				.IsRequired();
 
+			modelBuilder.Entity<Product>()
+				.HasMany(p => p.Categories)
+				.WithMany(c => c.Products)
+				.UsingEntity(j => j.ToTable("ProductCategoryAssociation"));
+			
 			modelBuilder.Entity<ProductVariant>()
 			   .HasKey(p => new { p.ProductId, p.ProductTypeId });
 

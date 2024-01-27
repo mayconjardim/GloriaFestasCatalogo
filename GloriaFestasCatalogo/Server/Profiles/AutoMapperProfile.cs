@@ -28,7 +28,7 @@ namespace GloriaFestasCatalogo.Server.Profiles
 			CreateMap<ProductCategoryDto, ProductCategory>().ReverseMap();
 
 			CreateMap<ProductCreateDto, Product>()
-				.ForMember(dest => dest.Category, opt => opt.Ignore())
+				.ForMember(dest => dest.Categories, opt => opt.Ignore())
 				.ForMember(dest => dest.Variants, opt => opt.Ignore());
 
 

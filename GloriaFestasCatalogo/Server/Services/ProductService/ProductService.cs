@@ -28,7 +28,7 @@ namespace GloriaFestasCatalogo.Server.Services.ProductService
         public async Task<ServiceResponse<List<ProductDto>>> GetProductsAsync()
         {
             var products = await _context.Products
-                .Include(p => p.Category)
+                .Include(p => p.Categories)
                 .Include(p => p.Variants)
                 .Where(p => p.Active)
                 .ToListAsync();
@@ -42,7 +42,7 @@ namespace GloriaFestasCatalogo.Server.Services.ProductService
         {
 
             IQueryable<Product> query = _context.Products
-                .Include(p => p.Category)
+                .Include(p => p.Categories)
                 .Include(p => p.Variants)
                 .ThenInclude(v => v.ProductType);
 
