@@ -329,8 +329,7 @@ namespace GloriaFestasCatalogo.Server.Services.ProductService
 
         public async Task<ServiceResponse<ProductResponse>> GetActiveProductsPageableAsync(int page, int pageSize, int categoryId, string text = null)
         {
-            IQueryable<Product> query = _context.Products.
-                 Include(p => p.Categories)
+            IQueryable<Product> query = _context.Products
                 .Include(p => p.Variants)
                 .ThenInclude(v => v.ProductType);
 
