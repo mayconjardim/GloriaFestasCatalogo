@@ -53,14 +53,14 @@ namespace GloriaFestasCatalogo.Server.Services.ProductService
 
             if (categoryId != 0)
             {
-                query = query.Where(p => p.Category.Id == categoryId);
+                query = query.Where(p => p.Categories.Any(c => c.Id == categoryId));
             }
 
             var totalProducts = await query.CountAsync();
 
             var products = await query
                 .Skip((page - 1) * pageSize)
-                .Include(p => p.Category)
+                .Include(p => p.Categories)
                 .Include(p => p.Variants)
                 .ThenInclude(v => v.ProductType)
                 .Take(pageSize)
@@ -103,7 +103,7 @@ namespace GloriaFestasCatalogo.Server.Services.ProductService
         public async Task<ServiceResponse<ProductDto>> GetProductAsync(int productId)
         {
             var product = await _context.Products
-                .Include(p => p.Category)
+                .Include(p => p.Categories)
                 .Include(p => p.Variants)
                 .ThenInclude(v => v.ProductType)
                 .Where(p => p.Id == productId && p.Active)
@@ -125,10 +125,10 @@ namespace GloriaFestasCatalogo.Server.Services.ProductService
         public async Task<ServiceResponse<List<ProductDto>>> GetProductsByCategory(int categoryId)
         {
             var products = await _context.Products
-                .Include(p => p.Category)
+                .Include(p => p.Categories)
                 .Include(p => p.Variants)
                 .ThenInclude(v => v.ProductType)
-                .Where(p => p.Category.Id.Equals(categoryId) && p.Active)
+                .Where(p => p.Categories.Any(c => c.Id.Equals(categoryId) && p.Active))
                 .ToListAsync();
 
             var productDtos = _mapper.Map<List<ProductDto>>(products);
@@ -142,43 +142,48 @@ namespace GloriaFestasCatalogo.Server.Services.ProductService
 
             try
             {
-                var category = await _context.Categories.FindAsync(product.ProductCategoryId);
+                var categoryIds = product.Categories.Select(c => c.Id).ToList();
 
-                if (category == null)
+                var categories = await _context.Categories
+                    .Where(c => categoryIds.Contains(c.Id))
+                    .ToListAsync();
+
+                if (categories.Count != categoryIds.Count)
                 {
                     response.Success = false;
-                    response.Message = "Categoria não encontrada.";
+                    response.Message = "Uma ou mais categorias não foram encontradas.";
                     return response;
                 }
 
-                var existingProduct = await _context.Products
-                    .Where(p => p.Name == product.Name && p.Category.Id == category.Id)
-                    .FirstOrDefaultAsync();
-
-                if (existingProduct != null)
+                foreach (var category in categories)
                 {
-                    response.Success = false;
-                    response.Message = "Já existe um produto com o mesmo nome nesta categoria.";
-                    return response;
+                    var existingProduct = await _context.Products
+                        .Where(p => p.Name == product.Name && p.Categories.Any(c => c.Id == category.Id))
+                        .FirstOrDefaultAsync();
+
+                    if (existingProduct != null)
+                    {
+                        response.Success = false;
+                        response.Message = $"Já existe um produto com o mesmo nome na categoria: {category.Name}.";
+                        return response;
+                    }
+
+                    var newProduct = _mapper.Map<Product>(product);
+                    newProduct.Categories = new List<ProductCategory> { category };
+                    _context.Add(newProduct);
+                    await _context.SaveChangesAsync();
+
+                    foreach (var variant in product.Variants)
+                    {
+                        newProduct.Variants.Add(new ProductVariant { Price = variant.Price, ProductId = newProduct.Id, ProductTypeId = variant.ProductTypeId });
+                    }
+
+                    _context.Update(newProduct);
+                    await _context.SaveChangesAsync();
+
+                    response.Success = true;
+                    response.Data = _mapper.Map<ProductDto>(newProduct);
                 }
-
-                var newProduct = _mapper.Map<Product>(product);
-                newProduct.Category = category;
-                _context.Add(newProduct);
-                await _context.SaveChangesAsync();
-
-
-                foreach (var variant in product.Variants)
-                {
-                    newProduct.Variants.Add(new ProductVariant { Price = variant.Price, ProductId = newProduct.Id, ProductTypeId = variant.ProductTypeId });
-                }
-
-                _context.Update(newProduct);
-                await _context.SaveChangesAsync();
-
-
-                response.Success = true;
-                response.Data = _mapper.Map<ProductDto>(newProduct);
             }
             catch (Exception ex)
             {
@@ -189,23 +194,30 @@ namespace GloriaFestasCatalogo.Server.Services.ProductService
             return response;
         }
 
+
         public async Task<ServiceResponse<ProductDto>> UpdateProduct(ProductDto updatedProduct)
         {
+            
             try
             {
-                var category = await _context.Categories.FindAsync(updatedProduct.Category.Id);
+                var categoryIds = updatedProduct.Categories.Select(c => c.Id).ToList();
 
-                if (category == null)
+                var categories = await _context.Categories
+                    .Where(c => categoryIds.Contains(c.Id))
+                    .ToListAsync();
+
+                if (categories.Count != categoryIds.Count)
                 {
                     return new ServiceResponse<ProductDto>
                     {
                         Success = false,
-                        Message = "Categoria não encontrada."
+                        Message = "Uma ou mais categorias não foram encontradas."
                     };
                 }
 
                 var product = await _context.Products
-                    .Include(p => p.Variants)  // Inclua as variantes para evitar uma consulta adicional
+                    .Include(p => p.Variants)
+                    .Include(p => p.Categories)
                     .FirstOrDefaultAsync(p => p.Id == updatedProduct.Id);
 
                 if (product == null)
@@ -221,7 +233,8 @@ namespace GloriaFestasCatalogo.Server.Services.ProductService
                 product.PhotoUrl = updatedProduct.PhotoUrl;
                 product.Tags = updatedProduct.Tags;
                 product.Description = updatedProduct.Description;
-                product.Category = category;
+                product.Categories.Clear();
+                product.Categories.AddRange(categories);
 
                 _context.ProductVariants.RemoveRange(product.Variants);
 
@@ -230,22 +243,21 @@ namespace GloriaFestasCatalogo.Server.Services.ProductService
                     product.Variants.Add(new ProductVariant { Price = variant.Price, ProductTypeId = variant.ProductTypeId });
                 }
 
-                // Salvar as alterações no banco de dados
                 await _context.SaveChangesAsync();
 
                 return new ServiceResponse<ProductDto>
                 {
-                    Success = true,
-                    Data = _mapper.Map<ProductDto>(product)
-                };
+                Success = true,
+                Data = _mapper.Map<ProductDto>(product)
+            };
             }
             catch (Exception ex)
             {
-                return new ServiceResponse<ProductDto>
-                {
-                    Success = false,
-                    Message = ex.Message
-                };
+            return new ServiceResponse<ProductDto>
+            {
+                Success = false,
+                Message = ex.Message
+            };
             }
         }
 
@@ -318,7 +330,7 @@ namespace GloriaFestasCatalogo.Server.Services.ProductService
         public async Task<ServiceResponse<ProductResponse>> GetActiveProductsPageableAsync(int page, int pageSize, int categoryId, string text = null)
         {
             IQueryable<Product> query = _context.Products.
-                 Include(p => p.Category)
+                 Include(p => p.Categories)
                 .Include(p => p.Variants)
                 .ThenInclude(v => v.ProductType);
 
@@ -329,14 +341,14 @@ namespace GloriaFestasCatalogo.Server.Services.ProductService
 
             if (categoryId != 0)
             {
-                query = query.Where(p => p.Category.Id == categoryId);
+                query = query.Where(p => p.Categories.Any(c => c.Id  == categoryId));
             }
 
             var totalProducts = await query.CountAsync();
 
             var products = await query
                 .Skip((page - 1) * pageSize)
-                .Include(p => p.Category)
+                .Include(p => p.Categories)
                 .Include(p => p.Variants)
                 .ThenInclude(v => v.ProductType)
                 .Where(p => p.Active == true)
