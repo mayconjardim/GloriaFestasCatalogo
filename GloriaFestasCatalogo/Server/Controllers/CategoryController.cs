@@ -63,6 +63,19 @@ namespace GloriaFestasCatalogo.Server.Controllers
 
 			return NotFound(response);
 		}
+		
+		[HttpPut("order/{categoryId}")]
+		public async Task<ActionResult> UpdateCategoryOrderAsync(int categoryId, CategoryOrder order)
+		{
+			var response = await _categoryService.UpdateCategoryOrderAsync(categoryId, order);
+
+			if (!response.Success)
+			{
+				return BadRequest(response);
+			}
+
+			return Ok(response);
+		}
 
 	}
 }

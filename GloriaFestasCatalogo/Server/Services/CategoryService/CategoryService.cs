@@ -155,5 +155,30 @@ namespace GloriaFestasCatalogo.Server.Services.CategoryService
 			return response;
 		}
 
+		public async Task<ServiceResponse<bool>> UpdateCategoryOrderAsync(int categoryId, CategoryOrder order)
+		{
+			
+			var response = new ServiceResponse<bool>();
+
+			try
+			{
+				var category = await _context.Categories.FindAsync(categoryId);
+
+				if (category != null)
+				{
+					category.Order = order.NewOrder;
+					await _context.SaveChangesAsync();
+					
+					response.Success = true;
+					response.Data = true;
+				}
+			}
+			catch (Exception ex)
+			{
+				response.Success = false;
+				response.Message = ex.Message;
+			}
+			return response;
+		}
 	}
 }

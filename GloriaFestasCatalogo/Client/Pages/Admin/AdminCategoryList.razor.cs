@@ -1,5 +1,6 @@
 ﻿using BlazorBootstrap;
 using GloriaFestasCatalogo.Shared.Dtos.Products;
+using GloriaFestasCatalogo.Shared.Utils;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 
@@ -14,7 +15,7 @@ namespace GloriaFestasCatalogo.Client.Pages.Admin
         private string message = string.Empty;
         private string searchText = string.Empty;
         private ProductCategoryDto? draggingModel;
-        
+
         [Inject] protected ToastService toastService { get; set; }
 
         protected override async Task OnInitializedAsync()
@@ -142,6 +143,26 @@ namespace GloriaFestasCatalogo.Client.Pages.Admin
         {
             searchText = e.Value.ToString();
             await FilterByText();
+        }
+        
+        private void HandleDrop(ProductCategoryDto landingModel)
+        {
+            
+            if (draggingModel is null) return;
+            int originalOrderLanding = landingModel.Order;
+            
+            categories.Where(x => x.Order >= landingModel.Order).ToList().ForEach(x => x.Order++);
+            draggingModel.Order = originalOrderLanding;
+            int ii = 0;
+            foreach (var model in categories.OrderBy(x=>x.Order).ToList())
+            {
+                model.Order = ii++;
+                model.IsDragOver = false;
+
+                CategoryOrder order = new CategoryOrder() { CategoryId = model.Id, NewOrder = model.Order };
+                
+                CategoryService.UpdateCategoryOrderAsync(model.Id, order);
+            }
         }
         
         private async void RefreshPage()

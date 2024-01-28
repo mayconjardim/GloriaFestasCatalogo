@@ -11,6 +11,7 @@ namespace GloriaFestasCatalogo.Server.Services.CategoryService
 		Task<ServiceResponse<ProductCategoryDto>> CreateCategorie(ProductCategoryDto categoryDto);
 		Task<ServiceResponse<ProductCategoryDto>> UpdateCategorie(ProductCategoryDto categoryDto);
 		Task<ServiceResponse<bool>> DeleteCategorie(int id);
+		Task<ServiceResponse<bool>> UpdateCategoryOrderAsync(int categoryId, CategoryOrder order);
 
 	}
 }
