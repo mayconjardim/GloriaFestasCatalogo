@@ -94,5 +94,23 @@ namespace GloriaFestasCatalogo.Client.Services.CategoryService
                 };
             }
         }
+        
+        public async Task<ServiceResponse<bool>> ActiveOrDeactiveCategory(ActiveOrDeactive activeOr)
+        {
+            try
+            {
+                var result = await _http.PutAsJsonAsync($"api/category/active/{activeOr.ProductId}", activeOr);
+                return await result.Content.ReadFromJsonAsync<ServiceResponse<bool>>();
+            }
+            catch (Exception ex)
+            {
+                return new ServiceResponse<bool>
+                {
+                    Success = false,
+                    Message = ex.Message
+                };
+            }
+        }
+        
     }
 }

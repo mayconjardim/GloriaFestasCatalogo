@@ -165,6 +165,26 @@ namespace GloriaFestasCatalogo.Client.Pages.Admin
             }
         }
         
+        public async Task ActiveOrDeactiveCategory(int id, bool active)
+        {
+            ActiveOrDeactive activeOr = new ActiveOrDeactive
+            {
+                ProductId = id,
+                Active = active
+            };
+
+            var result = await CategoryService.ActiveOrDeactiveCategory(activeOr);
+
+            if (result.Success)
+            {
+                message = result.Message;
+            }
+            else
+            {
+                await InvokeAsync(() => StateHasChanged());
+            }
+        }
+        
         private async void RefreshPage()
         {
             await Task.Delay(1000);

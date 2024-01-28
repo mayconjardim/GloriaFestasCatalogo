@@ -77,5 +77,29 @@ namespace GloriaFestasCatalogo.Server.Controllers
 			return Ok(response);
 		}
 
+		[HttpPut("active/{id}")]
+		public async Task<ActionResult<ServiceResponse<bool>>> ActiveOrDeactiveCategory(int id, ActiveOrDeactive activeOr)
+		{
+			try
+			{
+				var response = await _categoryService.ActiveOrDeactiveCategory(id, activeOr);
+
+				if (response.Success)
+				{
+					return Ok(response);
+				}
+
+				return BadRequest(response);
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(500, new ServiceResponse<bool>
+				{
+					Success = false,
+					Message = ex.Message
+				});
+			}
+		}
+		
 	}
 }

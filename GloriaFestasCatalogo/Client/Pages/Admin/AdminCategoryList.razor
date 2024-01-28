@@ -32,6 +32,7 @@
                     <tr>
                         <th>Id</th>
                         <th>Nome</th>
+                        <th>Ativo</th>
                         <th>Ações</th>
                     </tr>
                     </thead>
@@ -45,7 +46,21 @@
                                 @ondragleave="@(() => { item.IsDragOver = false; })"
                                 @ondragenter="@(() => { item.IsDragOver = true; })"
                                 @ondragstart="() => draggingModel = item"
-                                @ondragend="() => draggingModel = null" draggable="true">@item.Name</td>
+                                @ondragend="() => draggingModel = null" draggable="true">@item.Name
+                            </td>
+                            
+                            <td>
+                            
+                                @if (item.Active)
+                                {
+                                    <input type="checkbox" checked @onclick='(() => ActiveOrDeactiveCategory(item.Id, false))' />
+                                }
+                                else
+                                {
+                                    <input type="checkbox" @onclick='(() => ActiveOrDeactiveCategory(item.Id, true))' />
+                                }
+                            </td>
+                            
                             <td>
                                 <a @onclick='(() => OpenModal("EditModal", item.Id))' class="edit" data-toggle="modal">
                                     <i class="fa-solid fa-pen-to-square" data-toggle="tooltip" title="Edit" style="color: #5E0B76"></i>

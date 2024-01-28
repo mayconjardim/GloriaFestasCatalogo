@@ -180,5 +180,40 @@ namespace GloriaFestasCatalogo.Server.Services.CategoryService
 			}
 			return response;
 		}
+		
+		
+		public async Task<ServiceResponse<bool>> ActiveOrDeactiveCategory(int id, ActiveOrDeactive activeOr)
+		{
+			try
+			{
+				var category= await _context.Categories.FindAsync(id);
+
+				if (category == null)
+				{
+					return new ServiceResponse<bool>
+					{
+						Success = false,
+						Message = "Categoria não encontrada."
+					};
+				}
+
+				category.Active = !category.Active;
+
+				_context.Update(category);
+				await _context.SaveChangesAsync();
+
+				return new ServiceResponse<bool> { Success = true, Data = true };
+
+			}
+			catch (Exception ex)
+			{
+				return new ServiceResponse<bool>
+				{
+					Success = false,
+					Message = ex.Message
+				};
+			}
+		}
+		
 	}
 }
