@@ -44,7 +44,7 @@ namespace GloriaFestasCatalogo.Client.Pages.Products
 			cartProduct.Name = product.Name;
 			cartProduct.Description = product.Description;
 			cartProduct.PhotoUrl = product.PhotoUrl;
-			cartProduct.Category = product.Category;
+			cartProduct.Categories = product.Categories;
 			cartProduct.Tags = product.Tags;
 			cartProduct.Variant = productVariant;
 			cartProduct.ProductTypeName = productVariant.ProductTypeName;

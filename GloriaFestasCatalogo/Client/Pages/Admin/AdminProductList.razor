@@ -60,7 +60,7 @@
 									<img src="@products.PhotoUrl" alt="Imagem" style="max-width: 50px; max-height: 50px; margin-right: 10px; border-radius: 50%;" />
 									@products.Name
 								</td>
-								<td>@products.Category.Name</td>
+								<td> @*  @products.Category.Name *@</td>
 								<td>
 
 									@if (products.Variants.Count > 1)
@@ -244,6 +244,7 @@
 
 							<div class="input-group mb-3 d-print-include">
 								<label class="input-group-text" for="inputGroupSelect01"><b>Categoria</b></label>
+							@*
 								<select @onchange="HandleUpdateCategory" class="form-select" required>
 									<option value="@selectedProduct.Category.Id">@selectedProduct.Category.Name</option>
 									@foreach (var category in categories)
@@ -251,6 +252,7 @@
 										<option value="@category.Id">@category.Name</option>
 									}
 								</select>
+								*@
 							</div>
 
 							<div class="input-group mb-3 d-print-include">

@@ -279,7 +279,7 @@ namespace GloriaFestasCatalogo.Client.Pages.Admin
 		{
 			if (int.TryParse(e.Value.ToString(), out var value))
 			{
-				newProduct.ProductCategoryId = value;
+				//newProduct.ProductCategoryId = value;
 			}
 		}
 
@@ -288,7 +288,7 @@ namespace GloriaFestasCatalogo.Client.Pages.Admin
 
 			if (int.TryParse(e.Value.ToString(), out var value))
 			{
-				selectedProduct.Category.Id = value;
+				//selectedProduct.Category.Id = value;
 			}
 		}
 
@@ -340,7 +340,7 @@ namespace GloriaFestasCatalogo.Client.Pages.Admin
 				return false;
 			}
 
-			if (newProduct.ProductCategoryId == null)
+			if (newProduct.Categories.Count <=0)
 			{
 				toastService.Notify(new(ToastType.Danger, $"É necessario adicionar uma categoria ao produto!"));
 				return false;
@@ -389,13 +389,12 @@ namespace GloriaFestasCatalogo.Client.Pages.Admin
 				toastService.Notify(new(ToastType.Danger, $"É necessario adicionar um tipo de produto!"));
 				return false;
 			}
-
-			if (selectedProduct.Category.Id == null)
+			
+			if (selectedProduct.Categories.Count <= 0)
 			{
 				toastService.Notify(new(ToastType.Danger, $"É necessario adicionar uma categoria ao produto!"));
 				return false;
 			}
-
 			else
 			{
 
