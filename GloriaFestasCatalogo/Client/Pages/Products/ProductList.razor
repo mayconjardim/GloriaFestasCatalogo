@@ -5,28 +5,14 @@
 
 @if (products != null && products.Products != null)
 {
-
-    @if (categories != null)
-    {
         <div class="d-flex flex-wrap justify-content-center" style="margin-top: 10px; width: 100%;">
-
             <form role="search"class="d-flex flex-wrap" style="width: 100%;">
 
                 <div class="flex-fill">
                     <input class="form-control me-2" type="search" @oninput="UpdateProductNameSearch" placeholder="Procurar produto por Nome" aria-label="Search">
                 </div>
-
             </form>
-
-            <select @onchange="HandleCategoryChange" class="form-select-sm" style="margin-top: 10px; height: 38px; width: 100%;">
-                <option selected value="0">Categorias</option>
-                @foreach (var category in categories)
-                {
-                    <option value="@category.Id">@category.Name</option>
-                }
-            </select>
         </div>
-    }
 
     <div class="produtos d-flex justify-content-center flex-wrap" style="margin: 5px">
 
@@ -56,7 +42,6 @@
                             {
                                 <h5 class="mt-0 mb-0" style="font-size: 1.4rem">R$ @product.Variants.FirstOrDefault().Price</h5>
                             }
-
                         </div>
                     </div>
                 </div>
@@ -65,8 +50,6 @@
         }
 
     </div>
-
-
 
     <nav aria-label="Page navigation" class="d-flex justify-content-center" >
         <ul class="pagination">
