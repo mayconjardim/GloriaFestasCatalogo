@@ -10,241 +10,267 @@
 @if (products != null && products.Products != null)
 {
 
-	<div class="container-xl">
-		<div class="table-responsive">
-			<div class="table-wrapper">
-				<div class="table-title">
-					<div class="row">
-						<div class="col-sm-4 d-flex">
-							<h2>Gerenciar <b>Produtos</b></h2>
+    <div class="container-xl">
+        <div class="table-responsive">
+            <div class="table-wrapper">
+                <div class="table-title">
+                    <div class="row">
+                        <div class="col-sm-4 d-flex">
+                            <h2>Gerenciar <b>Produtos</b></h2>
 
-						</div>
+                        </div>
 
-						<div class="col-sm-8 d-flex justify-content-end">
-							<div style="margin: 0 10px">
-								<a @onclick='(() => OpenModal("CreateModal", 0))' class="btn btn-success" data-toggle="modal" style="height: 38px;"><i class="fa-solid fa-plus"></i> <span>Novo Produto</span></a>
-							</div>
+                        <div class="col-sm-8 d-flex justify-content-end">
+                            <div style="margin: 0 10px">
+                                <a @onclick='(() => OpenModal("CreateModal", 0))' class="btn btn-success" data-toggle="modal" style="height: 38px;"><i class="fa-solid fa-plus"></i> <span>Novo Produto</span></a>
+                            </div>
 
-							<div>
-								<select @onchange="HandleCategoryChange" class="form-select-sm" style="margin: 0 10px;height: 38px;">
-									<option selected value="0">Categorias</option>
-									@foreach (var category in categories)
-									{
-										<option value="@category.Id">@category.Name</option>
-									}
-								</select>
-							</div>
-							<form class="d-flex w-50" role="search" >
-								<input class="form-control me-2" type="search" @oninput="UpdateProductNameSearch" placeholder="Procurar produto por Nome" aria-label="Search">
-							</form>
-						</div>
-					</div>
-				</div>
-				<table class="table table-striped table-hover">
-					<thead>
-						<tr>
-							<th>Id</th>
-							<th>Nome</th>
-							<th>Categoria</th>
-							<th>Valor</th>
-							<th>Ativo</th>
-							<th>Ações</th>
-						</tr>
-					</thead>
-					<tbody>
-						@foreach (var products in products.Products)
-						{
-							<tr>
-								<td>@products.Id</td>
-								<td style="font-size: 12px; display: flex; align-items: center;">
-									<img src="@products.PhotoUrl" alt="Imagem" style="max-width: 50px; max-height: 50px; margin-right: 10px; border-radius: 50%;" />
-									@products.Name
-								</td>
-								<td> @*  @products.Category.Name *@</td>
-								<td>
+                            <div>
+                                <select @onchange="HandleCategoryChange" class="form-select-sm" style="margin: 0 10px;height: 38px;">
+                                    <option selected value="0">Categorias</option>
+                                    @foreach (var category in categories)
+                                    {
+                                        <option value="@category.Id">@category.Name</option>
+                                    }
+                                </select>
+                            </div>
+                            <form class="d-flex w-50" role="search" >
+                                <input class="form-control me-2" type="search" @oninput="UpdateProductNameSearch" placeholder="Procurar produto por Nome" aria-label="Search">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <table class="table table-striped table-hover">
+                    <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Nome</th>
+                        <th>Categoria</th>
+                        <th>Valor</th>
+                        <th>Ativo</th>
+                        <th>Ações</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var products in products.Products)
+                    {
+                        <tr>
+                            <td>@products.Id</td>
+                            <td style="font-size: 12px; display: flex; align-items: center;">
+                                <img src="@products.PhotoUrl" alt="Imagem" style="max-width: 50px; max-height: 50px; margin-right: 10px; border-radius: 50%;" />
+                                @products.Name
+                            </td>
+                            <td> @*  @products.Category.Name *@</td>
+                            <td>
 
-									@if (products.Variants.Count > 1)
-									{
-										<span>A partir de:</span>
-										<br />
-										<span>R$ @products.Variants.Min(v => v.Price)</span>
-									}else
-									{
-										<span>R$ @products.Variants.FirstOrDefault().Price</span>
-									}
+                                @if (products.Variants.Count > 1)
+                                {
+                                    <span>A partir de:</span>
+                                    <br />
+                                    <span>R$ @products.Variants.Min(v => v.Price)</span>
+                                }else
+                                {
+                                    <span>R$ @products.Variants.FirstOrDefault().Price</span>
+                                }
 								
-								</td>
-								<td>
+                            </td>
+                            <td>
 
-									@if (products.Active)
-									{
-										<input type="checkbox" checked @onclick='(() => ActiveOrDeactiveProduct(products.Id, false))' />
-									}
-									else
-									{
-										<input type="checkbox" @onclick='(() => ActiveOrDeactiveProduct(products.Id, true))' />
-									}
+                                @if (products.Active)
+                                {
+                                    <input type="checkbox" checked @onclick='(() => ActiveOrDeactiveProduct(products.Id, false))' />
+                                }
+                                else
+                                {
+                                    <input type="checkbox" @onclick='(() => ActiveOrDeactiveProduct(products.Id, true))' />
+                                }
 
 
-								</td>
-								<td>
-									<a @onclick='(() => OpenModal("EditModal", products.Id))' class="edit" data-toggle="modal">
-										<i class="fa-solid fa-pen-to-square" data-toggle="tooltip" title="Edit" style="color: #5E0B76"></i>
-									</a>
-									<a @onclick='(() => OpenModal("DeleteModal", products.Id))' class="delete" data-toggle="modal">
-										<i class="fa-solid fa-trash" data-toggle="tooltip" title="Delete" style="color: #5E0B76"></i>
-									</a>
-								</td>
-							</tr>
-						}
-					</tbody>
-				</table>
+                            </td>
+                            <td>
+                                <a @onclick='(() => OpenModal("EditModal", products.Id))' class="edit" data-toggle="modal">
+                                    <i class="fa-solid fa-pen-to-square" data-toggle="tooltip" title="Edit" style="color: #5E0B76"></i>
+                                </a>
+                                <a @onclick='(() => OpenModal("DeleteModal", products.Id))' class="delete" data-toggle="modal">
+                                    <i class="fa-solid fa-trash" data-toggle="tooltip" title="Delete" style="color: #5E0B76"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
 
-				<div class="clearfix">
-					<ul class="pagination">
+                <div class="clearfix">
+                    <ul class="pagination">
 
-						@for (int i = 1; i <= products.Pages; i++)
-						{
-							var localVariable = i;
+                        @for (int i = 1; i <= products.Pages; i++)
+                        {
+                            var localVariable = i;
 
-							<li class="page-item @(i == products.CurrentPage ? "active" : "")">
-								<a class="page-link" @onclick="() => ChangePage(localVariable)">@i</a>
-							</li>
-						}
-					</ul>
-				</div>
+                            <li class="page-item @(i == products.CurrentPage ? "active" : "")">
+                                <a class="page-link" @onclick="() => ChangePage(localVariable)">@i</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
 
-			</div>
-		</div>
-	</div>
+            </div>
+        </div>
+    </div>
 
-	<!-- Create Modal HTML -->
-		<div id="CreateModal" class="modal fade">
-			<div class="modal-dialog modal-lg">
-				<div class="modal-content">
-				<form>
+    <!-- Create Modal HTML -->
+    <div id="CreateModal" class="modal fade">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <form>
 
-					<div class="modal-header">
-						<h4 class="modal-title">Adicionar Produto</h4>
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true" @onclick='(() => CloseModal("CreateModal"))'>&times;</button>
-					</div>
+                    <div class="modal-header">
+                        <h4 class="modal-title">Adicionar Produto</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" @onclick='(() => CloseModal("CreateModal"))'>&times;</button>
+                    </div>
 
-					<div class="modal-body">
+                    <div class="modal-body">
 
-						<div class="input-group mb-3 d-print-include">
-							<span class="input-group-text" id="basic-addon1"><b>Nome</b></span>
-							<input type="text" class="form-control" @bind="newProduct.Name" required>
-						</div>
+                        <div class="input-group mb-3 d-print-include">
+                            <span class="input-group-text" id="basic-addon1"><b>Nome</b></span>
+                            <input type="text" class="form-control" @bind="newProduct.Name" required>
+                        </div>
 
-						<div class="input-group mb-3 d-print-include">
-							<span class="input-group-text" id="basic-addon1"><b>Descrição</b></span>
-							<textarea class="form-control" @bind="@newProduct.Description" rows="10" required></textarea>
-						</div>
+                        <div class="input-group mb-3 d-print-include">
+                            <span class="input-group-text" id="basic-addon1"><b>Descrição</b></span>
+                            <textarea class="form-control" @bind="@newProduct.Description" rows="10" required></textarea>
+                        </div>
 
-						<div class="input-group mb-3 d-print-include">
-							<span class="input-group-text" id="basic-addon1"><b>Imagem</b></span>
-							<input type="text" class="form-control" @bind="newProduct.PhotoUrl" required>
-						</div>
+                        <div class="input-group mb-3 d-print-include">
+                            <span class="input-group-text" id="basic-addon1"><b>Imagem</b></span>
+                            <input type="text" class="form-control" @bind="newProduct.PhotoUrl" required>
+                        </div>
+						
+                        <div class="input-group mb-3 d-print-include">
+                            <span class="input-group-text" id="basic-addon1"><b>Tags</b></span>
+                            <input type="text" class="form-control" @bind="newProduct.Tags" >
+                        </div>
+                        
+                        @* Categiries *@
+                        <hr />
+                        <div class="header">
+                            <div class="cols">Categoria</div>
+                            <div class="cols"></div>
+                            <div class="cols"></div>
+                        
+                        </div>
+                        @foreach (var newCategorie in newProduct.Categories)
+                        {
+                            <div class="rows">
+                                <div class="cols">
+                                    <select class="form-select" @onchange="@((ChangeEventArgs e) => SelectCategorieType(int.Parse(e.Value.ToString()), newCategorie))">
+                                        <option selected disabled>Categoria</option>
+                                        @foreach (var selectCategory in categories)
+                                        {
+                                            <option value="@selectCategory.Id">
+                                                @selectCategory.Name
+                                            </option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="cols">
+                                </div>
+                                <div class="cols">
+                                    <a class="delete" @onclick="@(() => RemoveCategorie(newCategorie, 0))" style="font-size: 20px">
+                                        <i class="fa-solid fa-trash" data-toggle="tooltip" title="Delete" style="color: #5E0B76"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        }
+                        <button type="button" class="btn" style="color: #5E0B76" @onclick="() => AddCategorie(0)">
+                            <i class="oi oi-plus" ></i> Add Categoria
+                        </button>
+                        <hr />
+						
+                        @* Produtos Variantes*@
+                        <hr />
+                        <div class="header">
+                            <div class="cols">Tipo de Produto</div>
+                            <div class="cols">Preço</div>
+                            <div class="cols"></div>
 
-						<div class="input-group mb-3 d-print-include">
-							<label class="input-group-text" for="inputGroupSelect01"><b>Categoria</b></label>
-							<select @onchange="HandleCreationCategory" class="form-select" required>
-								<option selected disabled>Selecione a categoria</option>
-								@foreach (var category in categories)
-								{
-									<option value="@category.Id">@category.Name</option>
-								}
-							</select>
-						</div>
+                        </div>
+                        @foreach (var variant in newProduct.Variants)
+                        {
+                            <div class="rows">
+                                <div class="cols">
 
-						<div class="input-group mb-3 d-print-include">
-							<span class="input-group-text" id="basic-addon1"><b>Tags</b></span>
-							<input type="text" class="form-control" @bind="newProduct.Tags" >
-						</div>
+                                    <select class="form-select" @onchange="@((ChangeEventArgs e) => SelectProductType( int.Parse(e.Value.ToString()), variant))">
+                                        <option selected disabled>Tipo de produto</option>
+                                        @foreach (var productType in productTypes)
+                                        {
+                                            <option value="@productType.Id">
+                                                @productType.Name
+                                            </option>
+                                        }
+                                    </select>
 
-						<hr />
-						<div class="header">
-							<div class="cols">Tipo de Produto</div>
-							<div class="cols">Preço</div>
-							<div class="cols"></div>
+                                </div>
+                                <div class="cols">
+                                    <input type="text" class="form-control" @bind="variant.Price" required>
+                                </div>
 
-						</div>
-						@foreach (var variant in newProduct.Variants)
-						{
-							<div class="rows">
-								<div class="cols">
+                                <div class="cols">
+                                    <a class="delete" @onclick="@(() => RemoveVariant(variant, 0))" style="font-size: 20px">
+                                        <i class="fa-solid fa-trash" data-toggle="tooltip" title="Delete" style="color: #5E0B76"></i>
+                                    </a>
+                                </div>
+                            </div>
 
-									<select class="form-select" @onchange="@((ChangeEventArgs e) => SelectProductType( int.Parse(e.Value.ToString()), variant))">
-										<option selected disabled>Tipo de produto</option>
-										@foreach (var productType in productTypes)
-										{
-											<option value="@productType.Id">
-												@productType.Name
-											</option>
-										}
-									</select>
+                        }
+                        <button type="button" class="btn" style="color: #5E0B76" @onclick="() => AddVariant(0)">
+                            <i class="oi oi-plus" ></i> Add Tipos de Produto
+                        </button>
+                        <hr />
+                    </div>
+                    <div class="modal-footer">
+                        <input class="btn btn-success" value="Adicionar" @onclick="CreateProduct">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
-								</div>
-								<div class="cols">
-									<input type="text" class="form-control" @bind="variant.Price" required>
-								</div>
+    <!-- Create Modal HTML -->
 
-								<div class="cols">
-									<a class="delete" @onclick="@(() => RemoveVariant(variant, 0))" style="font-size: 20px">
-										<i class="fa-solid fa-trash" data-toggle="tooltip" title="Delete" style="color: #5E0B76"></i>
-									</a>
-								</div>
-							</div>
+    <!-- Edit Modal HTML -->
+    @if (selectedProduct != null)
+    {
+        <div id="EditModal" class="modal fade">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <form>
 
-						}
-						<button type="button" class="btn" style="color: #5E0B76" @onclick="() => AddVariant(0)">
-							<i class="oi oi-plus" ></i> Add Tipos de Produto
-						</button>
-						<hr />
-					</div>
-					<div class="modal-footer">
-						<input class="btn btn-success" value="Adicionar" @onclick="CreateProduct">
-					</div>
-				</form>
-				</div>
-			</div>
-		</div>
+                        <div class="modal-header">
+                            <h4 class="modal-title">Editar Produto</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true" @onclick='(() => CloseModal("EditModal"))'>&times;</button>
+                        </div>
 
-	<!-- Create Modal HTML -->
+                        <div class="modal-body">
 
-	<!-- Edit Modal HTML -->
-	@if (selectedProduct != null)
-	{
-		<div id="EditModal" class="modal fade">
-			<div class="modal-dialog modal-lg">
-				<div class="modal-content">
-					<form>
+                            <div class="input-group mb-3 d-print-include">
+                                <span class="input-group-text" id="basic-addon1"><b>Nome</b></span>
+                                <input type="text" class="form-control" @bind-value="@selectedProduct.Name" required>
+                            </div>
 
-						<div class="modal-header">
-							<h4 class="modal-title">Editar Produto</h4>
-							<button type="button" class="close" data-dismiss="modal" aria-hidden="true" @onclick='(() => CloseModal("EditModal"))'>&times;</button>
-						</div>
+                            <div class="input-group mb-3 d-print-include">
+                                <span class="input-group-text" id="basic-addon1"><b>Descrição</b></span>
+                                <textarea class="form-control" @bind="@selectedProduct.Description" rows="10" required></textarea>
+                            </div>
 
-						<div class="modal-body">
+                            <div class="input-group mb-3 d-print-include">
+                                <span class="input-group-text" id="basic-addon1"><b>Imagem</b></span>
+                                <input type="text" class="form-control" @bind-value="@selectedProduct.PhotoUrl" required>
+                            </div>
 
-							<div class="input-group mb-3 d-print-include">
-								<span class="input-group-text" id="basic-addon1"><b>Nome</b></span>
-								<input type="text" class="form-control" @bind-value="@selectedProduct.Name" required>
-							</div>
-
-							<div class="input-group mb-3 d-print-include">
-								<span class="input-group-text" id="basic-addon1"><b>Descrição</b></span>
-								<textarea class="form-control" @bind="@selectedProduct.Description" rows="10" required></textarea>
-							</div>
-
-							<div class="input-group mb-3 d-print-include">
-								<span class="input-group-text" id="basic-addon1"><b>Imagem</b></span>
-								<input type="text" class="form-control" @bind-value="@selectedProduct.PhotoUrl" required>
-							</div>
-
-							<div class="input-group mb-3 d-print-include">
-								<label class="input-group-text" for="inputGroupSelect01"><b>Categoria</b></label>
-							@*
+                            <div class="input-group mb-3 d-print-include">
+                                <label class="input-group-text" for="inputGroupSelect01"><b>Categoria</b></label>
+                                @*
 								<select @onchange="HandleUpdateCategory" class="form-select" required>
 									<option value="@selectedProduct.Category.Id">@selectedProduct.Category.Name</option>
 									@foreach (var category in categories)
@@ -253,93 +279,93 @@
 									}
 								</select>
 								*@
-							</div>
+                            </div>
 
-							<div class="input-group mb-3 d-print-include">
-								<span class="input-group-text" id="basic-addon1"><b>Tags</b></span>
-								<input type="text" class="form-control" @bind-value="@selectedProduct.Tags">
-							</div>
+                            <div class="input-group mb-3 d-print-include">
+                                <span class="input-group-text" id="basic-addon1"><b>Tags</b></span>
+                                <input type="text" class="form-control" @bind-value="@selectedProduct.Tags">
+                            </div>
 
-							<hr />
-							<div class="header">
-								<div class="cols">Tipo de Produto</div>
-								<div class="cols">Preço</div>
-								<div class="cols"></div>
+                            <hr />
+                            <div class="header">
+                                <div class="cols">Tipo de Produto</div>
+                                <div class="cols">Preço</div>
+                                <div class="cols"></div>
 
-							</div>
-							@foreach (var variant in selectedProduct.Variants)
-							{
-								<div class="rows">
-									<div class="cols">
+                            </div>
+                            @foreach (var variant in selectedProduct.Variants)
+                            {
+                                <div class="rows">
+                                    <div class="cols">
 
-										<select class="form-select" @onchange="@((ChangeEventArgs e) => SelectProductType( int.Parse(e.Value.ToString()), variant))">
+                                        <select class="form-select" @onchange="@((ChangeEventArgs e) => SelectProductType( int.Parse(e.Value.ToString()), variant))">
 
-											@if (!string.IsNullOrEmpty(variant.ProductTypeName))
-											{
-												<option value="@variant.ProductTypeId">@variant.ProductTypeName</option>
-											} else
-											{
-												<option selected disabled>Tipo de produto</option>
-											}
-											@foreach (var productType in productTypes)
-											{
-												<option value="@productType.Id">@productType.Name</option>
-											}
-										</select>
+                                            @if (!string.IsNullOrEmpty(variant.ProductTypeName))
+                                            {
+                                                <option value="@variant.ProductTypeId">@variant.ProductTypeName</option>
+                                            } else
+                                            {
+                                                <option selected disabled>Tipo de produto</option>
+                                            }
+                                            @foreach (var productType in productTypes)
+                                            {
+                                                <option value="@productType.Id">@productType.Name</option>
+                                            }
+                                        </select>
 
-									</div>
-									<div class="cols">
-										<input type="text" class="form-control" @bind="variant.Price" required>
-									</div>
+                                    </div>
+                                    <div class="cols">
+                                        <input type="text" class="form-control" @bind="variant.Price" required>
+                                    </div>
 
-									<div class="cols">
-										<a class="delete" @onclick="@(() => RemoveVariant(variant, 1))" style="font-size: 20px">
-											<i class="fa-solid fa-trash" data-toggle="tooltip" title="Delete" style="color: #5E0B76"></i>
-										</a>
-									</div>
-								</div>
+                                    <div class="cols">
+                                        <a class="delete" @onclick="@(() => RemoveVariant(variant, 1))" style="font-size: 20px">
+                                            <i class="fa-solid fa-trash" data-toggle="tooltip" title="Delete" style="color: #5E0B76"></i>
+                                        </a>
+                                    </div>
+                                </div>
 
-							}
-							<button type="button" class="btn" style="color: #5E0B76" @onclick="() => AddVariant(1)">
-								<i class="oi oi-plus"></i> Add Tipos de Produto
-							</button>
-							<hr />
+                            }
+                            <button type="button" class="btn" style="color: #5E0B76" @onclick="() => AddVariant(1)">
+                                <i class="oi oi-plus"></i> Add Tipos de Produto
+                            </button>
+                            <hr />
 
-						</div>
-						<div class="modal-footer">
-							<input  class="btn btn-success" value="Editar" @onclick="EditProduct">
-						</div>
-					</form>
-				</div>
-			</div>
-		</div>
-	}
-	<!-- Edit Modal HTML -->
+                        </div>
+                        <div class="modal-footer">
+                            <input  class="btn btn-success" value="Editar" @onclick="EditProduct">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    }
+    <!-- Edit Modal HTML -->
 
-	<!-- Delete Modal HTML -->
-	<div id="DeleteModal" class="modal fade">
-		<div class="modal-dialog modal-lg">
-			<div class="modal-content">
-				<form>
-					<div class="modal-header">
-						<h4 class="modal-title">Deletar Produto</h4>
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true" @onclick='(() => CloseModal("DeleteModal"))' a>&times;</button>
-					</div>
-					<div class="modal-body">
-						<p>
-							Tem certeza de que deseja excluir este produto?
-						</p>
-						<p class="text-warning"><small>Essa ação não pode ser desfeita.</small></p>
-					</div>
-					<div class="modal-footer">
-						<input  class="btn btn-danger" @onclick="DeleteProduct" value="Deletar">
-					</div>
-				</form>
-			</div>
-		</div>
-	</div>
+    <!-- Delete Modal HTML -->
+    <div id="DeleteModal" class="modal fade">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <form>
+                    <div class="modal-header">
+                        <h4 class="modal-title">Deletar Produto</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" @onclick='(() => CloseModal("DeleteModal"))' a>&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <p>
+                            Tem certeza de que deseja excluir este produto?
+                        </p>
+                        <p class="text-warning"><small>Essa ação não pode ser desfeita.</small></p>
+                    </div>
+                    <div class="modal-footer">
+                        <input  class="btn btn-danger" @onclick="DeleteProduct" value="Deletar">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 }
 else
 {
-	@message
+    @message
 }

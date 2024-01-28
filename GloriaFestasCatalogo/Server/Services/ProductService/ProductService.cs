@@ -142,48 +142,45 @@ namespace GloriaFestasCatalogo.Server.Services.ProductService
 
             try
             {
-                var categoryIds = product.Categories.Select(c => c.Id).ToList();
 
-                var categories = await _context.Categories
-                    .Where(c => categoryIds.Contains(c.Id))
-                    .ToListAsync();
+                var existingProduct = await _context.Products
+                    .Where(p => p.Name == product.Name)
+                    .FirstOrDefaultAsync();
 
-                if (categories.Count != categoryIds.Count)
+                if (existingProduct != null)
                 {
                     response.Success = false;
-                    response.Message = "Uma ou mais categorias não foram encontradas.";
+                    response.Message = $"Já existe um produto com o mesmo nome.";
                     return response;
                 }
+                
+                List<ProductCategory> newCategories = new List<ProductCategory>();
 
-                foreach (var category in categories)
+                foreach (var categorie in product.Categories)
                 {
-                    var existingProduct = await _context.Products
-                        .Where(p => p.Name == product.Name && p.Categories.Any(c => c.Id == category.Id))
-                        .FirstOrDefaultAsync();
-
-                    if (existingProduct != null)
+                    var existingCategory = await _context.Categories.FirstOrDefaultAsync(c => c.Id == categorie.Id);
+                    if (existingCategory != null)
                     {
-                        response.Success = false;
-                        response.Message = $"Já existe um produto com o mesmo nome na categoria: {category.Name}.";
-                        return response;
+                        newCategories.Add(existingCategory);
                     }
-
-                    var newProduct = _mapper.Map<Product>(product);
-                    newProduct.Categories = new List<ProductCategory> { category };
-                    _context.Add(newProduct);
-                    await _context.SaveChangesAsync();
-
-                    foreach (var variant in product.Variants)
-                    {
-                        newProduct.Variants.Add(new ProductVariant { Price = variant.Price, ProductId = newProduct.Id, ProductTypeId = variant.ProductTypeId });
-                    }
-
-                    _context.Update(newProduct);
-                    await _context.SaveChangesAsync();
-
-                    response.Success = true;
-                    response.Data = _mapper.Map<ProductDto>(newProduct);
                 }
+                
+                var newProduct = _mapper.Map<Product>(product);
+                newProduct.Categories = newCategories;
+                _context.Add(newProduct);
+                await _context.SaveChangesAsync();
+
+                foreach (var variant in product.Variants)
+                {
+                    newProduct.Variants.Add(new ProductVariant { Price = variant.Price, ProductId = newProduct.Id, ProductTypeId = variant.ProductTypeId });
+                }
+
+                _context.Update(newProduct);
+                await _context.SaveChangesAsync();
+
+                response.Success = true;
+                response.Data = _mapper.Map<ProductDto>(newProduct);
+                
             }
             catch (Exception ex)
             {
@@ -247,17 +244,17 @@ namespace GloriaFestasCatalogo.Server.Services.ProductService
 
                 return new ServiceResponse<ProductDto>
                 {
-                Success = true,
-                Data = _mapper.Map<ProductDto>(product)
-            };
+                    Success = true,
+                    Data = _mapper.Map<ProductDto>(product)
+                };
             }
             catch (Exception ex)
             {
-            return new ServiceResponse<ProductDto>
-            {
-                Success = false,
-                Message = ex.Message
-            };
+                return new ServiceResponse<ProductDto>
+                {
+                    Success = false,
+                    Message = ex.Message
+                };
             }
         }
 
@@ -330,6 +327,7 @@ namespace GloriaFestasCatalogo.Server.Services.ProductService
         public async Task<ServiceResponse<ProductResponse>> GetActiveProductsPageableAsync(int page, int pageSize, int categoryId, string text = null)
         {
             IQueryable<Product> query = _context.Products
+                .Include(p => p.Categories)
                 .Include(p => p.Variants)
                 .ThenInclude(v => v.ProductType);
 

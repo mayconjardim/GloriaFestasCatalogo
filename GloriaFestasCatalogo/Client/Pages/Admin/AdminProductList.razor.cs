@@ -148,7 +148,6 @@ namespace GloriaFestasCatalogo.Client.Pages.Admin
 
 		private async Task CreateProduct()
 		{
-			await JSRuntime.InvokeVoidAsync("console.log", newProduct);
 
 			if (IsValid())
 			{
@@ -319,12 +318,57 @@ namespace GloriaFestasCatalogo.Client.Pages.Admin
 				selectedProduct.Variants.Remove(productVariantDto);
 			}
 		}
+		
+		private void AddCategorie(int type)
+		{
+
+			if (type == 0)
+			{
+				newProduct.Categories
+					.Add(new ProductCategoryDto() { Id = 0});
+			}
+			if (type == 1)
+			{
+				selectedProduct.Categories
+					.Add(new ProductCategoryDto { });
+			}
+
+		}
+		
+		private void RemoveCategorie(ProductCategoryDto categoryDto, int type)
+		{
+			if (type == 0)
+			{
+				newProduct.Categories.Remove(categoryDto);
+			}
+			if (type == 1)
+			{
+				selectedProduct.Categories.Remove(categoryDto);
+			}
+		}
+		
 
 		private void SelectProductType(int productTypeId, ProductVariantDto variant)
 		{
+		
 			variant.ProductTypeId = productTypeId;
 		}
 
+		private void SelectCategorieType(int newCategoryID, ProductCategoryDto newCategoryDto)
+		{
+			var newCategory = categories.FirstOrDefault(c => c.Id == newCategoryID);
+
+			if (newCategory != null)
+			{
+				int index = newProduct.Categories.FindIndex(c => c == newCategoryDto);
+
+				if (index != -1)
+				{
+					newProduct.Categories[index] = newCategory;
+				}
+			}
+		}
+		
 		bool IsValid()
 		{
 
