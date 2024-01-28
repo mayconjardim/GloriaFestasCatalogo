@@ -122,12 +122,21 @@ namespace GloriaFestasCatalogo.Server.Services.CategoryService
 
 			try
 			{
-				var category = await _context.Categories.FindAsync(id);
+				var category = await _context.Categories
+					.Include(c => c.Products) 
+					.FirstOrDefaultAsync(c => c.Id == id);
 
 				if (category == null)
 				{
 					response.Success = false;
 					response.Message = "Categoria não encontrado.";
+					return response;
+				}
+				
+				if (category.Products.Any())
+				{
+					response.Success = false;
+					response.Message = "Não é possível excluir a categoria, pois existem produtos associados a ela.";
 					return response;
 				}
 

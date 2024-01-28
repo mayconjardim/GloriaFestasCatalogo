@@ -129,7 +129,10 @@ namespace GloriaFestasCatalogo.Client.Pages.Admin
                     await CloseModal("DeleteModal");
 
                     RefreshPage();
-
+                }
+                else
+                {
+                    toastService.Notify(new(ToastType.Danger, result.Message));
                 }
             }
         }
