@@ -60,7 +60,19 @@
                                 <img src="@products.PhotoUrl" alt="Imagem" style="max-width: 50px; max-height: 50px; margin-right: 10px; border-radius: 50%;" />
                                 @products.Name
                             </td>
-                            <td> @*  @products.Category.Name *@</td>
+                            <td> 
+                                @if (products.Categories.Count == 1)
+                                {
+                                    @products.Categories.FirstOrDefault().Name 
+                                }
+                                else
+                                {
+                                    @foreach (var categorie in products.Categories)
+                                    {
+                                        <p style="font-size: 11px; line-height: 1">@categorie.Name</p> 
+                                    }
+                                }
+                                </td>
                             <td>
 
                                 @if (products.Variants.Count > 1)

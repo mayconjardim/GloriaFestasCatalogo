@@ -13,7 +13,8 @@ namespace GloriaFestasCatalogo.Client.Pages.Admin
         private ProductCategoryDto newCategory = new ProductCategoryDto();
         private string message = string.Empty;
         private string searchText = string.Empty;
-
+        private ProductCategoryDto? draggingModel;
+        
         [Inject] protected ToastService toastService { get; set; }
 
         protected override async Task OnInitializedAsync()
@@ -136,13 +137,13 @@ namespace GloriaFestasCatalogo.Client.Pages.Admin
                 }
             }
         }
-
+        
         private async void UpdateCategoryNameSearch(ChangeEventArgs e)
         {
             searchText = e.Value.ToString();
             await FilterByText();
         }
-
+        
         private async void RefreshPage()
         {
             await Task.Delay(1000);
