@@ -163,7 +163,7 @@
                         {
                             <div class="rows">
                                 <div class="cols">
-                                    <select class="form-select" @onchange="@((ChangeEventArgs e) => SelectCategorieType(int.Parse(e.Value.ToString()), newCategorie))">
+                                    <select class="form-select" @onchange="@((ChangeEventArgs e) => SelectCategorieType(int.Parse(e.Value.ToString()), newCategorie, 0))">
                                         <option selected disabled>Categoria</option>
                                         @foreach (var selectCategory in categories)
                                         {
@@ -221,7 +221,6 @@
                                     </a>
                                 </div>
                             </div>
-
                         }
                         <button type="button" class="btn" style="color: #5E0B76" @onclick="() => AddVariant(0)">
                             <i class="oi oi-plus" ></i> Add Tipos de Produto
@@ -267,25 +266,54 @@
                                 <span class="input-group-text" id="basic-addon1"><b>Imagem</b></span>
                                 <input type="text" class="form-control" @bind-value="@selectedProduct.PhotoUrl" required>
                             </div>
-
-                            <div class="input-group mb-3 d-print-include">
-                                <label class="input-group-text" for="inputGroupSelect01"><b>Categoria</b></label>
-                                @*
-								<select @onchange="HandleUpdateCategory" class="form-select" required>
-									<option value="@selectedProduct.Category.Id">@selectedProduct.Category.Name</option>
-									@foreach (var category in categories)
-									{
-										<option value="@category.Id">@category.Name</option>
-									}
-								</select>
-								*@
-                            </div>
-
+                            
                             <div class="input-group mb-3 d-print-include">
                                 <span class="input-group-text" id="basic-addon1"><b>Tags</b></span>
                                 <input type="text" class="form-control" @bind-value="@selectedProduct.Tags">
                             </div>
 
+                            @* Categiries *@
+                            <hr />
+                            <div class="header">
+                                <div class="cols">Categoria</div>
+                                <div class="cols"></div>
+                                <div class="cols"></div>
+                                                    
+                            </div>
+                            @foreach (var newCategorie in selectedProduct.Categories)
+                            {
+                                <div class="rows">
+                                    <div class="cols">
+                                        <select class="form-select" @onchange="@((ChangeEventArgs e) => SelectCategorieType(int.Parse(e.Value.ToString()), newCategorie, 1))">
+                                            @if (!string.IsNullOrEmpty(newCategorie.Name))
+                                            {
+                                                <option value="@newCategorie.Id">@newCategorie.Name</option>
+                                            } else
+                                            {
+                                                <option selected disabled>Categoria</option>
+                                            }
+                                            @foreach (var categorie in categories)
+                                            {
+                                                <option value="@categorie.Id">@categorie.Name</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="cols">
+                                    </div>
+                                    <div class="cols">
+                                        <a class="delete" @onclick="@(() => RemoveCategorie(newCategorie, 1))" style="font-size: 20px">
+                                            <i class="fa-solid fa-trash" data-toggle="tooltip" title="Delete" style="color: #5E0B76"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            }
+                            <button type="button" class="btn" style="color: #5E0B76" @onclick="() => AddCategorie(1)">
+                                <i class="oi oi-plus" ></i> Add Categoria
+                            </button>
+                            <hr />
+                            						
+                            @* Produtos Variantes*@
+                            
                             <hr />
                             <div class="header">
                                 <div class="cols">Tipo de Produto</div>

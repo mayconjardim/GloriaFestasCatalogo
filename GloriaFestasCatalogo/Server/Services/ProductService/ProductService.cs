@@ -197,13 +197,19 @@ namespace GloriaFestasCatalogo.Server.Services.ProductService
             
             try
             {
-                var categoryIds = updatedProduct.Categories.Select(c => c.Id).ToList();
+        
+                List<ProductCategory> newCategories = new List<ProductCategory>();
 
-                var categories = await _context.Categories
-                    .Where(c => categoryIds.Contains(c.Id))
-                    .ToListAsync();
+                foreach (var categorie in updatedProduct.Categories)
+                {
+                    var existingCategory = await _context.Categories.FirstOrDefaultAsync(c => c.Id == categorie.Id);
+                    if (existingCategory != null)
+                    {
+                        newCategories.Add(existingCategory);
+                    }
+                }
 
-                if (categories.Count != categoryIds.Count)
+                if (newCategories.Count == 0)
                 {
                     return new ServiceResponse<ProductDto>
                     {
@@ -231,7 +237,7 @@ namespace GloriaFestasCatalogo.Server.Services.ProductService
                 product.Tags = updatedProduct.Tags;
                 product.Description = updatedProduct.Description;
                 product.Categories.Clear();
-                product.Categories.AddRange(categories);
+                product.Categories.AddRange(newCategories);
 
                 _context.ProductVariants.RemoveRange(product.Variants);
 
