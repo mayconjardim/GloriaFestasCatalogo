@@ -111,6 +111,12 @@ namespace GloriaFestasCatalogo.Client.Services.CategoryService
                 };
             }
         }
-        
+     
+        public async Task<ServiceResponse<List<ProductCategoryDto>>> GetCategoriesOrderActivesAsync()
+        {
+            var url = "api/category/active";
+            var result = await _http.GetFromJsonAsync<ServiceResponse<List<ProductCategoryDto>>>(url);
+            return result;
+        }
     }
 }

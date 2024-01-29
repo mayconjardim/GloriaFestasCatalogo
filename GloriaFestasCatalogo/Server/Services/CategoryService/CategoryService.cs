@@ -39,6 +39,20 @@ namespace GloriaFestasCatalogo.Server.Services.CategoryService
 			return response;
 		}
 
+		public async Task<ServiceResponse<List<ProductCategoryDto>>> GetCategoriesOrderActivesAsync()
+		{
+			var response = new ServiceResponse<List<ProductCategoryDto>>();
+
+			 var categories = await _context.Categories.Where(c => c.Active == true)
+				.OrderBy(c => c.Order).ToListAsync();
+
+			var categoryDto = _mapper.Map<List<ProductCategoryDto>>(categories);
+			response.Success = true;
+			response.Data = categoryDto;
+
+			return response;
+		}
+
 		public async Task<ServiceResponse<ProductCategoryDto>> GetCategorieAsync(int id)
 		{
 			var response = new ServiceResponse<ProductCategoryDto>();

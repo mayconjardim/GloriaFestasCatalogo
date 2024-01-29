@@ -7,6 +7,7 @@ namespace GloriaFestasCatalogo.Server.Services.CategoryService
 	{
 
 		Task<ServiceResponse<List<ProductCategoryDto>>> GetCategoriesAsync(string? text = null);
+		Task<ServiceResponse<List<ProductCategoryDto>>> GetCategoriesOrderActivesAsync();
 		Task<ServiceResponse<ProductCategoryDto>> GetCategorieAsync(int id);
 		Task<ServiceResponse<ProductCategoryDto>> CreateCategorie(ProductCategoryDto categoryDto);
 		Task<ServiceResponse<ProductCategoryDto>> UpdateCategorie(ProductCategoryDto categoryDto);

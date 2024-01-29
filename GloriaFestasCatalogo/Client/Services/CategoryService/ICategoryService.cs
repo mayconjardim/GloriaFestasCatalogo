@@ -13,6 +13,7 @@ namespace GloriaFestasCatalogo.Client.Services.CategoryService
 		Task<ServiceResponse<bool>> DeleteCategorie(int id);
 		Task<ServiceResponse<bool>> UpdateCategoryOrderAsync(int categoryId, CategoryOrder order);
 		Task<ServiceResponse<bool>> ActiveOrDeactiveCategory(ActiveOrDeactive activeOr);
+		Task<ServiceResponse<List<ProductCategoryDto>>> GetCategoriesOrderActivesAsync();
 
 	}
 }
