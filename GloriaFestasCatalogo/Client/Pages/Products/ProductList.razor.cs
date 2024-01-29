@@ -17,9 +17,14 @@ namespace GloriaFestasCatalogo.Client.Pages.Products
 
 		protected override async Task OnInitializedAsync()
 		{
+			await GetCategories();
+		}
+
+		private async Task GetProcuctsByCategorie(int newCategoryId)
+		{
 			message = "Carregando Produtos...";
 
-			var result = await ProductService.GetActiveProductsPageableAsync(currentPage, pageSize, categoryId, searchText);
+			var result = await ProductService.GetActiveProductsPageableAsync(currentPage, pageSize, newCategoryId, searchText);
 			if (!result.Success)
 			{
 				message = result.Message;
@@ -28,10 +33,9 @@ namespace GloriaFestasCatalogo.Client.Pages.Products
 			{
 				products = result.Data;
 				currentPage = result.Data.CurrentPage;
-				await GetCategories();
 			}
 		}
-
+		
 		private async Task FilterByText()
 		{
 			var result = await ProductService.GetActiveProductsPageableAsync(currentPage, pageSize, categoryId, searchText);
@@ -89,7 +93,7 @@ namespace GloriaFestasCatalogo.Client.Pages.Products
 		private async Task GetCategories()
 		{
 
-			var result = await CategoryService.GetCategoriesAsync();
+			var result = await CategoryService.GetCategoriesOrderActivesAsync();
 
 			if (!result.Success)
 			{
@@ -111,7 +115,7 @@ namespace GloriaFestasCatalogo.Client.Pages.Products
 			await FilterByCategory();
 		}
 
-		public async Task AddToCart(ProductCartDto product)
+		private async Task AddToCart(ProductCartDto product)
 		{
 			await CartService.AddToCart(product);
 		}
@@ -128,5 +132,11 @@ namespace GloriaFestasCatalogo.Client.Pages.Products
 			NavigationManager.NavigateTo($"/produto/{id}");
 		}
 
+		private async void NavigateToCategorieProducts(int id)
+		{
+			await GetProcuctsByCategorie(id);
+			StateHasChanged();
+		}
+		
 	}
 }

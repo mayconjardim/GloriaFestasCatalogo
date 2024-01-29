@@ -72,7 +72,8 @@ namespace GloriaFestasCatalogo.Client.Shared
 
 		private void NavigateToHome()
 		{
-			NavigationManager.NavigateTo("/");
+				NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
+			
 		}
 
 		private void NavigateToOrder()
