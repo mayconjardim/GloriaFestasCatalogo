@@ -75,15 +75,32 @@
                                 </td>
                             <td>
 
-                                @if (products.Variants.Count > 1)
-                                {
-                                    <span>A partir de:</span>
-                                    <br />
-                                    <span>R$ @products.Variants.Min(v => v.Price)</span>
-                                }else
-                                {
-                                    <span>R$ @products.Variants.FirstOrDefault().Price</span>
-                                }
+                             @if (products.Variants != null && products.Variants.Any())
+                             {
+                                 @if (products.Variants.Count > 1)
+                                 {
+                                     <span>A partir de:</span>
+                                     <br />
+                                     <span>R$ @products.Variants.Min(v => v.Price)</span>
+                                 }
+                                 else
+                                 {
+                                     var firstVariant = products.Variants.FirstOrDefault();
+                                     if (firstVariant != null)
+                                     {
+                                         <span>R$ @firstVariant.Price</span>
+                                     }
+                                     else
+                                     {
+                                         <span>Preço indisponível</span>
+                                     }
+                                 }
+                             }
+                             else
+                             {
+                                 <span>Preço indisponível</span>
+                             }
+
 								
                             </td>
                             <td>

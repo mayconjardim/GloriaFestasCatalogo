@@ -163,6 +163,11 @@ namespace GloriaFestasCatalogo.Server.Services.ProductService
                     {
                         newCategories.Add(existingCategory);
                     }
+                    else
+                    {
+                        var oldCategory = await _context.Categories.FirstOrDefaultAsync(c => c.Id == 1);
+                        newCategories.Add(oldCategory);
+                    }
                 }
                 
                 var newProduct = _mapper.Map<Product>(product);
@@ -170,10 +175,18 @@ namespace GloriaFestasCatalogo.Server.Services.ProductService
                 _context.Add(newProduct);
                 await _context.SaveChangesAsync();
 
-                foreach (var variant in product.Variants)
+                if (product.Variants != null && product.Variants.Any())
                 {
-                    newProduct.Variants.Add(new ProductVariant { Price = variant.Price, ProductId = newProduct.Id, ProductTypeId = variant.ProductTypeId });
+                    foreach (var variant in product.Variants)
+                    {
+                        newProduct.Variants.Add(new ProductVariant { Price = variant.Price, ProductId = newProduct.Id, ProductTypeId = variant.ProductTypeId });
+                    }
                 }
+                else
+                {
+                    newProduct.Variants.Add(new ProductVariant { Price = 0.0m, ProductId = newProduct.Id, ProductTypeId = 1});
+                }
+
 
                 _context.Update(newProduct);
                 await _context.SaveChangesAsync();

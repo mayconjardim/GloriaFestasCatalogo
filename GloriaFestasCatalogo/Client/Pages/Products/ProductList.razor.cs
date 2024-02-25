@@ -18,6 +18,7 @@ namespace GloriaFestasCatalogo.Client.Pages.Products
 		protected override async Task OnInitializedAsync()
 		{
 			await GetCategories();
+			await GetProcuctsByCategorie(categoryId);
 		}
 
 		private async Task GetProcuctsByCategorie(int newCategoryId)

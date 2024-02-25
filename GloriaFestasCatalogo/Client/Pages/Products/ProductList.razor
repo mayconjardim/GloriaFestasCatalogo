@@ -3,30 +3,25 @@
 @inject CartService CartService
 @inject NavigationManager NavigationManager
 
-<div class="d-flex flex-wrap justify-content-center" style="margin-top: 10px; width: 100%;">
-    <form role="search"class="d-flex flex-wrap" style="width: 100%;">
-
-        <div class="flex-fill">
-            <input class="form-control me-2" type="search" @oninput="UpdateProductNameSearch" placeholder="Procurar produto por Nome" aria-label="Search">
-        </div>
-    </form>
-</div>
- 
-@if (categories != null && products == null) 
-{
-    <div class="card-container">
-        
-        @foreach (var categorie in categories)
-        {
-            <div class="card-categories" @onclick="() => NavigateToCategorieProducts(categorie.Id)">
-                <h2><i>@categorie.Name</i></h2>
-            </div>
-        }
-        
-    </div>
-}
 @if (products != null && products.Products != null)
 {
+        <div class="d-flex flex-wrap justify-content-center" style="margin-top: 10px; width: 100%;">
+            <form role="search"class="d-flex flex-wrap" style="width: 100%;">
+
+                <div class="flex-fill">
+                    <input class="form-control me-2" type="search" @oninput="UpdateProductNameSearch" placeholder="Procurar Produto por Nome" aria-label="Search">
+                </div>
+            </form>
+            
+            <select @onchange="HandleCategoryChange" class="form-select-sm" style="margin-top: 10px; height: 38px; width: 100%;">
+                <option selected value="0">Procurar Produto por Categoria</option>
+                @foreach (var category in categories)
+                {
+                    <option value="@category.Id">@category.Name</option>
+                }
+            </select>
+        </div>
+
     <div class="produtos d-flex justify-content-center flex-wrap" style="margin: 5px">
 
         @foreach (var product in products.Products)
@@ -39,22 +34,38 @@
                     <div class="card-body d-flex flex-column justify-content-between" @onclick="() => NavigateToProductPage(product.Id)">
                         <h4 class="card-title" style="font-size: 0.8rem;">
                             <a href="/produto/@product.Id">
-                                @product.Name
+                               @product.Name
                             </a>
                         </h4>
 
                         <div class="price text-center text-success">
 
-                            @if (product.Variants.Count > 1)
-                            {
-                                <span>A partir de:</span>
-                                <br />
-                                <h5 class="mt-0 mb-0" style="font-size: 1.4rem">R$ @product.Variants.Min(v => v.Price)</h5>
-                            }
-                            else
-                            {
-                                <h5 class="mt-0 mb-0" style="font-size: 1.4rem">R$ @product.Variants.FirstOrDefault().Price</h5>
-                            }
+                       @if (product.Variants != null && product.Variants.Any())
+                       {
+                           @if (product.Variants.Count > 1)
+                           {
+                               <span>A partir de:</span>
+                               <br />
+                               <h5 class="mt-0 mb-0" style="font-size: 1.4rem">R$ @product.Variants.Min(v => v.Price)</h5>
+                           }
+                           else
+                           {
+                               var firstVariantPrice = product.Variants.FirstOrDefault()?.Price;
+                               if (firstVariantPrice != null)
+                               {
+                                   <h5 class="mt-0 mb-0" style="font-size: 1.4rem">R$ @firstVariantPrice</h5>
+                               }
+                               else
+                               {
+                                   <h5 class="mt-0 mb-0" style="font-size: 1.4rem">Preço indisponível</h5>
+                               }
+                           }
+                       }
+                       else
+                       {
+                           <h5 class="mt-0 mb-0" style="font-size: 1.4rem">Preço indisponível</h5>
+                       }
+
                         </div>
                     </div>
                 </div>
@@ -78,4 +89,8 @@
         </ul>
     </nav>
 
+} else
+{
+    <p>@message</p>
 }
+
