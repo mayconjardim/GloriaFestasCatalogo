@@ -6,6 +6,10 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 	</PropertyGroup>
 
+ 	<PropertyGroup>
+	 <BlazorCacheBootResources>false</BlazorCacheBootResources>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<PackageReference Include="Blazor.Bootstrap" Version="1.11.1" />
 		<PackageReference Include="Blazored.LocalStorage" Version="4.5.0" />
@@ -22,6 +26,5 @@
 	<ItemGroup>
 		<Folder Include="wwwroot\img\" />
 	</ItemGroup>
-
-        <BlazorCacheBootResources>false</BlazorCacheBootResources>
+    
 </Project>
