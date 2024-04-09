@@ -5,10 +5,12 @@ using GloriaFestasCatalogo.Server.Services.ConfigService;
 using GloriaFestasCatalogo.Server.Services.OrderService;
 using GloriaFestasCatalogo.Server.Services.ProductService;
 using GloriaFestasCatalogo.Server.Services.ProductTypeService;
+using Toolbelt.Blazor.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Toolbelt.Blazor.Extensions.DependencyInjection;
 
 namespace GloriaFestasCatalogo
 {
@@ -23,8 +25,8 @@ namespace GloriaFestasCatalogo
 
 			builder.Services.AddControllersWithViews();
 			builder.Services.AddRazorPages();
-
-			builder.Services.AddScoped<IAuthService, AuthService>();
+            builder.Services.AddPWAUpdater();
+            builder.Services.AddScoped<IAuthService, AuthService>();
 			builder.Services.AddScoped<IConfigService, ConfigService>();
 			builder.Services.AddScoped<IProductService, ProductService>();
 			builder.Services.AddScoped<IProductTypeService, ProductTypeService>();
