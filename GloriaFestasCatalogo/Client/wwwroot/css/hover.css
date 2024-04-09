@@ -7,10 +7,11 @@
     left: 50%;
     transform: translate(-50%, -50%);
     text-align: center;
+    color: #FAD6E0;
 }
 
 .loader {
-    color: #552583;
+    color: #FAD6E0;
     font-weight: 800;
 }
 
@@ -20,9 +21,10 @@
     border-radius: 50%;
     display: inline-block;
     position: relative;
-    border: 2px solid #552583;
+    border: 2px solid #FAD6E0;
     box-sizing: border-box;
     animation: rotation 1s linear infinite;
+    color: #FAD6E0;
 }
 
     .loaders::after {
@@ -35,6 +37,7 @@
         width: 12px;
         height: 12px;
         border-radius: 50%;
+        color: #FAD6E0;
     }
 
 

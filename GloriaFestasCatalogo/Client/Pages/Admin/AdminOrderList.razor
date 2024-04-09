@@ -58,11 +58,11 @@
 							</td> 
 							<td>
 									<a @onclick='(() => OpenModal("PrintModal", order.Id))' class="edit" data-toggle="modal">
-										<i class="fa-solid fa-print" data-toggle="tooltip" title="Print" style="color: #5E0B76"></i>
+										<i class="fa-solid fa-print" data-toggle="tooltip" title="Print" style="color: #FAD6E0"></i>
 									</a>
 
 									<a @onclick='(() => OpenModal("DeleteModal", order.Id))' class="delete" data-toggle="modal">
-										<i class="fa-solid fa-trash" data-toggle="tooltip" title="Delete" style="color: #5E0B76"></i>
+										<i class="fa-solid fa-trash" data-toggle="tooltip" title="Delete" style="color: #FAD6E0"></i>
 									</a>
 							</td>
 						</tr>
@@ -181,7 +181,7 @@
 					</div>
 
 					<div class="modal-footer">
-							<input @onclick="Print" type="submit" class="btn" style="background: #5E0B76; color: #fff" value="Imprimir">
+							<input @onclick="Print" type="submit" class="btn" style="background: #FAD6E0; color: #000" value="Imprimir">
 					</div>
 				</form>
 			</div>
@@ -215,7 +215,7 @@
 
 						</div>
 						<div class="modal-footer">
-							<input @onclick="UpdateStatus" class="btn" style="background: #5E0B76; color: #fff" value="Salvar">
+							<input @onclick="UpdateStatus" class="btn" style="background: #FAD6E0; color: #000" value="Salvar">
 						</div>
 					</form>
 				</div>

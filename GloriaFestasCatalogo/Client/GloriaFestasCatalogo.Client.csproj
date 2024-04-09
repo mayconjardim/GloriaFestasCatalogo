@@ -22,9 +22,5 @@
 	<ItemGroup>
 		<ProjectReference Include="..\Shared\GloriaFestasCatalogo.Shared.csproj" />
 	</ItemGroup>
-
-	<ItemGroup>
-		<Folder Include="wwwroot\img\" />
-	</ItemGroup>
     
 </Project>

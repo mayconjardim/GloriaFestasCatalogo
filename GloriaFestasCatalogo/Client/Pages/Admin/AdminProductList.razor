@@ -118,10 +118,10 @@
                             </td>
                             <td>
                                 <a @onclick='(() => OpenModal("EditModal", products.Id))' class="edit" data-toggle="modal">
-                                    <i class="fa-solid fa-pen-to-square" data-toggle="tooltip" title="Edit" style="color: #5E0B76"></i>
+                                    <i class="fa-solid fa-pen-to-square" data-toggle="tooltip" title="Edit" style="color: #FAD6E0"></i>
                                 </a>
                                 <a @onclick='(() => OpenModal("DeleteModal", products.Id))' class="delete" data-toggle="modal">
-                                    <i class="fa-solid fa-trash" data-toggle="tooltip" title="Delete" style="color: #5E0B76"></i>
+                                    <i class="fa-solid fa-trash" data-toggle="tooltip" title="Delete" style="color: #FAD6E0"></i>
                                 </a>
                             </td>
                         </tr>
@@ -206,12 +206,12 @@
                                 </div>
                                 <div class="cols">
                                     <a class="delete" @onclick="@(() => RemoveCategorie(newCategorie, 0))" style="font-size: 20px">
-                                        <i class="fa-solid fa-trash" data-toggle="tooltip" title="Delete" style="color: #5E0B76"></i>
+                                        <i class="fa-solid fa-trash" data-toggle="tooltip" title="Delete" style="color: #FAD6E0"></i>
                                     </a>
                                 </div>
                             </div>
                         }
-                        <button type="button" class="btn" style="color: #5E0B76" @onclick="() => AddCategorie(0)">
+                        <button type="button" class="btn" style="color: #FAD6E0" @onclick="() => AddCategorie(0)">
                             <i class="oi oi-plus" ></i> Add Categoria
                         </button>
                         <hr />
@@ -246,12 +246,12 @@
 
                                 <div class="cols">
                                     <a class="delete" @onclick="@(() => RemoveVariant(variant, 0))" style="font-size: 20px">
-                                        <i class="fa-solid fa-trash" data-toggle="tooltip" title="Delete" style="color: #5E0B76"></i>
+                                        <i class="fa-solid fa-trash" data-toggle="tooltip" title="Delete" style="color: #FAD6E0"></i>
                                     </a>
                                 </div>
                             </div>
                         }
-                        <button type="button" class="btn" style="color: #5E0B76" @onclick="() => AddVariant(0)">
+                        <button type="button" class="btn" style="color: #FAD6E0" @onclick="() => AddVariant(0)">
                             <i class="oi oi-plus" ></i> Add Tipos de Produto
                         </button>
                         <hr />
@@ -331,12 +331,12 @@
                                     </div>
                                     <div class="cols">
                                         <a class="delete" @onclick="@(() => RemoveCategorie(newCategorie, 1))" style="font-size: 20px">
-                                            <i class="fa-solid fa-trash" data-toggle="tooltip" title="Delete" style="color: #5E0B76"></i>
+                                            <i class="fa-solid fa-trash" data-toggle="tooltip" title="Delete" style="color: #FAD6E0"></i>
                                         </a>
                                     </div>
                                 </div>
                             }
-                            <button type="button" class="btn" style="color: #5E0B76" @onclick="() => AddCategorie(1)">
+                            <button type="button" class="btn" style="color: #FAD6E0" @onclick="() => AddCategorie(1)">
                                 <i class="oi oi-plus" ></i> Add Categoria
                             </button>
                             <hr />
@@ -377,13 +377,13 @@
 
                                     <div class="cols">
                                         <a class="delete" @onclick="@(() => RemoveVariant(variant, 1))" style="font-size: 20px">
-                                            <i class="fa-solid fa-trash" data-toggle="tooltip" title="Delete" style="color: #5E0B76"></i>
+                                            <i class="fa-solid fa-trash" data-toggle="tooltip" title="Delete" style="color: #FAD6E0"></i>
                                         </a>
                                     </div>
                                 </div>
 
                             }
-                            <button type="button" class="btn" style="color: #5E0B76" @onclick="() => AddVariant(1)">
+                            <button type="button" class="btn" style="color: #FAD6E0" @onclick="() => AddVariant(1)">
                                 <i class="oi oi-plus"></i> Add Tipos de Produto
                             </button>
                             <hr />

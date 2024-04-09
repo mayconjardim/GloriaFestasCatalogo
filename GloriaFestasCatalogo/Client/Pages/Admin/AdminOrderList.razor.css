@@ -1,7 +1,7 @@
 ﻿.pagination .page-link {
-    background-color: #5E0B76 !important;
+    background-color: #FAD6E0 !important;
     border: 1px solid;
-    color: #fff;
+    color: #000;
 }
 
 .table-responsive {
@@ -18,8 +18,8 @@
 
 .table-title {
     padding-bottom: 15px;
-    background: #5e0b76;
-    color: #fff;
+    background: #FAD6E0;
+    color: #000;
     padding: 16px 30px;
     min-width: 100%;
     margin: -20px -25px 10px;
@@ -36,7 +36,7 @@
     }
 
     .table-title .btn {
-        color: #fff;
+        color: #000;
         float: right;
         font-size: 13px;
         border: none;
@@ -215,7 +215,7 @@ table.table .avatar {
     }
 
     .custom-checkbox input[type="checkbox"]:checked + label:after {
-        border-color: #fff;
+        border-color: #000;
     }
 
     .custom-checkbox input[type="checkbox"]:disabled + label:before {
@@ -273,6 +273,6 @@ table.table .avatar {
     }
 
     #PrintModal {
-        background-color: #fff;
+        background-color: #000;
     }
 }
