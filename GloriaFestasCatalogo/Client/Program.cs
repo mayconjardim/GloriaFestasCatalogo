@@ -8,6 +8,7 @@ global using GloriaFestasCatalogo.Client.Services.ConfigService;
 global using Microsoft.AspNetCore.Components.Authorization;
 global using Microsoft.AspNetCore.Components.Web;
 global using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Toolbelt.Blazor.Extensions.DependencyInjection;
 
 
 namespace GloriaFestasCatalogo.Client
@@ -27,6 +28,7 @@ namespace GloriaFestasCatalogo.Client
 			builder.Services.AddScoped<IAuthService, AuthService>();
 			builder.Services.AddScoped<IConfigService, ConfigService>();
 			builder.Services.AddScoped<CartService>();
+			builder.Services.AddPWAUpdater();
 			builder.Services.AddBlazorBootstrap();
 
 			builder.Services.AddOptions();

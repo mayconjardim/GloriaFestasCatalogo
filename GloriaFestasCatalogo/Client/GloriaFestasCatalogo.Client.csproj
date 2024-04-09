@@ -4,6 +4,7 @@
 		<TargetFramework>net8.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
+		<ServiceWorkerAssetsManifest>service-worker-assets.js</ServiceWorkerAssetsManifest>
 	</PropertyGroup>
 
  	<PropertyGroup>
@@ -21,7 +22,16 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ServiceWorker Include="wwwroot\service-worker.js"
+					   PublishedContent="wwwroot\service-worker.published.js" />
+	</ItemGroup>
+	
+	<ItemGroup>
 		<ProjectReference Include="..\Shared\GloriaFestasCatalogo.Shared.csproj" />
 	</ItemGroup>
-    
+	
+	<ItemGroup>
+	  <Content Remove="manifest.json" />
+	</ItemGroup>
+	
 </Project>
