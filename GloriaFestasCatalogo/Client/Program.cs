@@ -8,7 +8,7 @@ global using GloriaFestasCatalogo.Client.Services.ConfigService;
 global using Microsoft.AspNetCore.Components.Authorization;
 global using Microsoft.AspNetCore.Components.Web;
 global using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using Toolbelt.Blazor.Extensions.DependencyInjection;
+global using Toolbelt.Blazor.Extensions.DependencyInjection;
 
 
 namespace GloriaFestasCatalogo.Client
