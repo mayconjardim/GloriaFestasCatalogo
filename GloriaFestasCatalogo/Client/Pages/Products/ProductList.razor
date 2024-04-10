@@ -5,7 +5,7 @@
 
 @if (products != null && products.Products != null)
 {
-        <div class="d-flex flex-wrap justify-content-center" style="margin-top: 10px; width: 100%;">
+        <div class="container-fluid  d-flex flex-wrap justify-content-center" style="margin-top: 10px; width: 100%;">
             <form role="search"class="d-flex flex-wrap" style="width: 100%;">
 
                 <div class="flex-fill">
@@ -22,7 +22,7 @@
             </select>
         </div>
 
-    <div class="produtos d-flex justify-content-center flex-wrap" style="margin: 5px">
+    <div class="container-fluid d-flex justify-content-center flex-wrap" style="margin: 5px">
 
         @foreach (var product in products.Products)
         {
