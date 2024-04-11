@@ -32,6 +32,7 @@ async function onActivate(event) {
         .map(key => caches.delete(key)));
 }
 
+
 async function onFetch(event) {
     let cachedResponse = null;
     if (event.request.method === 'GET') {
