@@ -5,6 +5,9 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <LangVersion>12</LangVersion>
+	  <WasmEnableSIMD>false</WasmEnableSIMD>
+	  <WasmEnableExceptionHandling>false</WasmEnableExceptionHandling>
+	  <WasmBuildNative>true</WasmBuildNative>
   </PropertyGroup>
 
   <ItemGroup>

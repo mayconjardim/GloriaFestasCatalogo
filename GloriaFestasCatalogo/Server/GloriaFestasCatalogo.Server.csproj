@@ -4,6 +4,9 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+	  <WasmEnableSIMD>false</WasmEnableSIMD>
+	  <WasmEnableExceptionHandling>false</WasmEnableExceptionHandling>
+	  <WasmBuildNative>true</WasmBuildNative>
     <UserSecretsId>b279bdc9-e6fa-4624-8520-c0092e9fe507</UserSecretsId>
   </PropertyGroup>
 
