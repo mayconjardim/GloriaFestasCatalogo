@@ -1,10 +1,11 @@
 {
+
   "name": "Ih! Cresci",
   "short_name": "Ih! Cresci",
   "start_url": "./",
   "display": "standalone",
-  "background_color": "#fad6e0",
-  "theme_color": "#03173d",
+  "background_color": "#fffff",
+  "theme_color": "#FAD6E0",
   "prefer_related_applications": false,
   "icons": [
     {
