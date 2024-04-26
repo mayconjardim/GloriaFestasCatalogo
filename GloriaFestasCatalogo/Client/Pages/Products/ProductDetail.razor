@@ -26,14 +26,15 @@
 
 					@if (product.Variants != null && product.Variants.Count > 1)
 					{
-						<div style="margin: 10px">
-							<select class="form-select" @bind="currentTypeId">
-								@foreach (var variant in product.Variants)
-								{
-									<option value="@variant.ProductTypeId">@variant.ProductTypeName</option>
-								}
-							</select>
-						</div>
+
+
+						<select class="form-select" @onchange="HandleSelectionChange">
+							<option selected disabled >Selecione o item desejado</option>
+							@foreach (var variant in product.Variants)
+							{
+								<option value="@variant.ProductTypeId">@variant.ProductTypeName</option>
+							}
+						</select>
 					}
 
 					@if (GetSelectedVariant() != null)

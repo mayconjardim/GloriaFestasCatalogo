@@ -52,6 +52,10 @@ namespace GloriaFestasCatalogo.Client.Pages.Products
 			await CartService.AddToCart(cartProduct);
 		}
 
+		private void HandleSelectionChange(ChangeEventArgs e)
+		{
+			currentTypeId = Convert.ToInt32(e.Value);
+		}
 
 	}
 }
