@@ -11,7 +11,7 @@ namespace GloriaFestasCatalogo.Client.Shared
 
             if (order != null)
             {
-                message = $"Olá Glória Festas, meu nome é {order.Name} 😀 \n" +
+                message = $"Olá Ih! Cresci, meu nome é {order.Name} 😀 \n" +
                           "\n" +
                           $"🛒 *Acabei de realizar o pedido abaixo:*\n" +
                           $"📝 Nº do Pedido: {order.Id} \n" +
